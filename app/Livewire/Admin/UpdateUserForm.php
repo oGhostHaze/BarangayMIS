@@ -20,10 +20,12 @@ class UpdateUserForm extends Component
     {
         $this->user = $user = User::find($user_id);
         $this->roles = Role::all();
-        $this->userid = $user->userid;
+        $this->userid = $user->id;
         $this->name = $user->name;
         $this->username = $user->username;
         $this->email = $user->email;
         $this->userroles = $user->getRoleNames();
     }
+
+    public function update() {}
 }

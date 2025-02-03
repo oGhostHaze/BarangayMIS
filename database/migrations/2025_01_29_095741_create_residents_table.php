@@ -45,15 +45,6 @@ return new class extends Migration
             $table->boolean('ofw_professional')->default(false);
             $table->timestamps();
         });
-        Schema::create('medications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('resident_id')->constrained()->onDelete('cascade');
-            $table->string('medication_name');
-            $table->text('dosage')->nullable();
-            $table->text('instructions')->nullable();
-            $table->date('prescribed_date')->nullable();
-            $table->timestamps();
-        });
     }
 
     /**

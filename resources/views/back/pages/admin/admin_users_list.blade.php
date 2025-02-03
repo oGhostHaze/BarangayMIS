@@ -4,19 +4,19 @@
 
 
     <div class="page-header d-print-none">
-        <div class="row align-items-center mb-3">
+        <div class="mb-3 row align-items-center">
             <div class="col">
                 <h2 class="page-title">Manage Users</h2>
             </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="mb-3 card">
             <div class="card-body" style="max-height: 720px; overflow-y: auto;">
                 @include('back.layouts.messages')
                 <table class="table table-bordered table-vcenter table-striped card-table" id="table">
                     <thead class="sticky-top">
                         <tr>
-                            <th width="5%">EID</th>
+                            <th width="5%">ID</th>
                             <th width="10%">Name</th>
                             <th width="10%">Email</th>
                             <th width="40%">Roles</th>
@@ -32,13 +32,13 @@
                                 <td>{{ $user->email }}</td>
                                 <td>
                                     @foreach ($user->roles as $role)
-                                        <span class="badge badge-info mr-1">
+                                        <span class="mr-1 badge badge-info">
                                             {{ $role->name }}
                                         </span>
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a class="btn btn-success btn-sm text-white"
+                                    <a class="text-white btn btn-success btn-sm"
                                         href="{{ route('auth.admin.users.edit', $user->id) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -52,11 +52,11 @@
                                         </svg> Edit</a>
 
                                     {{-- @if (Auth::guard('admin')->user()->can('admin.edit'))
-                                         <a class="btn btn-success text-white" href="{{ route('admin.admins.edit', $admin->id) }}">Edit</a>
+                                         <a class="text-white btn btn-success" href="{{ route('admin.admins.edit', $admin->id) }}">Edit</a>
                                      @endif
 
                                      @if (Auth::guard('admin')->user()->can('admin.delete'))
-                                     <a class="btn btn-danger text-white" href="{{ route('admin.admins.destroy', $admin->id) }}"
+                                     <a class="text-white btn btn-danger" href="{{ route('admin.admins.destroy', $admin->id) }}"
                                      onclick="event.preventDefault(); document.getElementById('delete-form-{{ $admin->id }}').submit();">
                                          Delete
                                      </a>

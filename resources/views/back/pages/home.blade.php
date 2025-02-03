@@ -3,15 +3,15 @@
 @section('content')
     <div>
         <div class="page-header d-print-none">
-            <div class="row align-items-center mb-3">
+            <div class="mb-3 row align-items-center">
                 <div class="col">
-                    <h2 class="page-title">iHomis Menu</h2>
+                    <h2 class="page-title">Home</h2>
                 </div>
             </div>
         </div>
         <div class="row row-cards">
             <div class="col-md-4 col-lg-3 col-xl-2">
-                <a href="{{ route('auth.admin.users.list') }}" class="btn py-4 w-100">
+                <a href="{{ route('auth.admin.users.list') }}" class="py-4 btn w-100">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="icon icon-tabler icons-tabler-outline icon-tabler-settings-code">

@@ -97,134 +97,182 @@
                             </div>
                         </div>
                     </div>
-                    <li class="nav-item dropdown {{ request()->routeIs('auth.residents.*') ? 'active' : '' }}">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}"
-                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                            aria-expanded="false">
-                            <span
-                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Residents
-                            </span>
-                        </a>
-                        <div class="dropdown-menu {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{{ route('auth.residents.index') }}">
-                                        All Residents
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
-                                        Add New Resident
-                                    </a>
-                                </div>
+                <li class="nav-item dropdown {{ request()->routeIs('auth.residents.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}"
+                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                        aria-expanded="false">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title">
+                            Residents
+                        </span>
+                    </a>
+                    <div class="dropdown-menu {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="{{ route('auth.residents.index') }}">
+                                    All Residents
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
+                                    Add New Resident
+                                </a>
                             </div>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
-                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                            aria-expanded="false">
-                            <span
-                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M16 3l0 4" /><path d="M8 3l0 4" /><path d="M4 11l16 0" /><path d="M8 15h2v2h-2z" /></svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Events
-                            </span>
-                        </a>
-                        <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
-                                        Calendar of Events
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
-                                        All Events
-                                    </a>
-                                    <a href="" class="dropdown-item">
-                                        Add New Event
-                                    </a>
-                                </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown {{ request()->routeIs('auth.events.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.events.*') ? 'show' : '' }}"
+                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                        aria-expanded="false">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                <path d="M16 3l0 4" />
+                                <path d="M8 3l0 4" />
+                                <path d="M4 11l16 0" />
+                                <path d="M8 15h2v2h-2z" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title">
+                            Events
+                        </span>
+                    </a>
+                    <div class="dropdown-menu {{ request()->routeIs('auth.events.*') ? 'show' : '' }}">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="{{ route('auth.events.calendar') }}">
+                                    Calendar of Events
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.events.index') }}">
+                                    All Events
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.events.index') }}">
+                                    Add New Event
+                                </a>
                             </div>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
-                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                            aria-expanded="false">
-                            <span
-                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-news"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" /><path d="M8 8l4 0" /><path d="M8 12l4 0" /><path d="M8 16l4 0" /></svg>
-                            </span>
-                            <span class="nav-link-title">
-                                News, Update and Announcements
-                            </span>
-                        </a>
-                        <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
-                                        All Updates
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
-                                        Add New Update
-                                    </a>
-                                </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                        aria-expanded="false">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-news">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" />
+                                <path d="M8 8l4 0" />
+                                <path d="M8 12l4 0" />
+                                <path d="M8 16l4 0" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title">
+                            News, Update and Announcements
+                        </span>
+                    </a>
+                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
+                                    All Updates
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
+                                    Add New Update
+                                </a>
                             </div>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
-                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                            aria-expanded="false">
-                            <span
-                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-certificate"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" /><path d="M6 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" /></svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Certificate Requests
-                            </span>
-                        </a>
-                        <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
-                                        All Requests
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
-                                        Issue Certificate
-                                    </a>
-                                </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                        aria-expanded="false">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-file-certificate">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" />
+                                <path d="M6 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                <path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title">
+                            Certificate Requests
+                        </span>
+                    </a>
+                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
+                                    All Requests
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
+                                    Issue Certificate
+                                </a>
                             </div>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
-                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                            aria-expanded="false">
-                            <span
-                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-alert"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M12 17l.01 0" /><path d="M12 11l0 3" /></svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Blotter
-                            </span>
-                        </a>
-                        <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
-                                        All Blotter Records
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
-                                        Add New Blotter Record
-                                    </a>
-                                </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                        aria-expanded="false">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-file-alert">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                <path d="M12 17l.01 0" />
+                                <path d="M12 11l0 3" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title">
+                            Blotter
+                        </span>
+                    </a>
+                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
+                                    All Blotter Records
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
+                                    Add New Blotter Record
+                                </a>
                             </div>
                         </div>
-                    </li>
+                    </div>
+                </li>
                 </li>
             </ul>
         </div>

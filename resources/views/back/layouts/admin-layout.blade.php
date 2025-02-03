@@ -26,6 +26,9 @@
     <link href="{{ url('/back/dist/libs/ijaboCropTool/ijaboCropTool.min.css') }}" rel="stylesheet">
     <link href="{{ url('/back/dist/css/line-awesome/css/line-awesome.min.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
     @stack('styles')
     @livewireStyles
     <link href="{{ url('/back/dist/css/demo.min.css') }}" rel="stylesheet" />
@@ -72,7 +75,7 @@
             <div class="page-body">
                 <div class="container-fluid">
                     @yield('content')
-                    {{ $slot ?? ''}}
+                    {{ $slot ?? '' }}
                     {{-- @include('back.layouts.inc.footer') --}}
                 </div>
             </div>
@@ -90,6 +93,7 @@
     <script src="{{ url('/back/dist/js/xlsx.full.min.js') }}"></script>
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- Tabler Core -->
     <script src="{{ url('/back/dist/js/tabler.min.js') }}"></script>
     @livewireScripts

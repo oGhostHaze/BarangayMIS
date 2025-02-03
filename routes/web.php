@@ -1,12 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
+use App\Livewire\Pages\EventsCalendar;
+use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\ResidentsCreateForm;
+use App\Livewire\Pages\ResidentShow;
 use App\Livewire\Pages\ResidentsManage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,5 +54,8 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/residents', ResidentsManage::class)->name('residents.index');
     Route::get('/residents/create', ResidentsCreateForm::class)->name('residents.create');
     Route::get('/residents/update/{resident_id}', ResidentsCreateForm::class)->name('residents.update');
+    Route::get('/resident/{residentId}', ResidentShow::class)->name('residents.show');
 
+    Route::get('/events', EventsManageTable::class)->name('events.index');
+    Route::get('/events/calendar', EventsCalendar::class)->name('events.calendar');
 });
