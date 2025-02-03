@@ -163,15 +163,12 @@
                                 <a class="dropdown-item" href="{{ route('auth.events.index') }}">
                                     All Events
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.events.index') }}">
-                                    Add New Event
-                                </a>
                             </div>
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                <li class="nav-item dropdown {{ request()->routeIs('auth.announcements.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
                         <span
@@ -192,13 +189,16 @@
                             News, Update and Announcements
                         </span>
                     </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                    <div class="dropdown-menu {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
-                                    All Updates
+                                <a class="dropdown-item" href="{{ route('auth.announcements.feed') }}">
+                                    News Feed
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
+                                <a class="dropdown-item" href="{{ route('auth.announcements.manage') }}">
+                                    Manage Updates
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.announcements.create') }}">
                                     Add New Update
                                 </a>
                             </div>

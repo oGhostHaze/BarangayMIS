@@ -3,6 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
+use App\Livewire\Pages\AnnouncementsForm;
+use App\Livewire\Pages\AnnouncementsManage;
+use App\Livewire\Pages\AnnouncementsPublic;
+use App\Livewire\Pages\AnnouncementsShow;
 use App\Livewire\Pages\EventsCalendar;
 use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\ResidentsCreateForm;
@@ -24,7 +28,7 @@ Route::middleware(['guest:web'])->group(function () {
 });
 
 Route::get('/home', function () {
-    return redirect('/');
+    return redirect()->route('auth.events.calendar');
 })->name('home');
 
 Route::name('auth.')->middleware(['auth:web'])->group(function () {
@@ -58,4 +62,11 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
 
     Route::get('/events', EventsManageTable::class)->name('events.index');
     Route::get('/events/calendar', EventsCalendar::class)->name('events.calendar');
+
+    Route::get('/announcements/feed', AnnouncementsPublic::class)->name('announcements.feed');
+    Route::get('/announcements/manage', AnnouncementsManage::class)->name('announcements.manage');
+    Route::get('/announcements/create', AnnouncementsForm::class)->name('announcements.create');
+    Route::get('/announcements/{id}/edit', AnnouncementsForm::class)->name('announcements.edit');
+    Route::get('/announcements/{id}', AnnouncementsShow::class)->name('announcements.show');
+
 });

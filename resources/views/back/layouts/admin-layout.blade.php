@@ -27,7 +27,7 @@
     <link href="{{ url('/back/dist/css/line-awesome/css/line-awesome.min.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 
     @stack('styles')
     @livewireStyles
@@ -93,6 +93,7 @@
     <script src="{{ url('/back/dist/js/xlsx.full.min.js') }}"></script>
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/0edz9kwpq40w82jpdtjr5mimzsv4wz03zblumwwcx38k2neg/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
     <!-- Tabler Core -->
     <script src="{{ url('/back/dist/js/tabler.min.js') }}"></script>

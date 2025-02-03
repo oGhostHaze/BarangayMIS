@@ -29,7 +29,7 @@
                                 <td>{{ $event->end_date ? date('M d, Y', strtotime($event->end_date)) : 'N/A' }}</td>
                                 <td>{{ $event->location ?? 'N/A' }}</td>
                                 <td><span
-                                        class="badge bg-{{ $event->status == 'upcoming' ? 'warning' : ($event->status == 'ongoing' ? 'success' : ($event->status == 'completed' ? 'secondary' : 'danger')) }}">{{ ucfirst($event->status) }}</span>
+                                        class="badge text-white bg-{{ $event->status == 'upcoming' ? 'warning' : ($event->status == 'ongoing' ? 'success' : ($event->status == 'completed' ? 'secondary' : 'danger')) }}">{{ ucfirst($event->status) }}</span>
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-info"
@@ -60,7 +60,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Title</label>
-                            <input type="text" class="form-control" wire:model.defer="title">
+                            <input type="text" class="form-control" wire:model="title">
                             @error('title')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -68,14 +68,14 @@
 
                         <div class="mb-3">
                             <label class="form-label">Description</label>
-                            <textarea class="form-control" wire:model.defer="description"></textarea>
+                            <textarea class="form-control" wire:model="description"></textarea>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Start Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="start_date">
+                                    <input type="date" class="form-control" wire:model="start_date">
                                     @error('start_date')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -84,7 +84,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">End Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="end_date">
+                                    <input type="date" class="form-control" wire:model="end_date">
                                     @error('end_date')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -96,30 +96,42 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Start Time</label>
-                                    <input type="time" class="form-control" wire:model.defer="start_time">
+                                    <input type="time" class="form-control" wire:model="start_time">
+                                    @error('start_time')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">End Time</label>
-                                    <input type="time" class="form-control" wire:model.defer="end_time">
+                                    <input type="time" class="form-control" wire:model="end_time">
+                                    @error('end_time')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Location</label>
-                            <input type="text" class="form-control" wire:model.defer="location">
+                            <input type="text" class="form-control" wire:model="location">
+                            @error('location')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-control" wire:model.defer="status">
+                            <select class="form-control" wire:model="status">
                                 <option value="upcoming">Upcoming</option>
                                 <option value="ongoing">Ongoing</option>
                                 <option value="completed">Completed</option>
                                 <option value="canceled">Canceled</option>
                             </select>
+                            @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">

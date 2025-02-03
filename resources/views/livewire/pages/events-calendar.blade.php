@@ -5,7 +5,6 @@
         <script type="module">
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
                 initialView: 'dayGridMonth',
                 events: @json($events),
                 eventClick: function(info) {
