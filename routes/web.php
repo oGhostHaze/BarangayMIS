@@ -1,19 +1,21 @@
 <?php
 
+use App\Livewire\SystemSettings;
+use App\Livewire\Pages\ResidentShow;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\CertificateIndigency;
+use App\Livewire\Pages\EventsCalendar;
+use App\Livewire\Pages\ResidentsManage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
 use App\Livewire\Pages\AnnouncementsForm;
+use App\Livewire\Pages\AnnouncementsShow;
+use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
-use App\Livewire\Pages\AnnouncementsShow;
-use App\Livewire\Pages\EventsCalendar;
-use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\ResidentsCreateForm;
-use App\Livewire\Pages\ResidentShow;
-use App\Livewire\Pages\ResidentsManage;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
@@ -33,7 +35,7 @@ Route::get('/home', function () {
 
 Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/', function () {
-        return view('back.pages.home');
+        return redirect()->route('auth.events.calendar');
     })->name('home');
 
     Route::get('/logout', function () {
@@ -69,4 +71,11 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/announcements/{id}/edit', AnnouncementsForm::class)->name('announcements.edit');
     Route::get('/announcements/{id}', AnnouncementsShow::class)->name('announcements.show');
 
+
+
+    Route::prefix('/certificates')->name('certs.')->group(function () {
+        Route::get('/indigency', CertificateIndigency::class)->name('list');
+    });
+
+    Route::get('/settings', SystemSettings::class)->name('settings');
 });
