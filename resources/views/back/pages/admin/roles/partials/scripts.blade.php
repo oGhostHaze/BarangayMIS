@@ -39,12 +39,8 @@
 
          function implementAllChecked() {
              const countPermissions = {{ count($all_permissions) }};
-             const countPermissionGroups = {{ count($permission_groups) }};
 
-            //  console.log((countPermissions + countPermissionGroups));
-            //  console.log($('input[type="checkbox"]:checked').length);
-
-             if($('input[type="checkbox"]:checked').length >= (countPermissions + countPermissionGroups)){
+             if($('input[type="checkbox"]:checked').length >= (countPermissions)){
                 $("#checkPermissionAll").prop('checked', true);
             }else{
                 $("#checkPermissionAll").prop('checked', false);

@@ -32,8 +32,7 @@ class RolesController extends Controller
     {
 
         $all_permissions  = Permission::all();
-        $permission_groups = User::getpermissionGroups();
-        return view('back.pages.admin.roles.roles_create', compact('all_permissions', 'permission_groups'));
+        return view('back.pages.admin.roles.roles_create', compact('all_permissions'));
     }
 
     /**
