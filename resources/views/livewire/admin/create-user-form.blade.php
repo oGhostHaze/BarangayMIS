@@ -2,13 +2,8 @@
     @csrf
     <div class="form-row row">
         <div class="form-group mb-3 col-md-6 col-sm-6">
-            <label for="userid">User ID</label>
-            <input type="text" class="form-control" id="userid" name="userid" wire:model.lazy="userid"
-                placeholder="Enter User ID" required>
-        </div>
-        <div class="form-group mb-3 col-md-6 col-sm-6">
             <label for="emp_name">User Full Name </label>
-            <input type="text" class="form-control disabled" wire:model='emp_name' name="name" readonly>
+            <input type="text" class="form-control disabled" wire:model='emp_name' name="name">
         </div>
         <div class="form-group mb-3 col-md-6 col-sm-6">
             <label for="username">Username</label>
@@ -19,6 +14,15 @@
             <label for="email">User Email</label>
             <input type="text" class="form-control" id="email" name="email" wire:model="email"
                 placeholder="Enter Email">
+        </div>
+
+        <div class="form-group mb-3 col-md-6 col-sm-6" wire:ignore>
+            <label for="password">Assign Roles</label>
+            <select wire:model="userroles" name="userroles[]" id="userroles" class="form-control select2" multiple>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -32,17 +36,6 @@
             <label for="password_confirmation">Confirm Password</label>
             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
                 wire:model="password_confirmation" placeholder="Enter Password">
-        </div>
-    </div>
-
-    <div class="form-row row">
-        <div class="form-group mb-3 col-md-6 col-sm-6" wire:ignore>
-            <label for="password">Assign Roles</label>
-            <select wire:model="userroles" name="userroles[]" id="userroles" class="form-control select2" multiple>
-                @foreach ($roles as $role)
-                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                @endforeach
-            </select>
         </div>
     </div>
 

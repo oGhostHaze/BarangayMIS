@@ -9,15 +9,8 @@ use Spatie\Permission\Models\Role;
 
 class CreateUserForm extends Component
 {
-    public $userid, $emp_name, $username, $email, $password, $password_confirmation, $userroles = [];
+    public $emp_name, $username, $email, $password, $password_confirmation, $userroles = [];
 
-    public function updatedUserid()
-    {
-        $emp = User::find($this->userid);
-        if ($emp) {
-            $this->emp_name = $emp->lastname . ', ' . $emp->firstname . ' ' . $emp->middlename;
-        }
-    }
 
     public function render()
     {
