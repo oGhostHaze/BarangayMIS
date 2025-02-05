@@ -7,8 +7,8 @@
                 placeholder="Enter User ID" required>
         </div>
         <div class="form-group mb-3 col-md-6 col-sm-6">
-            <label for="emp_name">User Name (Provided from HRIS)</label>
-            <input type="text" class="form-control disabled" wire:model.live='emp_name'" name="name" readonly>
+            <label for="emp_name">User Full Name </label>
+            <input type="text" class="form-control disabled" wire:model='emp_name' name="name" readonly>
         </div>
         <div class="form-group mb-3 col-md-6 col-sm-6">
             <label for="username">Username</label>

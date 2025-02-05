@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('position');
             $table->enum('status', ['A','I'])->default('A');
+            $table->boolean('asignatory')->default(false);
             $table->timestamps();
         });
     }

@@ -31,8 +31,6 @@ class UsersController extends Controller
         // Validation Data
         $request->validate([
             'name' => 'required|max:100',
-            'employeeid' => 'required',
-            'department_id' => 'required|exists:department_sections,id',
             'email' => 'required|max:100|email|unique:users',
             'username' => 'required|max:100|unique:users',
             'password' => 'required|min:6',
@@ -42,8 +40,6 @@ class UsersController extends Controller
         // Create New Admin
         $admin = new User();
         $admin->name = $request->name;
-        $admin->department_section_id = $request->department_id;
-        $admin->employeeid = $request->employeeid;
         $admin->username = $request->username;
         $admin->email = $request->email;
         $admin->password = Hash::make($request->password);
@@ -74,16 +70,12 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required|max:50',
             'email' => 'required|max:100|email|unique:users,email,' . $id,
-            'employeeid' => 'required|max:100|unique:users,employeeid,' . $id,
             'username' => 'required|max:100|unique:users,username,' . $id,
-            'department_id' => 'required|exists:department_sections,id',
             'password' => 'nullable|min:6',
             'password_confirmation' => 'nullable|min:6|same:password',
         ]);
 
         $user->name = $request->name;
-        $user->department_section_id = $request->department_id;
-        $user->employeeid = $request->employeeid;
         $user->username = $request->username;
         $user->email = $request->email;
 
