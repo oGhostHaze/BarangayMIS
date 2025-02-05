@@ -3,7 +3,7 @@
     <div class="form-row row">
         <div class="form-group mb-3 col-md-6 col-sm-6">
             <label for="emp_name">User Full Name </label>
-            <input type="text" class="form-control disabled" wire:model='name' name="name">
+            <input type="text" class="form-control" wire:model='name' name="name">
         </div>
         <div class="form-group mb-3 col-md-6 col-sm-6">
             <label for="username">Username</label>
