@@ -186,7 +186,7 @@
                             </svg>
                         </span>
                         <span class="nav-link-title">
-                            News, Update and Announcements
+                            News and Updates
                         </span>
                     </a>
                     <div class="dropdown-menu {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}">
@@ -239,8 +239,8 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                <li class="nav-item dropdown {{ request()->routeIs('auth.blotters.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.blotters.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
                         <span
@@ -260,19 +260,56 @@
                             Blotter
                         </span>
                     </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                    <div class="dropdown-menu {{ request()->routeIs('auth.blotters.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
+                                <a class="dropdown-item" href="{{ route('auth.blotters.index') }}">
                                     All Blotter Records
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
+                                <a class="dropdown-item" href="{{ route('auth.blotters.create') }}">
                                     Add New Blotter Record
                                 </a>
                             </div>
                         </div>
                     </div>
                 </li>
+                <li class="nav-item dropdown {{ request()->routeIs('auth.barangay.*') ? 'active' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.barangay.*') ? 'show' : '' }}"
+                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                        aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-password-user">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 17v4" />
+                            <path d="M10 20l4 -2" />
+                            <path d="M10 18l4 2" />
+                            <path d="M5 17v4" />
+                            <path d="M3 20l4 -2" />
+                            <path d="M3 18l4 2" />
+                            <path d="M19 17v4" />
+                            <path d="M17 20l4 -2" />
+                            <path d="M17 18l4 2" />
+                            <path d="M9 6a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                            <path d="M7 14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2" />
+                        </svg>
+                        <span class="nav-link-title">
+                            Barangay Officials
+                        </span>
+                    </a>
+                    <div class="dropdown-menu {{ request()->routeIs('auth.barangay.*') ? 'show' : '' }}">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="{{ route('auth.barangay.org.chart') }}">
+                                    Organizational Chart
+                                </a>
+                                <a class="dropdown-item" href="{{ route('auth.barangay.officials') }}">
+                                    Manage Barangay Officials
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>

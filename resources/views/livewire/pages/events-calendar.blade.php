@@ -1,5 +1,5 @@
-<div>
-    <div id="calendar"></div>
+<div class="container card">
+    <div id="calendar" class="card-body"></div>
 
     @push('scripts')
         <script type="module">
