@@ -6,7 +6,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark">
-            <a href="{{ route('auth.home') }}">
+            <a href="{{ route('auth.admin.dashboard') }}">
                 <img src="{{ url('/back/dist/img/logo-favicon/favicon.ico') }}" width="110" height="32"
                     alt="Tabler" class="navbar-brand-image"> {{ env('APP_NAME') }}
             </a>
@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
                 <li class="nav-item">
-                    <a class="nav-link" href="./">
+                    <a class="nav-link" href="{{ route('auth.admin.dashboard') }}">
                         <span
                             class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -226,14 +226,14 @@
                             Certificate Requests
                         </span>
                     </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                    <div class="dropdown-menu {{ request()->routeIs('auth.certs.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
+                                <a class="dropdown-item" href="{{ route('auth.certs.requests') }}">
                                     All Requests
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
-                                    Issue Certificate
+                                <a class="dropdown-item" href="{{ route('auth.certs.issued') }}">
+                                    Issued Requests
                                 </a>
                             </div>
                         </div>

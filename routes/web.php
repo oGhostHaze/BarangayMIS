@@ -1,25 +1,30 @@
 <?php
 
+use App\Livewire\BlotterCreate;
+use App\Livewire\BlotterManage;
+use App\Livewire\AdminDashboard;
+use App\Livewire\SystemSettings;
+use App\Livewire\BarangayOrgChart;
+use App\Livewire\Pages\ResidentShow;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\CertificateIndigency;
+use App\Livewire\CertificateTemplate1;
+use App\Livewire\Pages\EventsCalendar;
+use App\Livewire\Pages\ResidentsManage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
-use App\Livewire\BarangayOrgChart;
-use App\Livewire\BlotterCreate;
-use App\Livewire\BlotterManage;
-use App\Livewire\CertificateIndigency;
 use App\Livewire\Pages\AnnouncementsForm;
+use App\Livewire\Pages\AnnouncementsShow;
+use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
-use App\Livewire\Pages\AnnouncementsShow;
-use App\Livewire\Pages\BarangayOfficialsManage;
-use App\Livewire\Pages\EventsCalendar;
-use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\ResidentsCreateForm;
-use App\Livewire\Pages\ResidentShow;
-use App\Livewire\Pages\ResidentsManage;
-use App\Livewire\SystemSettings;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Pages\CertificateIssuedPage;
+use App\Livewire\Pages\CertificateRequestPage;
+use App\Http\Controllers\CertificateController;
+use App\Livewire\Pages\BarangayOfficialsManage;
 
 
 
@@ -54,6 +59,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
 
 
     Route::prefix('/admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
         Route::prefix('/manage-users')->name('users.')->group(function () {
             Route::get('/list', [UsersController::class, 'index'])->name('list');
             Route::get('/create', [UsersController::class, 'create'])->name('create');
@@ -83,7 +89,10 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
 
 
     Route::prefix('/certificates')->name('certs.')->group(function () {
-        Route::get('/indigency', CertificateIndigency::class)->name('list');
+        Route::get('/indigency', CertificateTemplate1::class)->name('list');
+        Route::get('/template-1/{request_id?}', CertificateTemplate1::class)->name('temp1');
+        Route::get('/certificate-requests', CertificateRequestPage::class)->name('requests');
+        Route::get('/issued-certificates', CertificateIssuedPage::class)->name('issued');
     });
 
     Route::get('/settings', SystemSettings::class)->name('settings');

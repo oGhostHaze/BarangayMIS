@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,5 +18,10 @@ class Resident extends Model
     ];
     public function medications() {
         return $this->hasMany(Medication::class);
+    }
+
+    public function age()
+    {
+        return Carbon::parse($this->date_of_birth)->age;
     }
 }
