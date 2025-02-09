@@ -20,7 +20,7 @@
             <label for="password">Assign Roles</label>
             <select wire:model="userroles" name="userroles[]" id="userroles" class="form-control select2" multiple>
                 @foreach ($roles as $role)
-                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    <option value="{{ $role->name }}">{{ $role->name }}</option>
                 @endforeach
             </select>
         </div>
