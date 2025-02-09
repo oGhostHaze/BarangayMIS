@@ -16,6 +16,6 @@ class BarangayOrgChart extends Component
 
     public function render()
     {
-        return view('livewire.barangay-org-chart');
+        return view('livewire.barangay-org-chart')->layout('back.layouts.pages-layout');
     }
 }

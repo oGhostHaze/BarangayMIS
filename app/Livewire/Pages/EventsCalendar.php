@@ -30,6 +30,6 @@ class EventsCalendar extends Component
 
     public function render()
     {
-        return view('livewire.pages.events-calendar');
+        return view('livewire.pages.events-calendar')->layout('back.layouts.pages-layout');
     }
 }

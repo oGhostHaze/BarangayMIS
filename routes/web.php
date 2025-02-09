@@ -1,40 +1,37 @@
 <?php
 
-use App\Livewire\BlotterCreate;
-use App\Livewire\BlotterManage;
-use App\Livewire\AdminDashboard;
-use App\Livewire\SystemSettings;
-use App\Livewire\BarangayOrgChart;
-use App\Livewire\Pages\ResidentShow;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Livewire\CertificateIndigency;
-use App\Livewire\CertificateTemplate1;
-use App\Livewire\Pages\EventsCalendar;
-use App\Livewire\Pages\ResidentsManage;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
+use App\Livewire\AdminDashboard;
+use App\Livewire\BarangayOrgChart;
+use App\Livewire\BlotterCreate;
+use App\Livewire\BlotterManage;
+use App\Livewire\CertificateIndigency;
+use App\Livewire\CertificateTemplate1;
+use App\Livewire\LandingPage;
 use App\Livewire\Pages\AnnouncementsForm;
-use App\Livewire\Pages\AnnouncementsShow;
-use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
-use App\Livewire\Pages\ResidentsCreateForm;
+use App\Livewire\Pages\AnnouncementsShow;
+use App\Livewire\Pages\BarangayOfficialsManage;
 use App\Livewire\Pages\CertificateIssuedPage;
 use App\Livewire\Pages\CertificateRequestPage;
-use App\Http\Controllers\CertificateController;
-use App\Livewire\Pages\BarangayOfficialsManage;
+use App\Livewire\Pages\EventsCalendar;
+use App\Livewire\Pages\EventsManageTable;
+use App\Livewire\Pages\ResidentsCreateForm;
+use App\Livewire\Pages\ResidentShow;
+use App\Livewire\Pages\ResidentsManage;
+use App\Livewire\SystemSettings;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 
-
-
-
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', LandingPage::class)->name('landing');
+Route::get('/org-chart', BarangayOrgChart::class)->name('org-chart');
+Route::get('/announcements/feed', AnnouncementsPublic::class)->name('announcements.feed');
+Route::get('/events/calendar', EventsCalendar::class)->name('events.calendar');
 
 Route::middleware(['guest:web'])->group(function () {
     Route::view('/login', 'back.pages.auth.login')->name('login');
@@ -44,12 +41,12 @@ Route::middleware(['guest:web'])->group(function () {
 });
 
 Route::get('/home', function () {
-    return redirect()->route('auth.events.calendar');
+    return redirect()->route('events.calendar');
 })->name('home');
 
 Route::name('auth.')->middleware(['auth:web'])->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('auth.events.calendar');
+    Route::get('/admin', function () {
+        return redirect()->route('events.calendar');
     })->name('home');
 
     Route::get('/logout', function () {
@@ -78,9 +75,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/resident/{residentId}', ResidentShow::class)->name('residents.show');
 
     Route::get('/events', EventsManageTable::class)->name('events.index');
-    Route::get('/events/calendar', EventsCalendar::class)->name('events.calendar');
 
-    Route::get('/announcements/feed', AnnouncementsPublic::class)->name('announcements.feed');
     Route::get('/announcements/manage', AnnouncementsManage::class)->name('announcements.manage');
     Route::get('/announcements/create', AnnouncementsForm::class)->name('announcements.create');
     Route::get('/announcements/{id}/edit', AnnouncementsForm::class)->name('announcements.edit');

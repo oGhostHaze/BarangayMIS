@@ -13,6 +13,6 @@ class AnnouncementsPublic extends Component
             'announcements' => Announcement::where('status', 'published')
                 ->orderBy('published_at', 'desc')
                 ->get(),
-        ]);
+        ])->layout('back.layouts.pages-layout');;
     }
 }

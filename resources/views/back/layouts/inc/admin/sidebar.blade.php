@@ -13,7 +13,7 @@
         </h1>
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
-                <li class="nav-item">
+                <li class="nav-item {{ request()->routeIs('auth.admin.dashboard') ? 'active fw-bold' : '' }}">
                     <a class="nav-link" href="{{ route('auth.admin.dashboard') }}">
                         <span
                             class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
@@ -31,107 +31,112 @@
                         </span>
                     </a>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
-                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                        aria-expanded="false">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-users-group">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
-                                <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                <path d="M17 10h2a2 2 0 0 1 2 2v1" />
-                                <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            Manage Users
-                        </span>
-                    </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
-                        <div class="dropdown-menu-columns">
-                            <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
-                                    All Users
-                                </a>
-                                <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
-                                    Add New User
-                                </a>
+                @role('super-admin')
+                    <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active fw-bold' : '' }}">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                            aria-expanded="false">
+                            <span
+                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-users-group">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                    <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
+                                    <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                    <path d="M17 10h2a2 2 0 0 1 2 2v1" />
+                                    <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                    <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Manage Users
+                            </span>
+                        </a>
+                        <div class="dropdown-menu {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}">
+                            <div class="dropdown-menu-columns">
+                                <div class="dropdown-menu-column">
+                                    <a class="dropdown-item" href="{{ route('auth.admin.users.list') }}">
+                                        All Users
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('auth.admin.users.create') }}">
+                                        Add New User
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.roles.*') ? 'active' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.roles.*') ? 'show' : '' }}"
-                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                        aria-expanded="false">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="currentColor"
-                                class="icon icon-tabler icons-tabler-filled icon-tabler-shield-half">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path
-                                    d="M11.998 2l.032 .002l.086 .005a1 1 0 0 1 .342 .104l.105 .062l.097 .076l.016 .015l.247 .21a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.791 -2.75l.046 -.036l.053 -.041a1 1 0 0 1 .217 -.112l.075 -.023l.036 -.01a1 1 0 0 1 .12 -.022l.086 -.005zm.002 2.296l-.176 .135a13 13 0 0 1 -7.288 2.572l-.264 .006l-.064 .31a11 11 0 0 0 1.064 7.175l.17 .314a11 11 0 0 0 6.49 5.136l.068 .019z" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            Roles/Permissions
-                        </span>
-                    </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.admin.roles.*') ? 'show' : '' }}">
-                        <div class="dropdown-menu-columns">
-                            <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.admin.roles.index') }}">
-                                    All Roles
-                                </a>
-                                <a class="dropdown-item" href="{{ route('auth.admin.roles.create') }}">
-                                    Add New Role
-                                </a>
+                    </li>
+                    <li class="nav-item dropdown {{ request()->routeIs('auth.admin.roles.*') ? 'active fw-bold' : '' }}">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.roles.*') ? 'show' : '' }}"
+                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                            aria-expanded="false">
+                            <span
+                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    class="icon icon-tabler icons-tabler-filled icon-tabler-shield-half">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M11.998 2l.032 .002l.086 .005a1 1 0 0 1 .342 .104l.105 .062l.097 .076l.016 .015l.247 .21a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.791 -2.75l.046 -.036l.053 -.041a1 1 0 0 1 .217 -.112l.075 -.023l.036 -.01a1 1 0 0 1 .12 -.022l.086 -.005zm.002 2.296l-.176 .135a13 13 0 0 1 -7.288 2.572l-.264 .006l-.064 .31a11 11 0 0 0 1.064 7.175l.17 .314a11 11 0 0 0 6.49 5.136l.068 .019z" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Roles/Permissions
+                            </span>
+                        </a>
+                        <div class="dropdown-menu {{ request()->routeIs('auth.admin.roles.*') ? 'show' : '' }}">
+                            <div class="dropdown-menu-columns">
+                                <div class="dropdown-menu-column">
+                                    <a class="dropdown-item" href="{{ route('auth.admin.roles.index') }}">
+                                        All Roles
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('auth.admin.roles.create') }}">
+                                        Add New Role
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.residents.*') ? 'active' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}"
-                        href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
-                        aria-expanded="false">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-users">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            Residents
-                        </span>
-                    </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}">
-                        <div class="dropdown-menu-columns">
-                            <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.residents.index') }}">
-                                    All Residents
-                                </a>
-                                <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
-                                    Add New Resident
-                                </a>
+                    </li>
+                @endrole
+                @role('admin')
+                    <li class="nav-item dropdown {{ request()->routeIs('auth.residents.*') ? 'active fw-bold' : '' }}">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}"
+                            href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                            aria-expanded="false">
+                            <span
+                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Residents
+                            </span>
+                        </a>
+                        <div class="dropdown-menu {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}">
+                            <div class="dropdown-menu-columns">
+                                <div class="dropdown-menu-column">
+                                    <a class="dropdown-item" href="{{ route('auth.residents.index') }}">
+                                        All Residents
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
+                                        Add New Resident
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.events.*') ? 'active' : '' }}">
+                    </li>
+                @endrole
+                <li class="nav-item dropdown {{ request()->routeIs('auth.events.*') ? 'active fw-bold' : '' }}">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.events.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
@@ -157,17 +162,20 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.events.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.events.calendar') }}">
+                                <a class="dropdown-item" href="{{ route('events.calendar') }}">
                                     Calendar of Events
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.events.index') }}">
-                                    All Events
-                                </a>
+                                @role('admin')
+                                    <a class="dropdown-item" href="{{ route('auth.events.index') }}">
+                                        All Events
+                                    </a>
+                                @endrole
                             </div>
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.announcements.*') ? 'active' : '' }}">
+                <li
+                    class="nav-item dropdown {{ request()->routeIs('auth.announcements.*') ? 'active fw-bold' : '' }}">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
@@ -192,21 +200,23 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.announcements.feed') }}">
+                                <a class="dropdown-item" href="{{ route('announcements.feed') }}">
                                     News Feed
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.announcements.manage') }}">
-                                    Manage Updates
-                                </a>
-                                <a class="dropdown-item" href="{{ route('auth.announcements.create') }}">
-                                    Add New Update
-                                </a>
+                                @role('admin')
+                                    <a class="dropdown-item" href="{{ route('auth.announcements.manage') }}">
+                                        Manage Updates
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('auth.announcements.create') }}">
+                                        Add New Update
+                                    </a>
+                                @endrole
                             </div>
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
+                <li class="nav-item dropdown {{ request()->routeIs('auth.certs.*') ? 'active fw-bold' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.certs.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
                         <span
@@ -239,7 +249,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.blotters.*') ? 'active' : '' }}">
+                <li class="nav-item dropdown {{ request()->routeIs('auth.blotters.*') ? 'active fw-bold' : '' }}">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.blotters.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
@@ -273,7 +283,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.barangay.*') ? 'active' : '' }}">
+                <li class="nav-item dropdown {{ request()->routeIs('auth.barangay.*') ? 'active fw-bold' : '' }}">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.barangay.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
@@ -301,12 +311,14 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.barangay.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.barangay.org.chart') }}">
+                                <a class="dropdown-item" href="{{ route('org-chart') }}">
                                     Organizational Chart
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.barangay.officials') }}">
-                                    Manage Barangay Officials
-                                </a>
+                                @role('admin')
+                                    <a class="dropdown-item" href="{{ route('auth.barangay.officials') }}">
+                                        Manage Barangay Officials
+                                    </a>
+                                @endrole
                             </div>
                         </div>
                     </div>

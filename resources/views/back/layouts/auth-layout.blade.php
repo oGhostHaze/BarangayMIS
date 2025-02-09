@@ -9,7 +9,7 @@
     <title>@yield('pageTitle')</title>
     <!-- CSS files -->
     <base href="/">
-    {{-- <link rel="shortcut icon" href="{{ \App\Models\Setting::find(1)->blog_favicon }}" type="image/x-icon"> --}}
+    <link rel="shortcut icon" href="{{ url('/back/dist/img/logo-favicon/favicon.ico') }}" type="image/x-icon">
     <link href="{{ url('/back/dist/css/tabler.min.css') }}" rel="stylesheet" />
     <link href="{{ url('/back/dist/css/tabler.min.css') }}" rel="stylesheet" />
     <link href="{{ url('/back/dist/css/tabler.min.css') }}" rel="stylesheet" />

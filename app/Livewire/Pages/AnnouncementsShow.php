@@ -15,6 +15,6 @@ class AnnouncementsShow extends Component
     }
     public function render()
     {
-        return view('livewire.pages.announcements-show');
+        return view('livewire.pages.announcements-show')->layout('back.layouts.pages-layout');
     }
 }

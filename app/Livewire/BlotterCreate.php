@@ -16,7 +16,7 @@ class BlotterCreate extends Component
     public function mount()
     {
         // Generate unique case number
-        $this->case_number = 'CIF-' . now()->format('Ymd') . '-' . Str::random(5);
+        $this->case_number = 'CIF-' . now()->format('Ymd') . '-' . Str::upper(Str::random(5));
     }
 
     protected function rules()

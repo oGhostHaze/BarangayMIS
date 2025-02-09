@@ -123,7 +123,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="educational_attainment">Educational Attainment</label>
                             <select class="form-select @error('educational_attainment') is-invalid @enderror"
                                 wire:model="educational_attainment">
@@ -140,7 +140,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="contact_no">Contact No</label>
                             <input type="text" class="form-control @error('contact_no') is-invalid @enderror"
                                 wire:model="contact_no" placeholder="Contact Number">
@@ -148,7 +148,15 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                wire:model="email" placeholder="Contact Number">
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
                             <label for="sitio">Sitio</label>
                             <input type="text" class="form-control @error('sitio') is-invalid @enderror"
                                 wire:model="sitio" placeholder="Sitio">

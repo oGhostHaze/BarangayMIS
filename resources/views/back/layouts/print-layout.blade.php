@@ -9,7 +9,7 @@
     <title>@yield('pageTitle')</title>
     <!-- CSS files -->
     <base href="/">
-    <link rel="shortcut icon" href="{{ url('/back/dist/img/logo-favicon/mmmh_fav.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url('/back/dist/img/logo-favicon/favicon.ico') }}" type="image/x-icon">
     <link href="{{ url('/back/dist/css/tabler.min.css') }}" rel="stylesheet" />
     <link href="{{ url('/back/dist/css/tabler-flags.min.css') }}" rel="stylesheet" />
     <link href="{{ url('/back/dist/css/tabler-payments.min.css') }}" rel="stylesheet" />
@@ -25,34 +25,34 @@
     @livewireStyles
     <link href="{{ url('/back/dist/css/demo.min.css') }}" rel="stylesheet" />
     <style>
-    @import url('https://rsms.me/inter/inter.css');
+        @import url('https://rsms.me/inter/inter.css');
 
-    :root {
-        --tblr-font-sans-serif: 'Inter Var', '-apple-system', 'BlinkMacSystemFont', 'San Francisco', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'sans-serif';
-    }
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', '-apple-system', 'BlinkMacSystemFont', 'San Francisco', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'sans-serif';
+        }
 
-    body {
-        font-feature-settings: "cv03", "cv04", "cv11";
-    }
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
 
-    .swal2-popup {
-        font-size: .85rem;
-    }
+        .swal2-popup {
+            font-size: .85rem;
+        }
 
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        background-color: #F5F5F5;
-    }
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #F5F5F5;
+        }
 
-    ::-webkit-scrollbar {
-        width: 10px;
-        background-color: #F5F5F5;
-    }
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
 
-    ::-webkit-scrollbar-thumb {
-        background-color: #000000;
-        border: 2px solid #555555;
-    }
+        ::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
     </style>
 </head>
 
@@ -89,20 +89,20 @@
     @livewireScripts
     @stack('scripts')
     <script>
-    document.addEventListener('showToastr', function(event) {
-        toastr.remove();
-        if (event.detail[0].type === 'info') {
-            toastr.info(event.detail[0].message);
-        } else if (event.detail[0].type === 'success') {
-            toastr.success(event.detail[0].message);
-        } else if (event.detail[0].type === 'error') {
-            toastr.error(event.detail[0].message);
-        } else if (event.detail[0].type === 'warning') {
-            toastr.warning(event.detail[0].message);
-        } else {
-            return false;
-        }
-    });
+        document.addEventListener('showToastr', function(event) {
+            toastr.remove();
+            if (event.detail[0].type === 'info') {
+                toastr.info(event.detail[0].message);
+            } else if (event.detail[0].type === 'success') {
+                toastr.success(event.detail[0].message);
+            } else if (event.detail[0].type === 'error') {
+                toastr.error(event.detail[0].message);
+            } else if (event.detail[0].type === 'warning') {
+                toastr.warning(event.detail[0].message);
+            } else {
+                return false;
+            }
+        });
     </script>
     <script src="{{ url('/back/dist/js/demo.min.js') }}"></script>
 </body>

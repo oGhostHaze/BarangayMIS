@@ -27,6 +27,7 @@
             <h5 class="text-primary"><i class="fas fa-phone"></i> Contact Information</h5>
             <div class="row">
                 <div class="col-sm-6"><strong>Contact No.:</strong> {{ $resident->contact_no ?? 'N/A' }}</div>
+                <div class="col-sm-6"><strong>Email Address:</strong> {{ $resident->email ?? 'N/A' }}</div>
                 <div class="col-sm-6"><strong>Address (Sitio):</strong> {{ $resident->sitio ?? 'N/A' }}</div>
             </div>
 
