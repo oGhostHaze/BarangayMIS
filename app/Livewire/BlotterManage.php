@@ -125,8 +125,13 @@ class BlotterManage extends Component
 
     public function render()
     {
+        if(Auth::user()->hasRole('admin')) {
+            $blotters  = Blotter::latest()->paginate(10);
+        } else {
+            $blotters  = Blotter::where('recorded_by', Auth::id())->latest()->paginate(10);
+        }
         return view('livewire.blotter-manage', [
-            'blotters' => Blotter::latest()->paginate(10)
+            'blotters' => $blotters
         ]);
     }
 }

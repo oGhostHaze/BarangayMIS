@@ -84,6 +84,8 @@ class ResidentsCreateForm extends Component
                 'password' => Hash::make(Carbon::parse($resident->date_of_birth)->format('mdY')),
             ]);
             $user->assignRole('resident');
+            $resident->user_id = $user->id;
+            $resident->save();
         }
         $this->resetFields();
         $this->alert('success', 'New resident has been added.');

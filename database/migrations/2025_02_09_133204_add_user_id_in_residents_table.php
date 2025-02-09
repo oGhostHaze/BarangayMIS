@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('residents', function (Blueprint $table) {
-            $table->string('email')->unique()->after('middle_name')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // Admin who processed the request
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('residents', function (Blueprint $table) {
-            $table->dropColumn('email');
+            $table->dropColumn('user_id');
         });
     }
 };

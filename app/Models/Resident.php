@@ -40,7 +40,8 @@ class Resident extends Model
         'ofw_country',
         'ofw_is_domestic_helper',
         'ofw_professional',
-        'email'
+        'email',
+        'user_id',
     ];
     public function medications()
     {
@@ -50,5 +51,10 @@ class Resident extends Model
     public function age()
     {
         return Carbon::parse($this->date_of_birth)->age;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

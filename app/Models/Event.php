@@ -19,4 +19,11 @@ class Event extends Model
         'location',
         'status'
     ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
 }

@@ -25,7 +25,11 @@ class CertificateRequestPage extends Component
 
     public function mount()
     {
-        $this->residents = Resident::orderBy('last_name')->get();
+        if(Auth::user()->hasRole(['admin', 'super-admin'])) {
+            $this->residents = Resident::orderBy('last_name')->get();
+        } else {
+            $this->residents = Resident::where('id', Auth::user()->resident->id)->get();
+        }
     }
 
     public function saveRequest()
@@ -80,8 +84,13 @@ class CertificateRequestPage extends Component
 
     public function render()
     {
+        if(Auth::user()->hasRole('admin')) {
+            $requests = CertificateRequest::where('status', 'Pending')->get();
+        } else {
+            $requests = CertificateRequest::where('resident_id', Auth::user()->resident->id)->get();
+        }
         return view('livewire.pages.certificate-request-page', [
-            'requests' => CertificateRequest::latest()->get(),
+            'requests' => $requests,
         ]);
     }
 

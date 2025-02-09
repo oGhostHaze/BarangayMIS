@@ -42,7 +42,7 @@
         <h2 class="mb-3">📅 Upcoming Events</h2>
         <div class="list-group">
             @forelse ($events as $event)
-                <a href="{{ route('events') }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('events.calendar') }}" class="list-group-item list-group-item-action">
                     <strong>{{ $event->title }}</strong> <br>
                     <small>{{ $event->start_date->format('F j, Y') }}</small> -
                     <small>{{ $event->location ?? 'TBA' }}</small>
