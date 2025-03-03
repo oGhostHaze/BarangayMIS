@@ -25,7 +25,7 @@ class CertificateRequestPage extends Component
 
     public function mount()
     {
-        if(Auth::user()->hasRole(['admin', 'super-admin'])) {
+        if (Auth::user()->hasRole(['admin', 'super-admin'])) {
             $this->residents = Resident::orderBy('last_name')->get();
         } else {
             $this->residents = Resident::where('id', Auth::user()->resident->id)->get();
@@ -84,8 +84,8 @@ class CertificateRequestPage extends Component
 
     public function render()
     {
-        if(Auth::user()->hasRole('admin')) {
-            $requests = CertificateRequest::where('status', 'Pending')->get();
+        if (Auth::user()->hasRole('admin')) {
+            $requests = CertificateRequest::all();
         } else {
             $requests = CertificateRequest::where('resident_id', Auth::user()->resident->id)->get();
         }
@@ -97,8 +97,8 @@ class CertificateRequestPage extends Component
     public function processRequest($id, $newStatus)
     {
         $request = CertificateRequest::findOrFail($id);
-        if($newStatus == 'Approved') {
-            $capt = BarangayOfficial::where('position','LIKE', '%Punong Barangay%')->where('status', 'A')->first();
+        if ($newStatus == 'Approved') {
+            $capt = BarangayOfficial::where('position', 'LIKE', '%Punong Barangay%')->where('status', 'A')->first();
             $request->update([
                 'barangay_official_id' => $capt->id,
                 'status' => $newStatus,

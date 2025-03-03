@@ -1,5 +1,5 @@
 <div class="container mt-4">
-    <div class="card shadow">
+    <div class="shadow card">
         <div class="card-header d-flex justify-content-between">
             <h4>Certificate Requests</h4>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#requestModal">New Request</button>
@@ -28,20 +28,29 @@
                             <td>{{ $request->certificate_type }}</td>
                             <td>{{ $request->purpose }}</td>
                             <td>
-                                <span class="badge text-white bg-{{ $request->status == 'Released' ? 'success' : ($request->status == 'Approved' ? 'warning' : 'secondary') }}">
+                                <span
+                                    class="badge text-white bg-{{ $request->status == 'Released' ? 'success' : ($request->status == 'Approved' ? 'warning' : 'secondary') }}">
                                     {{ $request->status }}
                                 </span>
                             </td>
                             <td>{{ $request->requested_at->format('M d, Y') }}</td>
                             <td>
                                 @if ($request->status == 'Pending')
-                                    <button class="btn btn-sm btn-warning" wire:click="processRequest({{ $request->id }}, 'Approved')">Approve</button>
-                                    <button class="btn btn-sm btn-primary" wire:click="editRequest({{ $request->id }})" data-bs-toggle="modal" data-bs-target="#requestModal">Edit</button>
-                                    <button class="btn btn-sm btn-danger" wire:click="deleteRequest({{ $request->id }})" onclick="confirm('Are you sure?') || event.stopImmediatePropagation()">Delete</button>
+                                    <button class="btn btn-sm btn-warning"
+                                        wire:click="processRequest({{ $request->id }}, 'Approved')">Approve</button>
+                                    <button class="btn btn-sm btn-primary" wire:click="editRequest({{ $request->id }})"
+                                        data-bs-toggle="modal" data-bs-target="#requestModal">Edit</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        wire:click="deleteRequest({{ $request->id }})"
+                                        onclick="confirm('Are you sure?') || event.stopImmediatePropagation()">Delete</button>
                                 @elseif ($request->status == 'Approved')
-                                    <button class="btn btn-sm btn-success" wire:click="processRequest({{ $request->id }}, 'Released')">Release</button>
+                                    <button class="btn btn-sm btn-success"
+                                        wire:click="processRequest({{ $request->id }}, 'Released')">Release</button>
                                 @else
-                                    <a class="btn btn-sm btn-primary" href="{{ route('auth.certs.temp1', ['request_id' => $request->id]) }}" target="_blank" onclick="window.open(this.href,'newwindow','width=1000,height=800'); return false;">Preview</a>
+                                    <a class="btn btn-sm btn-primary"
+                                        href="{{ route('auth.certs.temp1', ['request_id' => $request->id]) }}"
+                                        target="_blank"
+                                        onclick="window.open(this.href,'newwindow','width=1000,height=800'); return false;">Preview</a>
                                 @endif
                             </td>
                         </tr>
@@ -52,7 +61,8 @@
     </div>
 
     <!-- Request Modal -->
-    <div wire:ignore.self class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -66,10 +76,13 @@
                             <select class="form-control" wire:model="resident_id">
                                 <option value="">Select Resident</option>
                                 @foreach ($residents as $resident)
-                                    <option value="{{ $resident->id }}">{{ $resident->first_name }} {{ $resident->last_name }}</option>
+                                    <option value="{{ $resident->id }}">{{ $resident->first_name }}
+                                        {{ $resident->last_name }}</option>
                                 @endforeach
                             </select>
-                            @error('resident_id') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('resident_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -81,17 +94,22 @@
                                 <option value="Certificate of Low Income">Certificate of Low Income</option>
                                 <option value="Certificate of Residency">Certificate of Residency</option>
                             </select>
-                            @error('certificate_type') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('certificate_type')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Purpose</label>
                             <textarea class="form-control" wire:model="purpose"></textarea>
-                            @error('purpose') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('purpose')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">{{ $request_id ? 'Update' : 'Submit' }}</button>
+                            <button type="submit"
+                                class="btn btn-primary">{{ $request_id ? 'Update' : 'Submit' }}</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
