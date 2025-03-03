@@ -84,7 +84,7 @@ class CertificateRequestPage extends Component
 
     public function render()
     {
-        if (Auth::user()->hasRole('admin')) {
+        if (Auth::user()->hasAnyRole('admin|super-admin')) {
             $requests = CertificateRequest::all();
         } else {
             $requests = CertificateRequest::where('resident_id', Auth::user()->resident->id)->get();
