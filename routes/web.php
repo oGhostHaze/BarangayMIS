@@ -16,8 +16,10 @@ use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
 use App\Livewire\Pages\AnnouncementsShow;
 use App\Livewire\Pages\BarangayOfficialsManage;
+use App\Livewire\Pages\BlotterRequestsResident;
 use App\Livewire\Pages\CertificateIssuedPage;
 use App\Livewire\Pages\CertificateRequestPage;
+use App\Livewire\Pages\CertificateRequestsResident;
 use App\Livewire\Pages\EventsCalendar;
 use App\Livewire\Pages\EventsManageTable;
 use App\Livewire\Pages\ResidentsCreateForm;
@@ -81,7 +83,8 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/announcements/{id}/edit', AnnouncementsForm::class)->name('announcements.edit');
     Route::get('/announcements/{id}', AnnouncementsShow::class)->name('announcements.show');
 
-
+    Route::get('/my-certificates', CertificateRequestsResident::class)->name('certs.resident');
+    Route::get('/my-reports', BlotterRequestsResident::class)->name('blotter.resident');
 
     Route::prefix('/certificates')->name('certs.')->group(function () {
         Route::get('/indigency', CertificateTemplate1::class)->name('list');

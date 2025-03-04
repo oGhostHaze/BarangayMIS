@@ -7,9 +7,9 @@
             <a href="{{ route('announcements.feed') }}" class="btn btn-primary">View Announcements</a>
             <a href="{{ route('events.calendar') }}" class="btn btn-outline-primary">Check Events</a>
             @if (Auth::user())
-                <a href="{{ route('login') }}" class="btn btn-success">Login to Dashboard</a>
-            @else
                 <a href="{{ route('auth.admin.dashboard') }}" class="btn btn-success">Go to Dashboard</a>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-success">Login</a>
             @endif
         </div>
     </div>

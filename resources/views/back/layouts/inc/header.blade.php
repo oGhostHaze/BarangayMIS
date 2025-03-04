@@ -15,21 +15,6 @@
              </a>
          </h1>
          <div class="flex-row navbar-nav order-md-last">
-             <div class="nav-item d-none d-md-flex me-3">
-                 <div class="btn-list">
-                     <a href="{{ route('auth.login') }}" class="btn" rel="noreferrer">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                             <path
-                                 d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5">
-                             </path>
-                         </svg>
-                         Login
-                     </a>
-                 </div>
-             </div>
              <div class="d-none d-md-flex">
                  <a href="?theme=dark" class="px-0 nav-link hide-theme-dark" data-bs-toggle="tooltip"
                      data-bs-placement="bottom" aria-label="Enable dark mode" data-bs-original-title="Enable dark mode">
@@ -67,14 +52,31 @@
                          </div>
                      </a>
                      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                         <a href="#" class="dropdown-item">Status</a>
-                         <a href="./profile.html" class="dropdown-item">Profile</a>
-                         <a href="#" class="dropdown-item">Feedback</a>
                          <div class="dropdown-divider"></div>
-                         <a href="./settings.html" class="dropdown-item">Settings</a>
                          <a href="{{ route('auth.logout') }}" class="dropdown-item">Logout</a>
                      </div>
                  </div>
+                 @role('admin')
+                     <div class="nav-item dropdown">
+                         <a href="#" class="p-0 nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown"
+                             aria-label="Open user menu">
+                             <span class="avatar avatar-sm"
+                                 style="background-image: url({{ Avatar::create($user->name)->toBase64() }})"></span>
+                             <div class="d-none d-xl-block ps-2">
+                                 <div>{{ $user->name }}</div>
+                                 <div class="mt-1 small text-secondary">{{ $user->email }}</div>
+                             </div>
+                         </a>
+                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                             <a href="#" class="dropdown-item">Status</a>
+                             <a href="./profile.html" class="dropdown-item">Profile</a>
+                             <a href="#" class="dropdown-item">Feedback</a>
+                             <div class="dropdown-divider"></div>
+                             <a href="./settings.html" class="dropdown-item">Settings</a>
+                             <a href="{{ route('auth.logout') }}" class="dropdown-item">Logout</a>
+                         </div>
+                     </div>
+                 @endrole
              @endif
          </div>
      </div>
@@ -85,24 +87,26 @@
              <div class="container-xl">
                  <ul class="navbar-nav">
                      @if (Auth::user())
-                         <li class="nav-item">
-                             <a class="nav-link" href="{{ route('auth.admin.dashboard') }}">
-                                 <span
-                                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                         height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                         fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                         <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                         <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                         <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                     </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                     Dashboard
-                                 </span>
-                             </a>
-                         </li>
+                         @role('admin')
+                             <li class="nav-item">
+                                 <a class="nav-link" href="{{ route('auth.admin.dashboard') }}">
+                                     <span
+                                         class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                             <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                             <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                             <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                         </svg>
+                                     </span>
+                                     <span class="nav-link-title">
+                                         Dashboard
+                                     </span>
+                                 </a>
+                             </li>
+                         @endrole
                      @endif
                      <li class="nav-item {{ request()->routeIs('landing') ? 'active' : '' }}">
                          <a class="nav-link" href="{{ route('landing') }}">
@@ -180,6 +184,43 @@
                              </span>
                          </a>
                      </li>
+                     @if (Auth::user())
+                         <li class="nav-item {{ request()->routeIs('auth.certs.resident') ? 'active' : '' }}">
+                             <a class="nav-link" href="{{ route('auth.certs.resident') }}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     class="icon icon-tabler icons-tabler-outline icon-tabler-file-certificate">
+                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                     <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                     <path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" />
+                                     <path d="M6 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                     <path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" />
+                                 </svg>
+                                 <span class="nav-link-title">
+                                     Certificate Requests
+                                 </span>
+                             </a>
+                         </li>
+                         <li class="nav-item {{ request()->routeIs('auth.blotter.resident') ? 'active' : '' }}">
+                             <a class="nav-link" href="{{ route('auth.blotter.resident') }}">
+
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     class="icon icon-tabler icons-tabler-outline icon-tabler-file-alert">
+                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                     <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                     <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                     <path d="M12 17l.01 0" />
+                                     <path d="M12 11l0 3" />
+                                 </svg>
+                                 <span class="nav-link-title">
+                                     Blotter
+                                 </span>
+                             </a>
+                         </li>
+                     @endif
                  </ul>
              </div>
          </div>
