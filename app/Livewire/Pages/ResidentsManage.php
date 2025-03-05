@@ -2,18 +2,21 @@
 
 namespace App\Livewire\Pages;
 
-use App\Traits\Toastr;
-use Livewire\Component;
 use App\Models\Resident;
+use App\Models\User;
+use App\Traits\Toastr;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Livewire\Component;
 
 class ResidentsManage extends Component
 {
     use Toastr;
     public $last_name, $first_name, $middle_name, $suffix, $prefix, $contact_no, $sitio, $date_of_birth, $gender, $civil_status,
-           $philhealth_id, $sss_id, $gsis_id, $social_pension_id, $is_pwd = false, $pwd_id, $type_of_disability, $illness,
-           $is_solo_parent = false, $solo_parent_id, $is_senior_citizen = false, $senior_citizen_id, $educational_attainment,
-           $source_of_income, $monthly_income, $income_type, $is_ofw = false, $ofw_country, $ofw_is_domestic_helper = false,
-           $ofw_professional = false;
+        $philhealth_id, $sss_id, $gsis_id, $social_pension_id, $is_pwd = false, $pwd_id, $type_of_disability, $illness,
+        $is_solo_parent = false, $solo_parent_id, $is_senior_citizen = false, $senior_citizen_id, $educational_attainment,
+        $source_of_income, $monthly_income, $income_type, $is_ofw = false, $ofw_country, $ofw_is_domestic_helper = false,
+        $ofw_professional = false;
     public $resident_id;
 
     public function rules()
@@ -51,22 +54,37 @@ class ResidentsManage extends Component
             'ofw_professional' => 'boolean',
         ];
     }
-    public function render() {
+    public function render()
+    {
         $residents = Resident::all();
         return view('livewire.pages.residents-manage', compact('residents'));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->resetFields();
     }
 
-    public function store() {
-        Resident::create($this->validateFields());
+    public function store()
+    {
+        $resident = Resident::create($this->validateFields());
+        if ($resident->email) {
+            $user = User::create([
+                'name' => $resident->first_name . ' ' . $resident->middle_name . ' ' . $resident->last_name,
+                'email' => $resident->email,
+                'username' => $resident->contact_no,
+                'password' => Hash::make(Carbon::parse($resident->date_of_birth)->format('mdY')),
+            ]);
+            $user->assignRole('resident');
+            $resident->user_id = $user->id;
+            $resident->save();
+        }
         $this->resetFields();
         $this->alert('success', 'New resident has been added.');
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $resident = Resident::findOrFail($id);
         $this->fill($resident->toArray());
         $this->resident_id = $resident->id;
@@ -78,22 +96,26 @@ class ResidentsManage extends Component
         $this->ofw_professional = $resident->ofw_professional ? true : false;
     }
 
-    public function update() {
+    public function update()
+    {
         Resident::findOrFail($this->resident_id)->update($this->validateFields());
         $this->resetFields();
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         Resident::findOrFail($id)->delete();
         $this->alert('info', 'Selected resident has been deleted.');
     }
 
-    private function resetFields() {
+    private function resetFields()
+    {
         $this->resident_id = null;
         $this->fill(array_fill_keys(array_keys($this->validateFields()), null));
     }
 
-    private function validateFields() {
+    private function validateFields()
+    {
         return $this->validate($this->rules());
     }
 }
