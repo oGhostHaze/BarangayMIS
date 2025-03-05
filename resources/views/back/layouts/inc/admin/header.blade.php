@@ -9,10 +9,10 @@
             aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-nav flex-row order-md-last">
+        <div class="flex-row navbar-nav order-md-last">
 
             <div class="d-none d-md-flex">
-                <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" data-bs-toggle="tooltip"
+                <a href="?theme=dark" class="px-0 nav-link hide-theme-dark" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" aria-label="Enable dark mode" data-bs-original-title="Enable dark mode">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -22,7 +22,7 @@
                         </path>
                     </svg>
                 </a>
-                <a href="?theme=light" class="nav-link px-0 hide-theme-light" data-bs-toggle="tooltip"
+                <a href="?theme=light" class="px-0 nav-link hide-theme-light" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" aria-label="Enable light mode"
                     data-bs-original-title="Enable light mode">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -37,7 +37,7 @@
                 </a>
             </div>
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                <a href="#" class="p-0 nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown"
                     aria-label="Open user menu">
                     <span class="avatar avatar-sm"
                         style="background-image: url({{ Avatar::create($user->name)->toBase64() }})"></span>
@@ -47,7 +47,6 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="./profile.html" class="dropdown-item">Profile</a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('auth.settings') }}" class="dropdown-item">Settings</a>
                     <a href="{{ route('auth.logout') }}" class="dropdown-item">Logout</a>
