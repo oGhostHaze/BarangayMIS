@@ -1,7 +1,7 @@
 <div class="text-center">
     <div class="row align-items-center mb-3">
         <div class="col-3 d-flex">
-            <img src="{{ asset('images/logo1.png') }}" alt="Logo 1" style="width: 80px; height: 80px;">
+            <img src="asd" alt="Logo 1" style="width: 80px; height: 80px;">
         </div>
         <div class="col-6">
             <div>
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-3 d-flex">
-            <img class="ms-auto" src="{{ asset('images/logo2.png') }}" alt="Logo 2" style="width: 80px; height: 80px; margin: 0 20px;">
+            <img class="ms-auto" src="{{ asset($setting->provincial_logo) }}" alt="Logo 2" style="width: 80px; height: 80px; margin: 0 20px;">
             <img class="ms-2" src="{{ asset('images/logo3.png') }}" alt="Logo 3" style="width: 80px; height: 80px;">
         </div>
     </div>

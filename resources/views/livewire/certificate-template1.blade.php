@@ -14,7 +14,7 @@
         <div class="text-center">
             <div class="row align-items-center mb-3">
                 <div class="col-3 d-flex">
-                    <img src="{{ asset('images/logo1.png') }}" alt="Logo 1" style="width: 50px; height: 50px;">
+                    <img src="{{ asset('storage/' . $setting->provincial_logo) }}" alt="Logo 1" style="width: 50px; height: 50px;">
                 </div>
                 <div class="col-6">
                     <div>
@@ -27,8 +27,8 @@
                     </div>
                 </div>
                 <div class="col-3 d-flex">
-                    <img class="ms-auto" src="{{ asset('images/logo2.png') }}" alt="Logo 2" style="width: 50px; height: 50px; margin: 0 20px;">
-                    <img class="ms-2" src="{{ asset('images/logo3.png') }}" alt="Logo 3" style="width: 50px; height: 50px;">
+                    <img class="ms-auto" src="{{ asset('storage/' . $setting->barangay_logo) }}" alt="Logo 2" style="width: 50px; height: 50px; margin: 0 20px;">
+                    @if($setting->additional_logo) <img class="ms-2" src="{{ asset('storage/' . $setting->additional_logo) }}" alt="Logo 3" style="width: 50px; height: 50px;">@endif
                 </div>
             </div>
         </div>
