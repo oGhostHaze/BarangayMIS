@@ -1,5 +1,5 @@
 <div class="text-center">
-    <div class="row align-items-center mb-3">
+    <div class="mb-3 row align-items-center">
         <div class="col-3 d-flex">
             <img src="asd" alt="Logo 1" style="width: 80px; height: 80px;">
         </div>
@@ -14,8 +14,10 @@
             </div>
         </div>
         <div class="col-3 d-flex">
-            <img class="ms-auto" src="{{ asset($setting->provincial_logo) }}" alt="Logo 2" style="width: 80px; height: 80px; margin: 0 20px;">
-            <img class="ms-2" src="{{ asset('images/logo3.png') }}" alt="Logo 3" style="width: 80px; height: 80px;">
+            <img class="ms-auto" src="{{ asset($setting->provincial_logo) }}" alt="Logo 2"
+                style="width: 80px; height: 80px; margin: 0 20px;">
+            <img class="ms-2" src="{{ asset($setting->barangay_logo) }}" alt="Logo 3"
+                style="width: 80px; height: 80px;">
         </div>
     </div>
 </div>

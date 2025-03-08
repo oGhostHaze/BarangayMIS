@@ -13,7 +13,8 @@
             <div class="text-center">
                 <div class="mb-3 row align-items-center">
                     <div class="col-3 d-flex">
-                        <img src="{{ asset('images/logo1.png') }}" alt="Logo 1" style="width: 50px; height: 50px;">
+                        <img src="{{ asset('storage/' . $setting->provincial_logo) }}" alt="Logo 1"
+                            style="width: 50px; height: 50px;">
                     </div>
                     <div class="col-6">
                         <div>
@@ -27,51 +28,57 @@
                         </div>
                     </div>
                     <div class="col-3 d-flex">
-                        <img class="ms-auto" src="{{ asset('images/logo2.png') }}" alt="Logo 2"
+                        <img class="ms-auto" src="{{ asset('storage/' . $setting->barangay_logo) }}" alt="Logo 2"
                             style="width: 50px; height: 50px; margin: 0 20px;">
-                        <img class="ms-2" src="{{ asset('images/logo3.png') }}" alt="Logo 3"
-                            style="width: 50px; height: 50px;">
+                        @if ($setting->additional_logo)
+                            <img class="ms-2" src="{{ asset('storage/' . $setting->additional_logo) }}" alt="Logo 3"
+                                style="width: 50px; height: 50px;">
+                        @endif
                     </div>
                 </div>
-            </div>
 
 
-            <div>
-                <p class="mt-4">To Whom It May Concern:</p>
+                <div>
+                    <p class="mt-4">To Whom It May Concern:</p>
 
-                <p>This is to certify that
-                    <strong>{{ $resident->first_name . ' ' . $resident->middle_name . ' ' . $resident->last_name }}</strong>,
-                    <strong>{{ $resident->age() }}</strong> years of age,
-                    <strong>{{ $resident->civil_status }}</strong>, is a bonafide resident of
-                    {{ ucfirst($setting->barangay_name . ', ' . $setting->municipal_name) }}.
-                </p>
-                @if (!$request->certificate_type == 'Certificate of Indigency')
-                    <p>This further certifies that he/she is known to the undersigned Punong Barangay that he/she
-                        belongs to an Indigent Family of this barangay.</p>
-                @elseif($request->certificate_type == 'Certificate of Low Income')
-                    <p>This further certifies that he/she is known to the undersigned Punong Barangay that he/she is
-                        a/an {{ $resident->source_of_income }} with monthly income of Php
-                        {{ number_format($resident->monthly_income, 2) ?? 0.0 }} and belongs to Low Income Family of
-                        this barangay.</p>
-                @endif
-                <p>This certification is issued upon the request of the above-mentioned name for whatever legal purpose
-                    it may serve.</p>
+                    <p>This is to certify that
+                        <strong>{{ $resident->first_name . ' ' . $resident->middle_name . ' ' . $resident->last_name }}</strong>,
+                        <strong>{{ $resident->age() }}</strong> years of age,
+                        <strong>{{ $resident->civil_status }}</strong>, is a bonafide resident of
+                        {{ ucfirst($setting->barangay_name . ', ' . $setting->municipal_name) }}.
+                    </p>
+                    @if (!$request->certificate_type == 'Certificate of Indigency')
+                        <p>This further certifies that he/she is known to the undersigned Punong Barangay that he/she
+                            belongs to an Indigent Family of this barangay.</p>
+                    @elseif($request->certificate_type == 'Certificate of Low Income')
+                        <p>This further certifies that he/she is known to the undersigned Punong Barangay that he/she is
+                            a/an {{ $resident->source_of_income }} with monthly income of Php
+                            {{ number_format($resident->monthly_income, 2) ?? 0.0 }} and belongs to Low Income Family
+                            of
+                            this barangay.</p>
+                    @endif
+                    <p>This certification is issued upon the request of the above-mentioned name for whatever legal
+                        purpose
+                        it may serve.</p>
 
-                <p class="mt-4">Issued this
-                    <strong>{{ \Carbon\Carbon::parse($request->updated_at)->format('jS \d\a\y \of F') }}</strong> at
-                    {{ ucfirst($setting->barangay_name . ', ' . $setting->municipal_name . ', ' . $setting->province_name) }},
-                    Philippines.</p>
+                    <p class="mt-4">Issued this
+                        <strong>{{ \Carbon\Carbon::parse($request->updated_at)->format('jS \d\a\y \of F') }}</strong>
+                        at
+                        {{ ucfirst($setting->barangay_name . ', ' . $setting->municipal_name . ', ' . $setting->province_name) }},
+                        Philippines.
+                    </p>
 
-            </div>
+                </div>
 
-            <div class="pt-5 mt-5 text-end">
+                <div class="pt-5 mt-5 text-end">
 
-                <h3 class="mb-0">
-                    <strong>{{ $capt->first_name . ' ' . $capt->middle_name . ' ' . $capt->last_name }}</strong></h3>
-                <span class="mt-0">Punong Barangay</span>
-            </div>
-        @else
-            <div class="alert alert-danger">Please check your settings.</div>
+                    <h3 class="mb-0">
+                        <strong>{{ $capt->first_name . ' ' . $capt->middle_name . ' ' . $capt->last_name }}</strong>
+                    </h3>
+                    <span class="mt-0">Punong Barangay</span>
+                </div>
+            @else
+                <div class="alert alert-danger">Please check your settings.</div>
         @endif
     </div>
 
