@@ -57,7 +57,7 @@ class LoginForm extends Component
                 if ($this->returnUrl != null) {
                     return redirect()->to($this->returnUrl);
                 } else {
-                    redirect()->route('auth.home');
+                    redirect()->route('auth.dashboard');
                 }
             }
         } else {

@@ -135,6 +135,6 @@ class BlotterRequestsResident extends Component
         $blotters  = Blotter::where('recorded_by', Auth::id())->latest()->paginate(10);
         return view('livewire.pages.blotter-requests-resident', [
             'blotters' => $blotters
-        ]);
+        ])->layout('back.layouts.pages-layout');
     }
 }

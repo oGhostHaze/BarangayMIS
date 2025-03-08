@@ -6,7 +6,7 @@
     @endif
     <form class="card card-md" wire:submit.prevent="LoginHandler()" method="POST" autocomplete="off">
         <div class="card-body">
-            <h2 class="h2 text-center mb-4">Login to your account</h2>
+            <h2 class="mb-4 text-center h2">Login to your account</h2>
             <div class="mb-3">
                 <label class="form-label">Username/Email address</label>
                 <input type="text" class="form-control" placeholder="Username or email" autocomplete="off"
@@ -49,8 +49,9 @@
                     <span class="form-check-label">Remember me on this device</span>
                 </label>
             </div>
-            <div class="form-footer">
-                <button type="submit" class="btn btn-teal w-100">Sign in</button>
+            <div class="form-footer d-flex">
+                <a href="{{ route('auth.register') }}" type="submit" class="btn btn-secondary w-25">Register</a>
+                <button type="submit" class="ms-auto btn btn-teal w-25">Sign in</button>
             </div>
         </div>
     </form>

@@ -15,8 +15,13 @@ class CertificateRequest extends Model
         'certificate_type',
         'purpose',
         'status',
+        'payment_method',
+        'pickup_datetime',
+        'receipt_path',
         'requested_at',
         'approved_at',
+
+        'is_paid',
         'released_at',
         'processed_by',
         'barangay_official_id',
@@ -26,8 +31,8 @@ class CertificateRequest extends Model
         'requested_at' => 'datetime',
         'approved_at' => 'datetime',
         'released_at' => 'datetime',
+        'pickup_datetime' => 'datetime',
     ];
-
     public function resident() {
         return $this->belongsTo(Resident::class);
     }

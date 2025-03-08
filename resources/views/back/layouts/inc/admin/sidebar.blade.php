@@ -162,9 +162,6 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.events.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('events.calendar') }}">
-                                    Calendar of Events
-                                </a>
                                 @role('admin')
                                     <a class="dropdown-item" href="{{ route('auth.events.index') }}">
                                         All Events
@@ -200,9 +197,6 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('announcements.feed') }}">
-                                    News Feed
-                                </a>
                                 @role('admin')
                                     <a class="dropdown-item" href="{{ route('auth.announcements.manage') }}">
                                         Manage Updates
@@ -311,9 +305,6 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.barangay.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('org-chart') }}">
-                                    Organizational Chart
-                                </a>
                                 @role('admin')
                                     <a class="dropdown-item" href="{{ route('auth.barangay.officials') }}">
                                         Manage Barangay Officials

@@ -47,6 +47,7 @@
 <body class="d-flex flex-column">
     <script src="{{ url('/back/dist/js/demo-theme.min.js') }}"></script>
     @yield('content')
+    {{ $slot ?? '' }}
     <!-- Libs JS -->
     <!-- Tabler Core -->
     <script src="{{ url('/back/dist/js/tabler.min.js') }}" defer></script>

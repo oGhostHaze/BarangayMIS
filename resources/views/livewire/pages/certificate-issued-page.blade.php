@@ -1,5 +1,5 @@
 <div class="container mt-4">
-    <div class="card shadow">
+    <div class="shadow card">
         <div class="card-header">
             <h4>Issued Certificates</h4>
         </div>
@@ -23,7 +23,9 @@
                             <td>{{ $request->resident->first_name }} {{ $request->resident->last_name }}</td>
                             <td>{{ $request->certificate_type }}</td>
                             <td>{{ $request->purpose }}</td>
-                            <td><span class="badge bg-{{ $request->status == 'Released' ? 'success' : 'warning' }}">{{ $request->status }}</span></td>
+                            <td><span
+                                    class="badge text-white bg-{{ $request->status == 'Released' ? 'success' : 'warning' }}">{{ $request->status }}</span>
+                            </td>
                             <td>{{ $request->approved_at ? $request->approved_at->format('M d, Y') : '-' }}</td>
                             <td>{{ $request->released_at ? $request->released_at->format('M d, Y') : '-' }}</td>
                             <td>{{ $request->processedBy?->name ?? 'N/A' }}</td>

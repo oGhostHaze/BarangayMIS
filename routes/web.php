@@ -1,33 +1,36 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CertificateController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\UsersController;
-use App\Livewire\AdminDashboard;
-use App\Livewire\BarangayOrgChart;
+use App\Livewire\LandingPage;
 use App\Livewire\BlotterCreate;
 use App\Livewire\BlotterManage;
-use App\Livewire\CertificateIndigency;
-use App\Livewire\CertificateTemplate1;
-use App\Livewire\LandingPage;
-use App\Livewire\Pages\AnnouncementsForm;
-use App\Livewire\Pages\AnnouncementsManage;
-use App\Livewire\Pages\AnnouncementsPublic;
-use App\Livewire\Pages\AnnouncementsShow;
-use App\Livewire\Pages\BarangayOfficialsManage;
-use App\Livewire\Pages\BlotterRequestsResident;
-use App\Livewire\Pages\CertificateIssuedPage;
-use App\Livewire\Pages\CertificateRequestPage;
-use App\Livewire\Pages\CertificateRequestsResident;
-use App\Livewire\Pages\EventsCalendar;
-use App\Livewire\Pages\EventsManageTable;
-use App\Livewire\Pages\ResidentsCreateForm;
-use App\Livewire\Pages\ResidentShow;
-use App\Livewire\Pages\ResidentsManage;
+use App\Livewire\AdminDashboard;
 use App\Livewire\SystemSettings;
+use App\Livewire\BarangayOrgChart;
+use App\Livewire\Pages\ResidentShow;
+use App\Livewire\Resident\Dashboard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\CertificateIndigency;
+use App\Livewire\CertificateTemplate1;
+use App\Livewire\Pages\EventsCalendar;
+use App\Livewire\Pages\ResidentsManage;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UsersController;
+use App\Livewire\Pages\AnnouncementsForm;
+use App\Livewire\Pages\AnnouncementsShow;
+use App\Livewire\Pages\EventsManageTable;
+use App\Livewire\User\UserAccountSettings;
+use App\Livewire\Pages\AnnouncementsManage;
+use App\Livewire\Pages\AnnouncementsPublic;
+use App\Livewire\Pages\ResidentsCreateForm;
+use App\Livewire\Pages\CertificateIssuedPage;
+use App\Livewire\Pages\CertificateRequestPage;
+use App\Http\Controllers\CertificateController;
+use App\Livewire\Auth\ResidentSelfRegistration;
+use App\Livewire\Pages\BarangayOfficialsManage;
+use App\Livewire\Pages\BlotterRequestsResident;
+use App\Livewire\Pages\CertificateRequestsResident;
 
 
 Route::get('/', LandingPage::class)->name('landing');
@@ -36,10 +39,12 @@ Route::get('/announcements/feed', AnnouncementsPublic::class)->name('announcemen
 Route::get('/events/calendar', EventsCalendar::class)->name('events.calendar');
 
 Route::middleware(['guest:web'])->group(function () {
+    Route::get('/register', ResidentSelfRegistration::class)->name('auth.register');
     Route::view('/login', 'back.pages.auth.login')->name('login');
     Route::view('/auth/login', 'back.pages.auth.login')->name('auth.login');
     Route::view('/forgot-password', 'back.pages.auth.forgot')->name('auth.forgot-password');
     Route::get('/password/reset/{token}', [AuthController::class, 'ResetForm'])->name('auth.reset-form');
+
 });
 
 Route::get('/home', function () {
@@ -56,9 +61,26 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
         return redirect()->route('auth.login');
     })->name('logout');
 
+    Route::get('/account/settings', UserAccountSettings::class)->name('user.account.settings');
+
+    Route::get('/dashboard', function () {
+        if (auth()->user()->hasRole('admin')) {
+            return redirect()->route('auth.admin.dashboard');
+        } else {
+            return redirect()->route('auth.resident.dashboard');
+        }
+    })->middleware(['auth'])->name('dashboard');
+
 
     Route::prefix('/admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+        Route::get('/dashboard', function () {
+            if (auth()->user()->hasRole('admin')) {
+                return redirect()->route('auth.admin.dash');
+            } else {
+                return redirect()->route('auth.resident.dashboard');
+            }
+        })->name('dashboard');
+        Route::get('/', AdminDashboard::class)->name('dash');
         Route::prefix('/manage-users')->name('users.')->group(function () {
             Route::get('/list', [UsersController::class, 'index'])->name('list');
             Route::get('/create', [UsersController::class, 'create'])->name('create');
@@ -72,6 +94,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     });
 
     Route::get('/residents', ResidentsManage::class)->name('residents.index');
+    Route::get('/resident/dashboard', Dashboard::class)->name('resident.dashboard');
     Route::get('/residents/create', ResidentsCreateForm::class)->name('residents.create');
     Route::get('/residents/update/{resident_id}', ResidentsCreateForm::class)->name('residents.update');
     Route::get('/resident/{residentId}', ResidentShow::class)->name('residents.show');
