@@ -51,11 +51,11 @@
                                             <path d="M16 5l3 3" />
                                         </svg> Edit</a>
 
-                                    {{-- @if (Auth::guard('admin')->user()->can('admin.edit'))
+                                    {{-- @if (Auth::guard('barangay_official')->user()->can('admin.edit'))
                                          <a class="text-white btn btn-success" href="{{ route('admin.admins.edit', $admin->id) }}">Edit</a>
                                      @endif
 
-                                     @if (Auth::guard('admin')->user()->can('admin.delete'))
+                                     @if (Auth::guard('barangay_official')->user()->can('admin.delete'))
                                      <a class="text-white btn btn-danger" href="{{ route('admin.admins.destroy', $admin->id) }}"
                                      onclick="event.preventDefault(); document.getElementById('delete-form-{{ $admin->id }}').submit();">
                                          Delete

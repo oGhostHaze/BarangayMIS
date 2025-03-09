@@ -47,11 +47,11 @@
                                                 d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
                                             <path d="M16 5l3 3" />
                                         </svg> Edit </a>
-                                    {{-- @if (Auth::guard('admin')->user()->can('admin.edit'))
+                                    {{-- @if (Auth::guard('barangay_official')->user()->can('admin.edit'))
                                          <a class="btn btn-success text-white" href="{{ route('admin.admins.edit', $admin->id) }}">Edit</a>
                                      @endif
 
-                                     @if (Auth::guard('admin')->user()->can('admin.delete'))
+                                     @if (Auth::guard('barangay_official')->user()->can('admin.delete'))
                                      <a class="btn btn-danger text-white" href="{{ route('admin.admins.destroy', $admin->id) }}"
                                      onclick="event.preventDefault(); document.getElementById('delete-form-{{ $admin->id }}').submit();">
                                          Delete

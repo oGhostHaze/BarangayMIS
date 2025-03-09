@@ -79,7 +79,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-sm btn-primary">View All</a>
+                            <a href="{{ route('auth.certs.resident') }}" class="btn btn-sm btn-primary">View All</a>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-sm btn-primary">View All</a>
+                            <a href="{{ route('auth.certs.resident') }}" class="btn btn-sm btn-primary">View All</a>
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-sm btn-primary">View All</a>
+                            <a href="{{ route('auth.certs.resident') }}" class="btn btn-sm btn-primary">View All</a>
                         </div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <a href="{{ route('auth.certs.resident') }}"
                                         class="btn btn-primary w-100 btn-icon-left">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
@@ -167,29 +167,9 @@
                                         Request Barangay Certificate
                                     </a>
                                 </div>
-                                <div class="col-md-4">
-                                    <a href="#" class="btn btn-success w-100 btn-icon-left">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                            height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                            </path>
-                                            <path
-                                                d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
-                                            </path>
-                                            <path d="M9 12l0 .01"></path>
-                                            <path d="M13 12l2 0"></path>
-                                            <path d="M9 16l0 .01"></path>
-                                            <path d="M13 16l2 0"></path>
-                                        </svg>
-                                        Request Barangay Clearance
-                                    </a>
-                                </div>
-                                <div class="col-md-4">
-                                    <a href="#" class="btn btn-warning w-100 btn-icon-left">
+                                <div class="col-md-6">
+                                    <a href="{{ route('auth.blotter.resident') }}"
+                                        class="btn btn-warning w-100 btn-icon-left">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                                             height="24" viewBox="0 0 24 24" stroke-width="2"
                                             stroke="currentColor" fill="none" stroke-linecap="round"
@@ -241,7 +221,8 @@
                                                     class="text-muted">{{ \Carbon\Carbon::parse($announcement->published_at)->diffForHumans() }}</small>
                                             </div>
                                             <div class="col-auto">
-                                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                                <a href="{{ route('auth.announcements.show', ['id' => $announcement->id]) }}"
+                                                    class="btn btn-sm btn-outline-primary">View</a>
                                             </div>
                                         </div>
                                     @endforeach
@@ -260,7 +241,8 @@
                         </div>
                         @if (count($announcements) > 0)
                             <div class="card-footer">
-                                <a href="#" class="btn btn-sm btn-outline-primary">View All Announcements</a>
+                                <a href="auth.announcements.feed" class="btn btn-sm btn-outline-primary">View All
+                                    Announcements</a>
                             </div>
                         @endif
                     </div>
@@ -299,9 +281,6 @@
                                                 </div>
                                                 <div class="text-muted">{{ $event->location }}</div>
                                             </div>
-                                            <div class="col-auto">
-                                                <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
-                                            </div>
                                         </div>
                                     @endforeach
                                 </div>
@@ -319,7 +298,8 @@
                         </div>
                         @if (count($upcomingEvents) > 0)
                             <div class="card-footer">
-                                <a href="#" class="btn btn-sm btn-outline-primary">View All Events</a>
+                                <a href="{{ route('events.calendar') }}" class="btn btn-sm btn-outline-primary">View
+                                    All Events</a>
                             </div>
                         @endif
                     </div>

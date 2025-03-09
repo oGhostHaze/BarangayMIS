@@ -1,4 +1,4 @@
-<div class="container-xl">
+<div class="container-fluid">
     <!-- Page title -->
     <div class="page-header d-print-none">
         <div class="row align-items-center">
@@ -41,7 +41,7 @@
     </div>
 
     <div class="page-body">
-        <div class="container-xl">
+        <div class="container-fluid">
             <!-- Statistics Cards -->
             <div class="mb-3 row row-deck row-cards">
                 <div class="col-sm-6 col-lg-3">
@@ -162,6 +162,15 @@
             <div class="mb-3 card">
                 <div class="card-body">
                     <div class="row g-3">
+                        <div class="col-md-2">
+                            <label class="form-label">Payment Status</label>
+                            <select class="form-select" wire:model.live="paymentStatusFilter">
+                                <option value="">All Statuses</option>
+                                <option value="unpaid">Unpaid</option>
+                                <option value="pending_verification">Pending Verification</option>
+                                <option value="paid">Paid</option>
+                            </select>
+                        </div>
                         <div class="col-md-3">
                             <label class="form-label">Filter by Status</label>
                             <select class="form-select" wire:model.live="statusFilter">
@@ -173,7 +182,7 @@
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Filter by Payment Method</label>
                             <select class="form-select" wire:model.live="paymentFilter">
                                 <option value="">All Payment Methods</option>
@@ -181,12 +190,21 @@
                                 <option value="GCash">GCash</option>
                             </select>
                         </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Filter by Discount</label>
+                            <select class="form-select" wire:model.live="discountFilter">
+                                <option value="">All Discounts</option>
+                                <option value="None">No Discount</option>
+                                <option value="Student">Student</option>
+                                <option value="Senior Citizen">Senior Citizen</option>
+                            </select>
+                        </div>
                         <div class="col-md-3">
                             <label class="form-label">Date Range</label>
                             <input type="text" class="form-control" placeholder="Select date range"
                                 wire:model.live="dateRange">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Pickup Date</label>
                             <input type="text" class="form-control" placeholder="Select pickup date"
                                 wire:model.live="pickupDateFilter">
@@ -194,7 +212,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Requests Table -->
             <div class="card">
                 <div class="card-header">
@@ -211,6 +228,7 @@
                                 <th>Purpose</th>
                                 <th>Status</th>
                                 <th>Payment</th>
+                                <th>Discount</th>
                                 <th>Pickup Date</th>
                                 <th>Requested At</th>
                                 <th>Actions</th>
@@ -259,113 +277,6 @@
                                                     </svg>
                                                 </a>
                                             @endif
-
-                                            <!-- Include Payment Modal -->
-                                            <!-- Payment Confirmation Modal -->
-                                            <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog"
-                                                aria-hidden="true" wire:ignore.self>
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Confirm Payment</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="mb-3 text-center">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="icon icon-tabler icon-tabler-cash text-primary"
-                                                                    width="64" height="64" viewBox="0 0 24 24"
-                                                                    stroke-width="2" stroke="currentColor"
-                                                                    fill="none" stroke-linecap="round"
-                                                                    stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z"
-                                                                        fill="none"></path>
-                                                                    <path
-                                                                        d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z">
-                                                                    </path>
-                                                                    <path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2">
-                                                                    </path>
-                                                                </svg>
-                                                            </div>
-
-                                                            <p class="text-center">Please confirm that payment has been
-                                                                received for this certificate request.</p>
-
-                                                            <div class="alert alert-info" role="alert">
-                                                                <div class="d-flex">
-                                                                    <div>
-                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            class="icon alert-icon" width="24"
-                                                                            height="24" viewBox="0 0 24 24"
-                                                                            stroke-width="2" stroke="currentColor"
-                                                                            fill="none" stroke-linecap="round"
-                                                                            stroke-linejoin="round">
-                                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                                fill="none"></path>
-                                                                            <path d="M12 9h.01"></path>
-                                                                            <path d="M11 12h1v4h1"></path>
-                                                                            <path
-                                                                                d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z">
-                                                                            </path>
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 class="alert-title">Certificate Fee
-                                                                            Information</h4>
-                                                                        <div class="text-muted">
-                                                                            @if ($currentCertificateType)
-                                                                                {{ $currentCertificateType }}:
-                                                                                ₱{{ number_format($currentCertificateFee, 2) }}
-                                                                            @else
-                                                                                Loading fee information...
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-link"
-                                                                data-bs-dismiss="modal">Cancel</button>
-                                                            <button type="button" class="btn btn-primary"
-                                                                wire:click="confirmPaymentAndRelease">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="icon icon-tabler icon-tabler-check"
-                                                                    width="24" height="24" viewBox="0 0 24 24"
-                                                                    stroke-width="2" stroke="currentColor"
-                                                                    fill="none" stroke-linecap="round"
-                                                                    stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z"
-                                                                        fill="none"></path>
-                                                                    <path d="M5 12l5 5l10 -10"></path>
-                                                                </svg>
-                                                                Confirm Payment & Release
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <script>
-                                                document.addEventListener('DOMContentLoaded', function() {
-                                                    window.addEventListener('showPaymentModal', event => {
-                                                        // Show modal
-                                                        var modal = new bootstrap.Modal(document.getElementById('paymentModal'));
-                                                        modal.show();
-                                                    });
-
-                                                    window.addEventListener('closePaymentModal', event => {
-                                                        var modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-                                                        if (modal) {
-                                                            modal.hide();
-                                                        }
-                                                    });
-                                                });
-                                            </script>
                                         </span>
                                         <div class="mt-1 text-white">
                                             @if ($request->is_paid || $request->certificate_type === 'Certificate of Indigency')
@@ -376,6 +287,16 @@
                                                 <span class="text-white badge bg-red">Unpaid</span>
                                             @endif
                                         </div>
+                                    </td>
+                                    <td>
+                                        @if ($request->discount_type && $request->discount_type !== 'None')
+                                            <span class="badge bg-purple-lt">{{ $request->discount_type }}</span>
+                                            <div class="mt-1 text-muted">
+                                                <small>₱{{ number_format($request->discount_amount, 2) }} off</small>
+                                            </div>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
                                     </td>
                                     <td>
                                         @if ($request->pickup_datetime)
@@ -401,25 +322,18 @@
                                                     onclick="confirm('Are you sure you want to reject this request?') || event.stopImmediatePropagation()">
                                                     Reject
                                                 </button>
-                                            @elseif ($request->status == 'Approved')
-                                                @if ($request->is_paid || $request->certificate_type === 'Certificate of Indigency')
-                                                    <button class="btn btn-sm btn-info"
-                                                        wire:click="processRequest({{ $request->id }}, 'Released')"
-                                                        onclick="confirm('Confirm that this certificate has been released to the resident?') || event.stopImmediatePropagation()">
-                                                        Mark Released
-                                                    </button>
-                                                @elseif($request->payment_method === 'GCash' && $request->receipt_path)
-                                                    <button class="btn btn-sm btn-warning"
-                                                        wire:click="processRequest({{ $request->id }}, 'Released')"
-                                                        onclick="confirm('Have you verified the GCash payment?') || event.stopImmediatePropagation()">
-                                                        Verify & Release
-                                                    </button>
-                                                @else
-                                                    <button class="btn btn-sm btn-primary"
-                                                        wire:click="processRequest({{ $request->id }}, 'Released')">
-                                                        Collect Payment & Release
-                                                    </button>
-                                                @endif
+                                            @elseif ($request->status == 'Approved' && $request->payment_status == 'pending_verification')
+                                                <button class="btn btn-sm btn-warning"
+                                                    wire:click="processRequest({{ $request->id }}, 'Payment Verified')"
+                                                    onclick="confirm('Have you verified the payment?') || event.stopImmediatePropagation()">
+                                                    Verify Payment
+                                                </button>
+                                            @elseif ($request->status == 'Ready for Pickup')
+                                                <button class="btn btn-sm btn-info"
+                                                    wire:click="processRequest({{ $request->id }}, 'Released')"
+                                                    onclick="confirm('Confirm that this certificate has been released to the resident?') || event.stopImmediatePropagation()">
+                                                    Mark Released
+                                                </button>
                                             @endif
 
                                             <a class="btn btn-sm btn-primary"
@@ -446,7 +360,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="py-4 text-center">
+                                    <td colspan="10" class="py-4 text-center">
                                         <div class="empty">
                                             <div class="empty-img">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -506,7 +420,6 @@
             </div>
         </div>
     </div>
-
     <!-- Request Modal -->
     <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-lg" role="document">
@@ -558,6 +471,70 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Discount Fields (New) -->
+                        <div class="mb-3 row">
+                            <div class="col-md-6">
+                                <label class="form-label">Discount Type</label>
+                                <select class="form-select @error('discount_type') is-invalid @enderror"
+                                    wire:model="discount_type">
+                                    <option value="None">No Discount</option>
+                                    <option value="Student">Student (20% Off)</option>
+                                    <option value="Senior Citizen">Senior Citizen (30% Off)</option>
+                                </select>
+                                @error('discount_type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6" x-data="{ showIdField: @entangle('discount_type').defer !== 'None' }">
+                                <label class="form-label" x-bind:class="{ 'required': showIdField }">ID Number</label>
+                                <input type="text"
+                                    class="form-control @error('discount_id_number') is-invalid @enderror"
+                                    wire:model="discount_id_number" placeholder="Enter student/senior citizen ID"
+                                    x-bind:disabled="!showIdField">
+                                @error('discount_id_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="form-hint">Required for discount validation</small>
+                            </div>
+                        </div>
+
+                        @if (isset($original_fee) && $original_fee > 0 && isset($discounted_fee))
+                            <div class="mb-3">
+                                <div class="alert alert-info">
+                                    <div class="d-flex">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="icon icon-tabler icon-tabler-receipt" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                    d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2" />
+                                                <path d="M14 8h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                                <path d="M12 7v9" />
+                                            </svg>
+                                        </div>
+                                        <div class="ms-2">
+                                            <h4 class="alert-title">Fee Information</h4>
+                                            <div class="text-muted">
+                                                Original Fee: ₱{{ number_format($original_fee, 2) }}
+                                                @if ($discount_type !== 'None')
+                                                    <br>
+                                                    Discount ({{ $discount_type }}):
+                                                    -₱{{ number_format($discount_amount, 2) }}
+                                                    <br>
+                                                    <strong>Final Fee:
+                                                        ₱{{ number_format($discounted_fee, 2) }}</strong>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="mb-3 row">
                             <div class="col-md-6">
@@ -618,6 +595,110 @@
             </div>
         </div>
     </div>
+
+    <!-- Payment Confirmation Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cash text-primary"
+                            width="64" height="64" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z">
+                            </path>
+                            <path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0">
+                            </path>
+                            <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2">
+                            </path>
+                        </svg>
+                    </div>
+
+                    <p class="text-center">Please confirm that payment has been
+                        received for this certificate request.</p>
+
+                    <div class="alert alert-info" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24"
+                                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 9h.01"></path>
+                                    <path d="M11 12h1v4h1"></path>
+                                    <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="alert-title">Certificate Fee
+                                    Information</h4>
+                                <div class="text-muted">
+                                    @if ($currentCertificateType)
+                                        {{ $currentCertificateType }}:
+                                        ₱{{ number_format($currentCertificateFee, 2) }}
+
+                                        @if ($currentDiscountType && $currentDiscountType !== 'None')
+                                            <hr class="my-2">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Original Fee:</span>
+                                                <span>₱{{ number_format($currentCertificateFee, 2) }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>{{ $currentDiscountType }} Discount:</span>
+                                                <span
+                                                    class="text-danger">-₱{{ number_format($currentDiscountAmount, 2) }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between fw-bold">
+                                                <span>Total to Collect:</span>
+                                                <span>₱{{ number_format($currentCertificateFee - $currentDiscountAmount, 2) }}</span>
+                                            </div>
+                                        @endif
+                                    @else
+                                        Loading fee information...
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" wire:click="confirmPaymentAndRelease">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        Confirm Payment & Release
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.addEventListener('showPaymentModal', event => {
+                // Show modal
+                var modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                modal.show();
+            });
+
+            window.addEventListener('closePaymentModal', event => {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                if (modal) {
+                    modal.hide();
+                }
+            });
+        });
+    </script>
 
     <!-- Receipt Modal -->
     @if ($viewingReceipt)

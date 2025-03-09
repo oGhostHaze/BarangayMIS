@@ -48,7 +48,7 @@ Route::middleware(['guest:web'])->group(function () {
 });
 
 Route::get('/home', function () {
-    return redirect()->route('events.calendar');
+    return redirect()->route('auth.dashboard');
 })->name('home');
 
 Route::name('auth.')->middleware(['auth:web'])->group(function () {
@@ -64,7 +64,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/account/settings', UserAccountSettings::class)->name('user.account.settings');
 
     Route::get('/dashboard', function () {
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->hasRole('barangay_official')) {
             return redirect()->route('auth.admin.dashboard');
         } else {
             return redirect()->route('auth.resident.dashboard');
@@ -74,7 +74,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
 
     Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/dashboard', function () {
-            if (auth()->user()->hasRole('admin')) {
+            if (auth()->user()->hasRole('barangay_official')) {
                 return redirect()->route('auth.admin.dash');
             } else {
                 return redirect()->route('auth.resident.dashboard');

@@ -33,6 +33,13 @@ class CertificateRequestsResident extends Component
     public $pickup_datetime;
     public $receipt;
 
+    // Discount properties (new)
+    public $discount_type = 'None';
+    public $discount_id_number;
+    public $discount_amount = 0;
+    public $original_fee = 0;
+    public $discounted_fee = 0;
+
     // View properties
     public $viewingReceipt = false;
     public $currentReceipt;
@@ -47,6 +54,13 @@ class CertificateRequestsResident extends Component
         'Good Moral Character' => 'Good Moral Character',
     ];
 
+    // Discount types for dropdown
+    public $discountTypes = [
+        'None' => 'No Discount',
+        'Student' => 'Student (20% off)',
+        'Senior Citizen' => 'Senior Citizen (30% off)'
+    ];
+
     // Tracking form state
     public $isEditing = false;
 
@@ -54,10 +68,16 @@ class CertificateRequestsResident extends Component
     public $search = '';
     public $statusFilter = '';
     public $dateRange = '';
+    public $discountFilter = '';
+    public $paymentRequestId;          // Stores the ID of the request being paid for
+    public $selectedCertificateType;   // Stores certificate type for display in modal
+    public $amountToPay;               // Stores the amount to pay (after discount)
+    public $paymentMethod;             // Stores payment method for the selected request
 
     protected $queryString = [
         'search' => ['except' => ''],
         'statusFilter' => ['except' => ''],
+        'discountFilter' => ['except' => ''],
         'page' => ['except' => 1],
     ];
 
@@ -70,6 +90,8 @@ class CertificateRequestsResident extends Component
             'payment_method' => 'required|in:Cash,GCash',
             'pickup_datetime' => 'required|date',
             'receipt' => $this->payment_method == 'GCash' ? 'required|file|mimes:jpg,jpeg,png,pdf|max:2048' : 'nullable',
+            'discount_type' => 'required|in:None,Student,Senior Citizen',
+            'discount_id_number' => 'nullable|required_if:discount_type,Student,Senior Citizen|string|max:50',
         ];
     }
 
@@ -84,15 +106,57 @@ class CertificateRequestsResident extends Component
         'receipt.file' => 'The receipt must be a file',
         'receipt.mimes' => 'The receipt must be a JPG, PNG, or PDF file',
         'receipt.max' => 'The receipt must not exceed 2MB',
+        'discount_id_number.required_if' => 'ID number is required when applying a discount',
     ];
 
     public $residents = [];
 
+    /**
+     * Calculate discount based on type
+     */
+    public function calculateDiscount()
+    {
+        $this->original_fee = $this->getCertificateFee($this->certificate_type);
+
+        switch ($this->discount_type) {
+            case 'Student':
+                $this->discount_amount = $this->original_fee * 0.2; // 20% discount for students
+                break;
+            case 'Senior Citizen':
+                $this->discount_amount = $this->original_fee * 0.3; // 30% discount for senior citizens
+                break;
+            default:
+                $this->discount_amount = 0; // No discount
+                break;
+        }
+
+        $this->discounted_fee = max(0, $this->original_fee - $this->discount_amount);
+    }
+
+    /**
+     * Get certificate fee based on type
+     *
+     * @param string $certificateType
+     * @return float
+     */
+    private function getCertificateFee($certificateType)
+    {
+        $fees = [
+            'Barangay Clearance' => 50.00,
+            'Certificate of Residency' => 50.00,
+            'Certificate of Indigency' => 0.00,
+            'Business Clearance' => 100.00,
+            'Good Moral Character' => 50.00,
+        ];
+
+        return $fees[$certificateType] ?? 50.00;
+    }
 
     public function isPickupToday($date)
     {
         return Carbon::parse($date)->isToday();
     }
+
     public function mount()
     {
         // Ensure the user has a resident profile
@@ -104,7 +168,7 @@ class CertificateRequestsResident extends Component
                 $this->residents = collect([Auth::user()->resident]);
             }
             // For admins/staff, they can see all residents
-            else if (Auth::user()->hasAnyRole(['admin', 'super-admin', 'staff'])) {
+            else if (Auth::user()->hasAnyRole(['barangay_official', 'admin', 'staff'])) {
                 $this->residents = Resident::orderBy('last_name')->orderBy('first_name')->get();
             }
         }
@@ -121,6 +185,16 @@ class CertificateRequestsResident extends Component
     public function hideRequestForm()
     {
         $this->showing_form = false;
+    }
+
+    public function updatedDiscountType()
+    {
+        $this->calculateDiscount();
+    }
+
+    public function updatedCertificateType()
+    {
+        $this->calculateDiscount();
     }
 
     public function saveRequest()
@@ -143,6 +217,9 @@ class CertificateRequestsResident extends Component
                 }
             }
 
+            // Calculate discount
+            $this->calculateDiscount();
+
             // Process receipt if uploaded
             $receipt_path = null;
             if ($this->receipt && $this->payment_method == 'GCash') {
@@ -161,6 +238,9 @@ class CertificateRequestsResident extends Component
                     'receipt_path' => $receipt_path ?: ($this->isEditing ? $request->receipt_path : null),
                     'requested_at' => now(),
                     'processed_by' => $this->isEditing ? $request->processed_by : null,
+                    'discount_type' => $this->discount_type,
+                    'discount_id_number' => $this->discount_type !== 'None' ? $this->discount_id_number : null,
+                    'discount_amount' => $this->discount_amount,
                 ]
             );
 
@@ -170,6 +250,57 @@ class CertificateRequestsResident extends Component
         } catch (\Exception $e) {
             $this->alert('error', 'Error: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Submit payment for an approved request
+     */
+    public function submitPayment($id)
+    {
+        try {
+            $request = CertificateRequest::findOrFail($id);
+
+            // Check if request belongs to current user
+            if ($request->resident_id != Auth::user()->resident->id) {
+                $this->alert('error', 'You are not authorized to submit payment for this request.');
+                return;
+            }
+
+            // Check if request is approved
+            if ($request->status != 'Approved') {
+                $this->alert('error', 'You can only submit payment for approved requests.');
+                return;
+            }
+
+            // For GCash, validate receipt
+            if ($request->payment_method == 'GCash' && !$this->receipt) {
+                $this->alert('error', 'Please upload a receipt for GCash payment.');
+                return;
+            }
+
+            // Process receipt if uploaded
+            $receipt_path = null;
+            if ($this->receipt && $request->payment_method == 'GCash') {
+                $receipt_path = $this->receipt->store('receipts', 'public');
+            }
+
+            // Update payment status
+            $request->update([
+                'receipt_path' => $receipt_path ?: $request->receipt_path,
+                'payment_status' => 'pending_verification',
+                'payment_submitted_at' => now(),
+            ]);
+
+            $this->alert('success', 'Payment submitted successfully! Your certificate will be ready once payment is verified.');
+            $this->resetPaymentFields();
+        } catch (\Exception $e) {
+            $this->alert('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    public function resetPaymentFields()
+    {
+        $this->receipt = null;
     }
 
     public function editRequest($id)
@@ -196,6 +327,11 @@ class CertificateRequestsResident extends Component
             $this->status = $request->status;
             $this->payment_method = $request->payment_method;
             $this->pickup_datetime = $request->pickup_datetime;
+            $this->discount_type = $request->discount_type ?? 'None';
+            $this->discount_id_number = $request->discount_id_number;
+
+            $this->calculateDiscount();
+
             // Don't set the receipt as it's a file upload
 
             $this->isEditing = true;
@@ -286,6 +422,11 @@ class CertificateRequestsResident extends Component
         $this->pickup_datetime = '';
         $this->receipt = null;
         $this->isEditing = false;
+        $this->discount_type = 'None';
+        $this->discount_id_number = null;
+        $this->discount_amount = 0;
+        $this->original_fee = 0;
+        $this->discounted_fee = 0;
     }
 
     // Reset pagination when filters change
@@ -295,6 +436,11 @@ class CertificateRequestsResident extends Component
     }
 
     public function updatingStatusFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingDiscountFilter()
     {
         $this->resetPage();
     }
@@ -341,6 +487,44 @@ class CertificateRequestsResident extends Component
             'pending_percentage' => $pending_percentage
         ];
     }
+
+    /**
+     * Show payment form for the specified request
+     */
+    public function showPaymentForm($id)
+    {
+        try {
+            $request = CertificateRequest::findOrFail($id);
+
+            // Check if request belongs to current user
+            if ($request->resident_id != Auth::user()->resident->id) {
+                $this->alert('error', 'You are not authorized to submit payment for this request.');
+                return;
+            }
+
+            // Check if request is approved and unpaid
+            if ($request->status != 'Approved' || $request->payment_status != 'unpaid') {
+                $this->alert('error', 'This request is not eligible for payment submission.');
+                return;
+            }
+
+            $this->paymentRequestId = $request->id;
+            $this->selectedCertificateType = $request->certificate_type;
+            $this->paymentMethod = $request->payment_method;
+
+            // Calculate payment amount (after discount)
+            $originalFee = $this->getCertificateFee($request->certificate_type);
+            $this->amountToPay = $originalFee;
+
+            if ($request->discount_type != 'None' && $request->discount_amount > 0) {
+                $this->amountToPay = max(0, $originalFee - $request->discount_amount);
+            }
+        } catch (\Exception $e) {
+            $this->alert('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+
     public function render()
     {
         // Make sure user has a resident profile
@@ -360,6 +544,10 @@ class CertificateRequestsResident extends Component
 
         if ($this->statusFilter) {
             $query->where('status', $this->statusFilter);
+        }
+
+        if ($this->discountFilter) {
+            $query->where('discount_type', $this->discountFilter);
         }
 
         // Apply date range filter if provided

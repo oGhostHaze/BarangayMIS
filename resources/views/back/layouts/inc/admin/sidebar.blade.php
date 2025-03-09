@@ -31,7 +31,7 @@
                         </span>
                     </a>
                 </li>
-                @role('super-admin')
+                @role('admin')
                     <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active fw-bold' : '' }}">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
                             href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
@@ -100,7 +100,7 @@
                         </div>
                     </li>
                 @endrole
-                @role('admin')
+                @role('barangay_official')
                     <li class="nav-item dropdown {{ request()->routeIs('auth.residents.*') ? 'active fw-bold' : '' }}">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}"
                             href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
@@ -162,7 +162,7 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.events.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                @role('admin')
+                                @role('barangay_official')
                                     <a class="dropdown-item" href="{{ route('auth.events.index') }}">
                                         All Events
                                     </a>
@@ -197,7 +197,7 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.announcements.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                @role('admin')
+                                @role('barangay_official')
                                     <a class="dropdown-item" href="{{ route('auth.announcements.manage') }}">
                                         Manage Updates
                                     </a>
@@ -235,9 +235,6 @@
                             <div class="dropdown-menu-column">
                                 <a class="dropdown-item" href="{{ route('auth.certs.requests') }}">
                                     All Requests
-                                </a>
-                                <a class="dropdown-item" href="{{ route('auth.certs.issued') }}">
-                                    Issued Requests
                                 </a>
                             </div>
                         </div>
@@ -305,7 +302,7 @@
                     <div class="dropdown-menu {{ request()->routeIs('auth.barangay.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                @role('admin')
+                                @role('barangay_official')
                                     <a class="dropdown-item" href="{{ route('auth.barangay.officials') }}">
                                         Manage Barangay Officials
                                     </a>

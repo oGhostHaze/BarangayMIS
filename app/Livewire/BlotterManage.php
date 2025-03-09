@@ -125,7 +125,7 @@ class BlotterManage extends Component
 
     public function render()
     {
-        if(Auth::user()->hasRole('admin')) {
+        if(Auth::user()->hasRole('barangay_official')) {
             $blotters  = Blotter::latest()->paginate(10);
         } else {
             $blotters  = Blotter::where('recorded_by', Auth::id())->latest()->paginate(10);

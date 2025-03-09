@@ -33,6 +33,13 @@ class CertificateRequestPage extends Component
     public $pickup_datetime;
     public $receipt;
 
+    // Discount properties (new)
+    public $discount_type = 'None';
+    public $discount_id_number;
+    public $discount_amount = 0;
+    public $original_fee = 0;
+    public $discounted_fee = 0;
+
     // Filter properties
     public $search = '';
     public $statusFilter = '';
@@ -40,6 +47,7 @@ class CertificateRequestPage extends Component
     public $paymentFilter = '';
     public $pickupDateFilter = '';
     public $perPage = 10;
+    public $discountFilter = '';
 
     // Receipt viewer properties
     public $viewingReceipt = false;
@@ -49,11 +57,14 @@ class CertificateRequestPage extends Component
     public $paymentRequestId;
     public $currentCertificateType;
     public $currentCertificateFee;
+    public $currentDiscountType;
+    public $currentDiscountAmount;
 
     protected $queryString = [
         'search' => ['except' => ''],
         'statusFilter' => ['except' => ''],
         'paymentFilter' => ['except' => ''],
+        'discountFilter' => ['except' => ''],
         'page' => ['except' => 1],
     ];
 
@@ -64,6 +75,8 @@ class CertificateRequestPage extends Component
         'payment_method' => 'required|in:Cash,GCash',
         'pickup_datetime' => 'required|date',
         'status' => 'required|in:Pending,Approved,Released,Rejected,Cancelled',
+        'discount_type' => 'required|in:None,Student,Senior Citizen',
+        'discount_id_number' => 'nullable|required_if:discount_type,Student,Senior Citizen|string|max:50',
     ];
 
     protected $messages = [
@@ -72,11 +85,12 @@ class CertificateRequestPage extends Component
         'purpose.required' => 'Please provide a purpose for the certificate',
         'payment_method.required' => 'Please select a payment method',
         'pickup_datetime.required' => 'Please select a pickup date and time',
+        'discount_id_number.required_if' => 'ID number is required when applying a discount',
     ];
 
     public function mount()
     {
-        if (Auth::user()->hasRole(['admin', 'super-admin'])) {
+        if (Auth::user()->hasRole(['barangay_official', 'admin'])) {
             $this->residents = Resident::orderBy('last_name')->get();
         } else {
             $this->residents = Resident::where('id', Auth::user()->resident->id)->get();
@@ -84,6 +98,28 @@ class CertificateRequestPage extends Component
                 $this->resident_id = Auth::user()->resident->id;
             }
         }
+    }
+
+    /**
+     * Calculate discount based on type
+     */
+    public function calculateDiscount()
+    {
+        $this->original_fee = $this->getCertificateFee($this->certificate_type);
+
+        switch ($this->discount_type) {
+            case 'Student':
+                $this->discount_amount = $this->original_fee * 0.2; // 20% discount for students
+                break;
+            case 'Senior Citizen':
+                $this->discount_amount = $this->original_fee * 0.3; // 30% discount for senior citizens
+                break;
+            default:
+                $this->discount_amount = 0; // No discount
+                break;
+        }
+
+        $this->discounted_fee = max(0, $this->original_fee - $this->discount_amount);
     }
 
     /**
@@ -127,11 +163,15 @@ class CertificateRequestPage extends Component
         $this->paymentRequestId = $requestId;
         $this->currentCertificateType = $request->certificate_type;
         $this->currentCertificateFee = $this->getCertificateFee($request->certificate_type);
+        $this->currentDiscountType = $request->discount_type;
+        $this->currentDiscountAmount = $request->discount_amount;
 
         // Pass certificate details to modal
         $this->dispatch('showPaymentModal', [
             'certificateType' => $this->currentCertificateType,
             'certificateFee' => $this->currentCertificateFee,
+            'discountType' => $this->currentDiscountType,
+            'discountAmount' => $this->currentDiscountAmount,
         ]);
     }
 
@@ -176,9 +216,21 @@ class CertificateRequestPage extends Component
             $this->paymentRequestId = null;
             $this->currentCertificateType = null;
             $this->currentCertificateFee = null;
+            $this->currentDiscountType = null;
+            $this->currentDiscountAmount = null;
         } catch (\Exception $e) {
             $this->alert('error', 'Error: ' . $e->getMessage());
         }
+    }
+
+    public function updatedDiscountType()
+    {
+        $this->calculateDiscount();
+    }
+
+    public function updatedCertificateType()
+    {
+        $this->calculateDiscount();
     }
 
     public function saveRequest()
@@ -186,6 +238,9 @@ class CertificateRequestPage extends Component
         $this->validate();
 
         try {
+            // Calculate discount
+            $this->calculateDiscount();
+
             // Process receipt if uploaded
             $receipt_path = null;
             if ($this->receipt && $this->payment_method == 'GCash') {
@@ -206,6 +261,9 @@ class CertificateRequestPage extends Component
                 'pickup_datetime' => $this->pickup_datetime,
                 'requested_at' => now(),
                 'processed_by' => Auth::id(),
+                'discount_type' => $this->discount_type,
+                'discount_id_number' => $this->discount_type !== 'None' ? $this->discount_id_number : null,
+                'discount_amount' => $this->discount_amount,
             ];
 
             // Only set receipt_path if we have a new one or keep the old one
@@ -256,6 +314,12 @@ class CertificateRequestPage extends Component
             $this->status = $request->status;
             $this->payment_method = $request->payment_method;
             $this->pickup_datetime = $request->pickup_datetime;
+            $this->discount_type = $request->discount_type ?? 'None';
+            $this->discount_id_number = $request->discount_id_number;
+            $this->discount_amount = $request->discount_amount ?? 0;
+
+            $this->calculateDiscount();
+
             // We don't set the receipt here because it's a file upload
 
             $this->dispatch('showModal');
@@ -270,7 +334,7 @@ class CertificateRequestPage extends Component
             $request = CertificateRequest::findOrFail($id);
 
             // Optional: Check if the user has permission to delete
-            if (!Auth::user()->hasRole(['admin', 'super-admin']) &&
+            if (!Auth::user()->hasRole(['barangay_official', 'admin']) &&
                 ($request->resident_id != Auth::user()->resident->id)) {
                 $this->alert('error', 'You are not authorized to delete this request.');
                 return;
@@ -285,7 +349,7 @@ class CertificateRequestPage extends Component
 
     public function resetFields()
     {
-        $this->resident_id = Auth::user()->hasRole(['admin', 'super-admin']) ? null : Auth::user()->resident->id;
+        $this->resident_id = Auth::user()->hasRole(['barangay_official', 'admin']) ? null : Auth::user()->resident->id;
         $this->certificate_type = null;
         $this->purpose = null;
         $this->status = 'Pending';
@@ -293,6 +357,11 @@ class CertificateRequestPage extends Component
         $this->pickup_datetime = null;
         $this->receipt = null;
         $this->request_id = null;
+        $this->discount_type = 'None';
+        $this->discount_id_number = null;
+        $this->discount_amount = 0;
+        $this->original_fee = 0;
+        $this->discounted_fee = 0;
     }
 
     public function issueRequest($request_id)
@@ -325,14 +394,9 @@ class CertificateRequestPage extends Component
         try {
             $request = CertificateRequest::findOrFail($id);
 
-            // If we're trying to mark as Released, check payment status first
-            if ($newStatus === 'Released' && !$this->checkPaymentStatus($id)) {
-                // Show payment confirmation modal
-                $this->showPaymentModal($id);
-                return;
-            }
-
+            // Handle status changes based on new workflow
             if ($newStatus == 'Approved') {
+                // Step 2: Admin approves the request
                 $capt = BarangayOfficial::where('position', 'LIKE', '%Punong Barangay%')
                     ->where('status', 'A')
                     ->first();
@@ -341,23 +405,47 @@ class CertificateRequestPage extends Component
                     'barangay_official_id' => $capt ? $capt->id : null,
                     'status' => $newStatus,
                     'approved_at' => now(),
+                    'payment_status' => 'unpaid', // Still unpaid after approval
                     'processed_by' => Auth::id(),
                 ]);
-            } elseif ($newStatus == 'Released') {
+
+                $this->alert('success', 'Request approved. Resident will be notified to make payment.');
+            }
+            elseif ($newStatus == 'Payment Verified') {
+                // Step 4: Admin verifies payment
+                $request->update([
+                    'status' => 'Ready for Pickup',
+                    'payment_status' => 'paid',
+                    'payment_verified_at' => now(),
+                    'processed_by' => Auth::id(),
+                    'is_paid' => true,
+                ]);
+
+                $this->alert('success', 'Payment verified. Certificate is ready for pickup.');
+            }
+            elseif ($newStatus == 'Released') {
+                // Step 5: Admin releases certificate to resident
+                if ($request->payment_status != 'paid' && $request->certificate_type !== 'Certificate of Indigency') {
+                    $this->alert('error', 'Cannot release certificate. Payment hasn\'t been verified.');
+                    return;
+                }
+
                 $request->update([
                     'status' => $newStatus,
                     'released_at' => now(),
                     'processed_by' => Auth::id(),
-                    'is_paid' => true, // Mark as paid when released
                 ]);
-            } else {
+
+                $this->alert('success', 'Certificate successfully released to resident.');
+            }
+            elseif ($newStatus == 'Rejected') {
                 $request->update([
                     'status' => $newStatus,
                     'processed_by' => Auth::id(),
                 ]);
-            }
 
-            $this->alert('success', 'Request updated successfully.');
+                $this->alert('info', 'Request has been rejected.');
+            }
         } catch (\Exception $e) {
             $this->alert('error', 'Error: ' . $e->getMessage());
         }
@@ -375,6 +463,11 @@ class CertificateRequestPage extends Component
     }
 
     public function updatingPaymentFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingDiscountFilter()
     {
         $this->resetPage();
     }
@@ -399,7 +492,7 @@ class CertificateRequestPage extends Component
     // Get stats for the dashboard cards
     public function getStats()
     {
-        $query = Auth::user()->hasRole(['admin', 'super-admin'])
+        $query = Auth::user()->hasRole(['barangay_official', 'admin'])
             ? CertificateRequest::query()
             : CertificateRequest::where('resident_id', Auth::user()->resident->id);
 
@@ -426,7 +519,7 @@ class CertificateRequestPage extends Component
 
     public function render()
     {
-        $query = Auth::user()->hasAnyRole('admin|super-admin')
+        $query = Auth::user()->hasAnyRole('barangay_official|admin')
             ? CertificateRequest::query()
             : CertificateRequest::where('resident_id', Auth::user()->resident->id);
 
@@ -437,7 +530,7 @@ class CertificateRequestPage extends Component
                   ->orWhere('purpose', 'like', "%{$this->search}%");
 
                 // If admin, also search by resident name
-                if (Auth::user()->hasAnyRole('admin|super-admin')) {
+                if (Auth::user()->hasAnyRole('barangay_official|admin')) {
                     $q->orWhereHas('resident', function($q2) {
                         $q2->where('first_name', 'like', "%{$this->search}%")
                            ->orWhere('last_name', 'like', "%{$this->search}%");
@@ -452,6 +545,10 @@ class CertificateRequestPage extends Component
 
         if ($this->paymentFilter) {
             $query->where('payment_method', $this->paymentFilter);
+        }
+
+        if ($this->discountFilter) {
+            $query->where('discount_type', $this->discountFilter);
         }
 
         // Apply date range filter if provided

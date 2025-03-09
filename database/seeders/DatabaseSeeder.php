@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'barangay_official']);
         Role::firstOrCreate(['name' => 'resident']);
-        Role::firstOrCreate(['name' => 'super-admin']);
+        Role::firstOrCreate(['name' => 'admin']);
     }
 }
