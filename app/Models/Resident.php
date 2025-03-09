@@ -10,6 +10,7 @@ class Resident extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'rfid_number', // Added RFID number field
         'last_name',
         'first_name',
         'middle_name',
@@ -43,6 +44,7 @@ class Resident extends Model
         'email',
         'user_id',
     ];
+
     public function medications()
     {
         return $this->hasMany(Medication::class);
@@ -56,5 +58,23 @@ class Resident extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function certificateRequests()
+    {
+        return $this->hasMany(CertificateRequest::class);
+    }
+
+    // Get all blotter cases where this resident is the complainant or respondent
+    public function blotterCases()
+    {
+        return Blotter::where('complainant_name', 'LIKE', "%{$this->first_name}%{$this->last_name}%")
+            ->orWhere('respondent_name', 'LIKE', "%{$this->first_name}%{$this->last_name}%")
+            ->get();
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . ($this->middle_name ? substr($this->middle_name, 0, 1) . '. ' : '') . $this->last_name . ($this->suffix ? ' ' . $this->suffix : '');
     }
 }

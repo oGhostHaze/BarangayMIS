@@ -124,3 +124,21 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/blotters', BlotterManage::class)->name('blotters.index');
     Route::get('/blotters/create', BlotterCreate::class)->name('blotters.create');
 });
+
+
+Route::get('/admin/search', [App\Http\Controllers\SearchController::class, 'search'])
+    ->name('admin.search')
+    ->middleware(['auth', 'role:barangay_official|admin']);
+
+// RFID related routes
+Route::middleware(['auth', 'role:barangay_official|admin'])->group(function () {
+    // View RFID details page after scanning
+    Route::get('/admin/residents/{resident}/rfid-details', [App\Http\Controllers\ResidentController::class, 'rfidDetails'])
+        ->name('admin.residents.rfid-details');
+
+    // Assign RFID to resident
+    Route::get('/admin/residents/{resident}/assign-rfid', [App\Http\Controllers\ResidentController::class, 'assignRfidForm'])
+        ->name('admin.residents.assign-rfid');
+
+    Route::post('/admin/residents/{resident}/assign-rfid', [App\Http\Controllers\ResidentController::class, 'assignRfid']);
+});

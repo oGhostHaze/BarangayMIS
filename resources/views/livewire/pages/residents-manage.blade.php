@@ -25,6 +25,10 @@
                             <td>
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('auth.residents.show', $resident->id) }}">View</a>
+                                <a class="btn btn-secondary btn-sm"
+                                    href="{{ route('admin.residents.assign-rfid', $resident->id) }}">
+                                    Assign RFID
+                                </a>
                                 <button class="btn btn-warning btn-sm" wire:click="edit({{ $resident->id }})"
                                     data-bs-toggle="modal" data-bs-target="#addResidentModal">Edit</button>
                                 <button class="btn btn-danger btn-sm" wire:click="delete({{ $resident->id }})"
