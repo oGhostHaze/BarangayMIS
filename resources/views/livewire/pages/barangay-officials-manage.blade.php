@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="mt-4 container-fluid">
     <div class="shadow card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4>Barangay Officials</h4>

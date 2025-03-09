@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
     <h2>{{ $announcement_id ? 'Edit Announcement' : 'Create Announcement' }}</h2>
 
     <form wire:submit.prevent="save">

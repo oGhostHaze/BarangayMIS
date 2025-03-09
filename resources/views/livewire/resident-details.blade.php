@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
     <div class="row">
         <!-- Resident Profile Card -->
         <div class="col-md-4">

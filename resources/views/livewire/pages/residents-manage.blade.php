@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="mt-5 container-fluid">
     <div class="mt-4 card">
         <div class="card-header d-flex justify-content-between">
             <h2 class="card-title">Residents List</h2>

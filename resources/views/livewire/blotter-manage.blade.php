@@ -1,4 +1,4 @@
-<div class="container mt-4 card">
+<div class="mt-4 container-fluid card">
     <div class="d-flex card-header justify-content-between">
         <h2>Barangay Blotter Records</h2>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blotterModal" wire:click="create">New

@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="mt-4 container-fluid">
     <div class="shadow card">
         <div class="card-header">
             <h4>Issued Certificates</h4>

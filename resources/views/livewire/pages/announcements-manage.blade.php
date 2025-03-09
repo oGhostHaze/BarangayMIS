@@ -1,4 +1,4 @@
-<div class="container card">
+<div class="container-fluid card">
     <div class="card-header d-flex justify-content-between">
         <h2 class="mb-4">Manage Announcements</h2>
         <a href="{{ route('auth.announcements.create') }}" class="mb-3 btn btn-success">Add New</a>

@@ -1,5 +1,5 @@
-<div class="container mt-5">
-    <div class="card shadow">
+<div class="mt-5 container-fluid">
+    <div class="shadow card">
         <div class="card-header">
             <h4>System Settings</h4>
         </div>
@@ -27,7 +27,8 @@
                 <div class="mb-3">
                     <label class="form-label">Provincial Logo</label>
                     @if ($existingProvincialLogo)
-                        <img src="{{ asset('storage/' . $existingProvincialLogo) }}" class="img-thumbnail mb-2" width="100">
+                        <img src="{{ asset('storage/' . $existingProvincialLogo) }}" class="mb-2 img-thumbnail"
+                            width="100">
                     @endif
                     <input type="file" class="form-control" wire:model="provincial_logo">
                 </div>
@@ -35,7 +36,8 @@
                 <div class="mb-3">
                     <label class="form-label">Barangay Logo</label>
                     @if ($existingBarangayLogo)
-                        <img src="{{ asset('storage/' . $existingBarangayLogo) }}" class="img-thumbnail mb-2" width="100">
+                        <img src="{{ asset('storage/' . $existingBarangayLogo) }}" class="mb-2 img-thumbnail"
+                            width="100">
                     @endif
                     <input type="file" class="form-control" wire:model="barangay_logo">
                 </div>
@@ -43,7 +45,8 @@
                 <div class="mb-3">
                     <label class="form-label">Additional Logo</label>
                     @if ($existingAdditionalLogo)
-                        <img src="{{ asset('storage/' . $existingAdditionalLogo) }}" class="img-thumbnail mb-2" width="100">
+                        <img src="{{ asset('storage/' . $existingAdditionalLogo) }}" class="mb-2 img-thumbnail"
+                            width="100">
                     @endif
                     <input type="file" class="form-control" wire:model="additional_logo">
                 </div>
