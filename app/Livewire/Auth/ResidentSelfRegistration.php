@@ -141,9 +141,6 @@ class ResidentSelfRegistration extends Component
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        // Assign the resident role
-        $user->assignRole('resident');
-
         // Remove password fields from the resident data
         unset($validatedData['password']);
         unset($validatedData['password_confirmation']);
