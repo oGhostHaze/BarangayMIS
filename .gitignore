@@ -54,3 +54,4 @@ yarn-error.log
 /.vscode
 /.zed
 >>>>>>> e2e9fad (Initial Commit)
+resources/views/back/layouts/inc/.DS_Store
