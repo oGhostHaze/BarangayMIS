@@ -52,6 +52,44 @@
             border: 2px solid #555555;
         }
     </style>
+
+
+    <style>
+        /* Ensure names don't wrap and add responsiveness */
+        .text-nowrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Add hover effects for cards */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s ease;
+        }
+
+        /* Gradual transition for all cards */
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        /* Specific styles for different official types */
+        .border-primary {
+            border: 1px solid #0d6efd;
+            border-bottom: 4px solid #0d6efd;
+        }
+
+        /* Media queries for better responsiveness */
+        @media (max-width: 768px) {
+
+            .col-md-3,
+            .col-md-4 {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
 </head>
 
 <body>
