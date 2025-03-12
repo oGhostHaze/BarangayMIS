@@ -54,6 +54,67 @@
             border: 2px solid #555555;
         }
     </style>
+    <style>
+        @media print {
+            @page {
+                size: 8.5in 11in;
+                margin: 0.5in;
+            }
+
+            .decorative-border {
+                height: 15px;
+                background: linear-gradient(to right, #e20000 50%, #fff 50%);
+                border-bottom: 2px solid #ffd700;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+
+            .decorative-footer {
+                height: 15px;
+                background: linear-gradient(to right, #e20000 50%, #fff 50%);
+                border-top: 2px solid #ffd700;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            .certificate-title {
+                text-transform: uppercase;
+                font-weight: bold;
+                font-size: 26px;
+                margin-top: 20px;
+                border-bottom: 2px solid #000;
+                display: inline-block;
+                padding-bottom: 5px;
+            }
+
+            .punong-barangay {
+                font-style: italic;
+                margin-top: 0;
+            }
+
+            .official-name {
+                text-decoration: underline;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .certificate-content {
+                line-height: 1.8;
+                text-align: justify;
+                font-size: 16px;
+            }
+
+            .underline {
+                text-decoration: underline;
+                font-weight: bold;
+            }
+
+            /* Hide print button when printing */
+            .btn-primary {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
