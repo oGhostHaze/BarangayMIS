@@ -9,16 +9,22 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Livewire\WithFileUploads; // Add this for file uploads
 
 class ResidentSelfRegistration extends Component
 {
     use Toastr;
+    use WithFileUploads; // Use Livewire's file upload trait
 
     public $last_name, $first_name, $middle_name, $suffix, $prefix, $contact_no, $sitio, $date_of_birth, $gender, $civil_status,
         $philhealth_id, $sss_id, $gsis_id, $social_pension_id, $is_pwd = false, $pwd_id, $type_of_disability, $illness,
         $is_solo_parent = false, $solo_parent_id, $is_senior_citizen = false, $senior_citizen_id, $educational_attainment,
         $source_of_income, $monthly_income, $income_type, $is_ofw = false, $ofw_country, $ofw_is_domestic_helper = false,
         $ofw_professional = false, $email, $password, $password_confirmation;
+
+    // Add new properties for valid ID upload
+    public $valid_id, $valid_id_type;
+
     public $currentStep = 1;
 
     public function mount()
@@ -68,9 +74,14 @@ class ResidentSelfRegistration extends Component
                 'ofw_is_domestic_helper' => 'boolean',
                 'ofw_professional' => 'boolean',
             ]);
+        } elseif ($this->currentStep == 4) {
+            $this->validate([
+                'valid_id' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'valid_id_type' => 'required|string|max:50',
+            ]);
         }
 
-        $this->currentStep = min(4, $this->currentStep + 1);
+        $this->currentStep = min(5, $this->currentStep + 1);
     }
 
     public function previousStep()
@@ -80,8 +91,9 @@ class ResidentSelfRegistration extends Component
 
     public function getProgressPercentageProperty()
     {
-        return ($this->currentStep / 4) * 100;
+        return ($this->currentStep / 5) * 100;
     }
+
     public function rules()
     {
         return [
@@ -115,6 +127,8 @@ class ResidentSelfRegistration extends Component
             'ofw_country' => 'nullable|string|max:255',
             'ofw_is_domestic_helper' => 'boolean',
             'ofw_professional' => 'boolean',
+            'valid_id' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'valid_id_type' => 'required|string|max:50',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
             'password_confirmation' => 'required',
@@ -145,9 +159,19 @@ class ResidentSelfRegistration extends Component
         unset($validatedData['password']);
         unset($validatedData['password_confirmation']);
 
+        // Handle the ID upload
+        $validIdPath = null;
+        if ($this->valid_id) {
+            $validIdPath = $this->valid_id->store('valid-ids', 'public');
+        }
+
+        // Remove the file upload object from the data array
+        unset($validatedData['valid_id']);
+
         // Create the resident profile and link to user
         $resident = new Resident($validatedData);
         $resident->user_id = $user->id;
+        $resident->valid_id_path = $validIdPath;
         $resident->save();
 
         // Log the user in

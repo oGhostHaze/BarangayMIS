@@ -1,7 +1,7 @@
 <div class="mt-5 container-fluid">
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">Add Resident Form</h2>
+            <h2 class="card-title">{{ $resident_id ? 'Edit' : 'Add' }} Resident Form</h2>
         </div>
         <div class="card-body">
             <form wire:submit.prevent="{{ $resident_id ? 'update' : 'store' }}">
@@ -81,6 +81,17 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <!-- Added RFID Number -->
+                    <div class="col-md-3">
+                        <label for="rfid_number">RFID Number</label>
+                        <input type="text" class="form-control @error('rfid_number') is-invalid @enderror"
+                            wire:model="rfid_number" placeholder="RFID Number">
+                        @error('rfid_number')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="col-md-3">
                         <label for="educational_attainment">Educational Attainment</label>
                         <select class="form-select @error('educational_attainment') is-invalid @enderror"
@@ -109,7 +120,7 @@
                     <div class="col-md-3">
                         <label for="email">Email</label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror"
-                            wire:model="email" placeholder="Contact Number">
+                            wire:model="email" placeholder="Email Address">
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -122,6 +133,60 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <!-- New Valid ID section -->
+                    <div class="p-0 col-md-12 card">
+                        <div class="card-header">ID Verification</div>
+                        <div class="card-body row">
+                            <div class="col-md-6">
+                                <label for="valid_id_type">Valid ID Type</label>
+                                <select class="form-select @error('valid_id_type') is-invalid @enderror"
+                                    wire:model="valid_id_type">
+                                    <option value="">Select ID Type</option>
+                                    <option value="National ID">National ID</option>
+                                    <option value="Driver's License">Driver's License</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Voter's ID">Voter's ID</option>
+                                    <option value="SSS ID">SSS ID</option>
+                                    <option value="PhilHealth ID">PhilHealth ID</option>
+                                    <option value="PRC ID">PRC ID</option>
+                                    <option value="GSIS ID">GSIS ID</option>
+                                    <option value="Postal ID">Postal ID</option>
+                                    <option value="Barangay ID">Barangay ID</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                @error('valid_id_type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="valid_id">Upload Valid ID</label>
+                                <input type="file" class="form-control @error('valid_id') is-invalid @enderror"
+                                    wire:model="valid_id" accept=".jpg,.jpeg,.png,.pdf">
+                                <small class="form-text text-muted">Upload a scan or photo of valid ID (JPG, PNG, or
+                                    PDF). Max 2MB.</small>
+                                @error('valid_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+
+                                @if ($existing_valid_id_path)
+                                    <div class="mt-2">
+                                        <a href="{{ asset('storage/' . $existing_valid_id_path) }}" target="_blank"
+                                            class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> View Existing ID
+                                        </a>
+                                    </div>
+                                @endif
+
+                                @if ($valid_id)
+                                    <div class="mt-2 alert alert-success">
+                                        <i class="fas fa-check"></i> New ID successfully uploaded
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-3">
                         <label for="philhealth_id">Philhealth ID</label>
                         <input type="text" class="form-control @error('philhealth_id') is-invalid @enderror"
@@ -166,10 +231,11 @@
                         <div class="card-header">Occupation</div>
                         <div class="card-body row">
                             <div class="mb-3 col-md-6">
-                                <label for="source_of_income">Souce of Income</label>
-                                <input type="text" class="form-control @error('enderror') is-invalid @enderror"
+                                <label for="source_of_income">Source of Income</label>
+                                <input type="text"
+                                    class="form-control @error('source_of_income') is-invalid @enderror"
                                     wire:model="source_of_income" placeholder="Source of Income">
-                                @error('enderror')
+                                @error('source_of_income')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

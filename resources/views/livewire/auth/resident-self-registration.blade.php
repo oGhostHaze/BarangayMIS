@@ -5,8 +5,8 @@
 
             <div class="mb-4 progress">
                 <div class="progress-bar" role="progressbar" style="width: {{ $this->progressPercentage }}%"
-                    aria-valuenow="{{ $this->currentStep }}" aria-valuemin="0" aria-valuemax="4">
-                    Step {{ $this->currentStep }} of 4
+                    aria-valuenow="{{ $this->currentStep }}" aria-valuemin="0" aria-valuemax="5">
+                    Step {{ $this->currentStep }} of 5
                 </div>
             </div>
 
@@ -293,8 +293,60 @@
                     </div>
                 </div>
 
-                <!-- Step 4: Account Information -->
+                <!-- Step 4: ID Verification (NEW) -->
                 <div class="step" x-show="$wire.currentStep === 4">
+                    <h3 class="mb-3">ID Verification</h3>
+
+                    <div class="mb-3">
+                        <label class="form-label required">Valid ID Type</label>
+                        <select class="form-select" wire:model="valid_id_type" required>
+                            <option value="">Select</option>
+                            <option value="National ID">National ID</option>
+                            <option value="Driver's License">Driver's License</option>
+                            <option value="Passport">Passport</option>
+                            <option value="Voter's ID">Voter's ID</option>
+                            <option value="SSS ID">SSS ID</option>
+                            <option value="PhilHealth ID">PhilHealth ID</option>
+                            <option value="PRC ID">PRC ID</option>
+                            <option value="GSIS ID">GSIS ID</option>
+                            <option value="Postal ID">Postal ID</option>
+                            <option value="Barangay ID">Barangay ID</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        @error('valid_id_type')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label required">Upload Valid ID</label>
+                        <input type="file" class="form-control" wire:model="valid_id"
+                            accept=".jpg,.jpeg,.png,.pdf" required>
+                        <small class="form-text text-muted">Upload a scan or photo of your valid ID (JPG, PNG, or PDF).
+                            Maximum file size: 2MB.</small>
+                        @error('valid_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        @if ($valid_id)
+                            <div class="alert alert-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M5 12l5 5l10 -10"></path>
+                                </svg>
+                                ID successfully uploaded
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Step 5: Account Information (previously step 4) -->
+                <div class="step" x-show="$wire.currentStep === 5">
                     <h3 class="mb-3">Account Information</h3>
 
                     <div class="mb-3">
@@ -347,7 +399,7 @@
                         Previous
                     </button>
 
-                    @if ($this->currentStep < 4)
+                    @if ($this->currentStep < 5)
                         <button type="button" class="btn btn-primary" wire:click="nextStep">
                             Next
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right"
@@ -379,7 +431,6 @@
         Already have an account? <a href="{{ route('login') }}" tabindex="-1">Sign in</a>
     </div>
 
-
     <!-- Terms and Conditions Modal -->
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -390,8 +441,17 @@
                 </div>
                 <div class="modal-body">
                     <!-- Terms and conditions content goes here -->
-                    <p>By registering for this service, you agree to the following terms and conditions...</p>
-                    <!-- Add more terms content as needed -->
+                    <p>By registering for this service, you agree to the following terms and conditions:</p>
+                    <ol>
+                        <li>All information provided must be true and accurate.</li>
+                        <li>The uploaded ID must be valid and current.</li>
+                        <li>You are responsible for maintaining the confidentiality of your account.</li>
+                        <li>The barangay reserves the right to verify all information submitted.</li>
+                        <li>False information may result in rejection of your application or termination of your
+                            account.</li>
+                    </ol>
+                    <p>The ID you upload will be used for verification purposes only and will be stored securely in
+                        compliance with data privacy laws.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Agree</button>

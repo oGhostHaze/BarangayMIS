@@ -43,6 +43,8 @@ class Resident extends Model
         'ofw_professional',
         'email',
         'user_id',
+        'valid_id_path', // Added valid ID file path
+        'valid_id_type', // Added valid ID type
     ];
 
     public function medications()
