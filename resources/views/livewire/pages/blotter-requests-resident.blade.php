@@ -31,8 +31,8 @@
                                 class="badge bg-{{ $blotter->status == 'Pending' ? 'warning' : ($blotter->status == 'Resolved' ? 'success' : 'danger') }}">{{ $blotter->status }}</span>
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm" wire:click="edit({{ $blotter->id }})"
-                                data-bs-toggle="modal" data-bs-target="#blotterModal">Edit</button>
+                            <a class="btn btn-warning btn-sm"
+                                href="{{ route('auth.blotter.edit.res', ['id' => $blotter->id]) }}">Edit</a>
                             <button class="btn btn-danger btn-sm" wire:click="delete({{ $blotter->id }})"
                                 onclick="return confirm('Are you sure?')">Delete</button>
                         </td>

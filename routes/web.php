@@ -24,6 +24,7 @@ use App\Http\Controllers\SearchController;
 use App\Livewire\User\UserAccountSettings;
 use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
+use App\Livewire\Pages\EditBlotterResident;
 use App\Livewire\Pages\ResidentsCreateForm;
 use App\Http\Controllers\ResidentController;
 use App\Livewire\Pages\CertificateIssuedPage;
@@ -112,6 +113,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/my-certificates', CertificateRequestsResident::class)->name('certs.resident');
     Route::get('/my-reports', BlotterRequestsResident::class)->name('blotter.resident');
     Route::get('/my-reports/create', CreateBlotterResident::class)->name('blotter.create.res');
+    Route::get('/my-report/{id}/edit', EditBlotterResident::class)->name('blotter.edit.res');
 
     Route::prefix('/certificates')->name('certs.')->group(function () {
         Route::get('/indigency', CertificateTemplate1::class)->name('list');

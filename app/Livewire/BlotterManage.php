@@ -88,14 +88,13 @@ class BlotterManage extends Component
     public function edit($id)
     {
         $blotter = Blotter::findOrFail($id);
+        $this->blotter_id = $blotter->id;
         $this->fill($blotter->toArray());
         $this->updateMode = true;
     }
 
-    public function update()
+    public function save()
     {
-        $this->validate();
-
         Blotter::findOrFail($this->blotter_id)->update([
             'complainant_name' => $this->complainant_name,
             'complainant_address' => $this->complainant_address,
@@ -111,8 +110,8 @@ class BlotterManage extends Component
             'remarks' => $this->remarks,
             'recorded_by' => Auth::id(),
         ]);
-
         session()->flash('success', 'Blotter record updated successfully.');
+
         $this->dispatch('close-modal');
         $this->resetFields();
     }

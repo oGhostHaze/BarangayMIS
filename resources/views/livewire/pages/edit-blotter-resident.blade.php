@@ -1,14 +1,20 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h2 class="mb-0">Create New Blotter Report</h2>
+            <h2 class="mb-0">Edit Blotter Report</h2>
         </div>
         <div class="card-body">
             @if (session()->has('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <form wire:submit.prevent="store">
+            @if (session()->has('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
+            <form wire:submit.prevent="update">
+                <input type="hidden" wire:model="blotter_id">
+
                 <div class="mb-4 row">
                     <div class="col-md-12">
                         <div class="card">
@@ -162,9 +168,11 @@
                         <a href="{{ route('auth.blotter.resident') }}" class="btn btn-secondary">
                             <i class="ti ti-arrow-left me-1"></i> Back to List
                         </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="ti ti-device-floppy me-1"></i> Submit Blotter Report
-                        </button>
+                        <div>
+                            <button type="submit" class="btn btn-success">
+                                <i class="ti ti-device-floppy me-1"></i> Update Blotter Report
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
