@@ -20,11 +20,14 @@ use App\Http\Controllers\UsersController;
 use App\Livewire\Pages\AnnouncementsForm;
 use App\Livewire\Pages\AnnouncementsShow;
 use App\Livewire\Pages\EventsManageTable;
+use App\Http\Controllers\SearchController;
 use App\Livewire\User\UserAccountSettings;
 use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
 use App\Livewire\Pages\ResidentsCreateForm;
+use App\Http\Controllers\ResidentController;
 use App\Livewire\Pages\CertificateIssuedPage;
+use App\Livewire\Pages\CreateBlotterResident;
 use App\Livewire\Pages\CertificateRequestPage;
 use App\Http\Controllers\CertificateController;
 use App\Livewire\Auth\ResidentSelfRegistration;
@@ -108,6 +111,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
 
     Route::get('/my-certificates', CertificateRequestsResident::class)->name('certs.resident');
     Route::get('/my-reports', BlotterRequestsResident::class)->name('blotter.resident');
+    Route::get('/my-reports/create', CreateBlotterResident::class)->name('blotter.create.res');
 
     Route::prefix('/certificates')->name('certs.')->group(function () {
         Route::get('/indigency', CertificateTemplate1::class)->name('list');
