@@ -344,12 +344,6 @@
                                     <p class="empty-subtitle text-muted">
                                         This resident has not requested any certificates yet.
                                     </p>
-                                    <div class="empty-action">
-                                        <a href="{{ route('admin.certificates.create', ['resident_id' => $resident->id]) }}"
-                                            class="btn btn-primary">
-                                            Create New Request
-                                        </a>
-                                    </div>
                                 </div>
                             @endif
                         </div>
