@@ -4,6 +4,7 @@ use App\Livewire\LandingPage;
 use App\Livewire\BlotterCreate;
 use App\Livewire\BlotterManage;
 use App\Livewire\AdminDashboard;
+use App\Livewire\Pages\ResidentsManagePending;
 use App\Livewire\SystemSettings;
 use App\Livewire\BarangayOrgChart;
 use App\Livewire\Pages\ResidentShow;
@@ -98,6 +99,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     });
 
     Route::get('/residents', ResidentsManage::class)->name('residents.index');
+    Route::get('/residents/pending', ResidentsManagePending::class)->name('residents.pending');
     Route::get('/resident/dashboard', Dashboard::class)->name('resident.dashboard');
     Route::get('/residents/create', ResidentsCreateForm::class)->name('residents.create');
     Route::get('/residents/update/{resident_id}', ResidentsCreateForm::class)->name('residents.update');

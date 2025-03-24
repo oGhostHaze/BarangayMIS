@@ -170,12 +170,8 @@ class ResidentSelfRegistration extends Component
 
         // Create the resident profile and link to user
         $resident = new Resident($validatedData);
-        $resident->user_id = $user->id;
         $resident->valid_id_path = $validIdPath;
         $resident->save();
-
-        // Log the user in
-        Auth::login($user);
 
         // Redirect to dashboard
         return redirect()->route('auth.dashboard');

@@ -49,8 +49,12 @@ class LoginForm extends Component
         $creds = array($fieldType => $this->login_id, 'password' => $this->password);
 
         if (Auth::guard('web')->attempt($creds)) {
-            $checkUser = User::where($fieldType, $this->login_id)->first();
-            if ($checkUser->blocked == 1) {
+            $checkUser = User::where($fieldType, $this->login_id)->has('resident')->first();
+            if (!$checkUser) {
+                Auth::guard('web')->logout();
+                return redirect()->route('auth.login')->with('fail', 'Your account has not yet been verified. Please contact administrator!');
+            }
+            if (!$checkUser OR $checkUser->blocked == 1) {
                 Auth::guard('web')->logout();
                 return redirect()->route('auth.login')->with('fail', 'Your account had been blocked!');
             } else {

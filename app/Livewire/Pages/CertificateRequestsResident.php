@@ -225,9 +225,16 @@ class CertificateRequestsResident extends Component
             if ($this->receipt && $this->payment_method == 'GCash') {
                 $receipt_path = $this->receipt->store('receipts', 'public');
             }
-
+            if($this->isEditing){
+                $control_number = $request->control_number;
+            }else{
+                $control_number = Str::random(10);
+            }
             CertificateRequest::updateOrCreate(
-                ['id' => $this->request_id],
+                [
+                    'id' => $this->request_id,
+                    'control_number' => $control_number,
+                ],
                 [
                     'resident_id' => $this->resident_id,
                     'certificate_type' => $this->certificate_type,

@@ -250,9 +250,13 @@ class CertificateRequestPage extends Component
             $existingRequest = null;
             if ($this->request_id) {
                 $existingRequest = CertificateRequest::find($this->request_id);
+                $control_number = $existingRequest->control_number;
+            }else{
+                $control_number = Str::random(10);
             }
 
             $data = [
+                'control_number' => $control_number,
                 'resident_id' => $this->resident_id,
                 'certificate_type' => $this->certificate_type,
                 'purpose' => $this->purpose,

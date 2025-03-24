@@ -128,6 +128,9 @@
                                     <a class="dropdown-item" href="{{ route('auth.residents.index') }}">
                                         All Residents
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('auth.residents.pending') }}">
+                                        Pending Approval
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
                                         Add New Resident
                                     </a>

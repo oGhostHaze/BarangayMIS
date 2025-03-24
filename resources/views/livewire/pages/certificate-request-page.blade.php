@@ -223,6 +223,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Control #</th>
                                 <th>Resident</th>
                                 <th>Certificate Type</th>
                                 <th>Purpose</th>
@@ -238,6 +239,7 @@
                             @forelse($requests as $request)
                                 <tr>
                                     <td>{{ $request->id }}</td>
+                                    <td>{{ $request->control_number }}</td>
                                     <td>
                                         <div class="py-1 d-flex align-items-center">
                                             <span
@@ -312,11 +314,13 @@
                                     <td>
                                         <div class="btn-list flex-nowrap">
                                             @if ($request->status == 'Pending')
-                                                <button class="btn btn-sm btn-success"
-                                                    wire:click="processRequest({{ $request->id }}, 'Approved')"
-                                                    onclick="confirm('Are you sure you want to approve this request?') || event.stopImmediatePropagation()">
-                                                    Approve
-                                                </button>
+                                                @if ($request->payment_method == 'GCash' && $request->receipt_path or $request->payment_method == 'Cash')
+                                                    <button class="btn btn-sm btn-success"
+                                                        wire:click="processRequest({{ $request->id }}, 'Approved')"
+                                                        onclick="confirm('Are you sure you want to approve this request?') || event.stopImmediatePropagation()">
+                                                        Approve
+                                                    </button>
+                                                @endif
                                                 <button class="btn btn-sm btn-danger"
                                                     wire:click="processRequest({{ $request->id }}, 'Rejected')"
                                                     onclick="confirm('Are you sure you want to reject this request?') || event.stopImmediatePropagation()">
@@ -335,26 +339,27 @@
                                                     Mark Released
                                                 </button>
                                             @endif
-
-                                            <a class="btn btn-sm btn-primary"
-                                                href="{{ route('auth.certs.temp1', ['request_id' => $request->id]) }}"
-                                                target="_blank">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-printer" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path
-                                                        d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
-                                                    </path>
-                                                    <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
-                                                    <path
-                                                        d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z">
-                                                    </path>
-                                                </svg>
-                                                Print
-                                            </a>
+                                            @if ($request->status === 'Released' or $request->status === 'Ready for Pickup')
+                                                <a class="btn btn-sm btn-primary"
+                                                    href="{{ route('auth.certs.temp1', ['request_id' => $request->id]) }}"
+                                                    target="_blank">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="icon icon-tabler icon-tabler-printer" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path
+                                                            d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
+                                                        </path>
+                                                        <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
+                                                        <path
+                                                            d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z">
+                                                        </path>
+                                                    </svg>
+                                                    Print
+                                                </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

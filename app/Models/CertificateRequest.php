@@ -15,6 +15,7 @@ class CertificateRequest extends Model
         'certificate_type',
         'purpose',
         'status',
+        'control_number',
         'payment_method',
         'pickup_datetime',
         'receipt_path',
