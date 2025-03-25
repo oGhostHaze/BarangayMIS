@@ -122,14 +122,9 @@ class ResidentsManagePending extends Component
     public function approve($id)
     {
         $resident = Resident::findOrFail($id);
-        $user = User::updateOrCreate([
+        $user = User::where([
             'email' => $resident->email,
-        ], [
-            'name' => $resident->first_name . ' ' .
-            ($resident->middle_name ? $resident->middle_name . ' ' : '') . $resident->last_name,
-            'username' => $resident->contact_no,
-            'password' => Hash::make($resident->password),
-        ]);
+        ])->first();
         $resident->user_id = $user->id;
         $resident->save();
         $this->resetFields();
