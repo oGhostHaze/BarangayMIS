@@ -293,14 +293,16 @@
                                     </div>
 
                                     <div class="mb-3 col-md-6">
-                                        <label class="form-label required">Preferred Pickup Date & Time</label>
-                                        <input type="datetime-local"
+                                        <label class="form-label">Pickup Date & Time</label>
+                                        <input type="text" readonly
                                             class="form-control @error('pickup_datetime') is-invalid @enderror"
-                                            wire:model.live="pickup_datetime">
+                                            value="{{ Carbon\Carbon::parse($pickup_datetime)->format('F d, Y g:i A') }}">
+                                        <input type="hidden" wire:model.live="pickup_datetime">
                                         @error('pickup_datetime')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                        <small class="form-hint">Office hours: Monday-Friday, 8:00 AM - 5:00 PM</small>
+                                        <small class="form-hint">Your certificate will be available for pickup 2
+                                            business days after submission (Mon-Fri only)</small>
                                     </div>
                                 </div>
 
