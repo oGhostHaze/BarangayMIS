@@ -56,7 +56,7 @@ class Dashboard extends Component
             ->get();
 
         // Get upcoming events
-        $this->upcomingEvents = Event::whereIn('status', array('active','ongoing'))
+        $this->upcomingEvents = Event::whereIn('status', array('active', 'ongoing'))
             ->whereDate('start_date', '>=', now())
             ->orderBy('start_date', 'asc')
             ->limit(3)
