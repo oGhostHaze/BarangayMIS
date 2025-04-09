@@ -306,6 +306,23 @@
                                     </div>
                                 </div>
 
+                                <!-- Cedula Upload Field -->
+                                <div class="row">
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label">Cedula (Optional)</label>
+                                        <div class="input-group">
+                                            <input type="file"
+                                                class="form-control @error('cedula_image') is-invalid @enderror"
+                                                wire:model.live="cedula_image" accept="image/*,.pdf">
+                                            @error('cedula_image')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <small class="form-hint">Upload a photo or PDF of your community tax
+                                            certificate (cedula) if needed</small>
+                                    </div>
+                                </div>
+
                                 @if ($payment_method == 'GCash')
                                     <div class="row">
                                         <div class="mb-3 col-md-12">
@@ -355,8 +372,7 @@
                             </div>
 
                             <div class="form-footer">
-                                <button type="button" class="btn btn-link"
-                                    wire:click="hideRequestForm">Cancel</button>
+                                <button type="button" class="btn" wire:click="hideRequestForm">Cancel</button>
                                 <button type="submit" class="btn btn-primary">
                                     {{ $isEditing ? 'Update Request' : 'Submit Request' }}
                                 </button>
@@ -505,7 +521,7 @@
                                             @endif
 
                                             @if ($request->status == 'Ready for Pickup')
-                                                <button class="btn btn-sm btn-outline-success" disabled>
+                                                <button class="btn btn-sm" disabled>
                                                     Ready for Pickup
                                                 </button>
                                             @endif
@@ -523,6 +539,14 @@
                                                     wire:click="viewReceipt({{ $request->id }})"
                                                     data-bs-toggle="modal" data-bs-target="#receiptModal">
                                                     View Receipt
+                                                </a>
+                                            @endif
+
+                                            @if ($request->cedula_image_path)
+                                                <a href="#" class="btn btn-sm btn-outline-info"
+                                                    wire:click="viewCedula({{ $request->id }})"
+                                                    data-bs-toggle="modal" data-bs-target="#receiptModal">
+                                                    View Cedula
                                                 </a>
                                             @endif
 
@@ -549,53 +573,56 @@
                                             @endif
 
                                         </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="py-4 text-center">
+                                        <div class="empty">
+                                            <div class="empty-img">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-file-off" width="40"
+                                                    height="40" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M3 3l18 18"></path>
+                                                    <path d="M17 17h-12a2 2 0 0 1 -2 -2v-10"></path>
+                                                    <path d="M7 3h7l5 5v7m0 4a2 2 0 0 1 -2 2"></path>
+                                                </svg>
+                                            </div>
+                                            <p class="empty-title">No certificate requests found</p>
+                                            <p class="empty-subtitle text-muted">
+                                                No certificate requests matching your criteria were found.
+                                            </p>
+                                            <div class="empty-action">
+                                                <button class="btn btn-primary" wire:click="showRequestForm">
+                                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon"
+                                                        width="24" height="24" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke="currentColor" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M12 5l0 14"></path>
+                                                        <path d="M5 12l14 0"></path>
+                                                    </svg>
+                                                    Create a new request
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-                </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="9" class="py-4 text-center">
-                        <div class="empty">
-                            <div class="empty-img">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-off"
-                                    width="40" height="40" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M3 3l18 18"></path>
-                                    <path d="M17 17h-12a2 2 0 0 1 -2 -2v-10"></path>
-                                    <path d="M7 3h7l5 5v7m0 4a2 2 0 0 1 -2 2"></path>
-                                </svg>
-                            </div>
-                            <p class="empty-title">No certificate requests found</p>
-                            <p class="empty-subtitle text-muted">
-                                No certificate requests matching your criteria were found.
-                            </p>
-                            <div class="empty-action">
-                                <button class="btn btn-primary" wire:click="showRequestForm">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M12 5l0 14"></path>
-                                        <path d="M5 12l14 0"></path>
-                                    </svg>
-                                    Create a new request
-                                </button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                @endforelse
-                </tbody>
-                </table>
-            </div>
 
-            <div class="card-footer d-flex align-items-center">
-                {{ $requests->links() }}
+                <div class="card-footer d-flex align-items-center">
+                    {{ $requests->links() }}
+                </div>
             </div>
         </div>
+
         <!-- Payment Submission Modal -->
         <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-hidden="true"
             wire:ignore.self>
@@ -670,7 +697,7 @@
                             @endif
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">
                                 Submit Payment
                             </button>
@@ -679,6 +706,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Receipt Modal -->
         @if ($viewingReceipt)
             <div class="modal modal-blur fade" id="receiptModal" tabindex="-1" role="dialog" aria-hidden="true"
@@ -686,7 +714,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Payment Receipt</h5>
+                            <h5 class="modal-title">Document Viewer</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
@@ -707,15 +735,15 @@
                                             <path d="M20 15h-3v6"></path>
                                             <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z"></path>
                                         </svg>
-                                        View PDF Receipt
+                                        View PDF Document
                                     </a>
                                 </div>
                             @else
-                                <img src="{{ $currentReceipt }}" class="rounded img-fluid" alt="Payment Receipt">
+                                <img src="{{ $currentReceipt }}" class="rounded img-fluid" alt="Document Image">
                             @endif
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

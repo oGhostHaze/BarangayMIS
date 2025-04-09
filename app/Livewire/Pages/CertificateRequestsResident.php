@@ -32,6 +32,7 @@ class CertificateRequestsResident extends Component
     public $payment_method;
     public $pickup_datetime;
     public $receipt;
+    public $cedula_image;
 
     // Discount properties (new)
     public $discount_type = 'None';
@@ -256,6 +257,31 @@ class CertificateRequestsResident extends Component
         }
     }
 
+    /**
+     * View cedula image
+     */
+    public function viewCedula($id)
+    {
+        try {
+            $request = CertificateRequest::findOrFail($id);
+
+            // Check if request belongs to current user
+            if ($request->resident_id != Auth::user()->resident->id) {
+                $this->alert('error', 'You are not authorized to view this cedula.');
+                return;
+            }
+
+            if ($request->cedula_image_path) {
+                $this->currentReceipt = Storage::url($request->cedula_image_path);
+                $this->viewingReceipt = true;
+            } else {
+                $this->alert('error', 'No cedula image found for this request.');
+            }
+        } catch (\Exception $e) {
+            $this->alert('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
     public function resetFields()
     {
         $this->certificate_type = '';
@@ -265,6 +291,7 @@ class CertificateRequestsResident extends Component
         // Set the pickup date to 2 business days from now
         $this->pickup_datetime = $this->calculateNextBusinessDay(2)->format('Y-m-d\TH:i');
         $this->receipt = null;
+        $this->cedula_image = null;
         $this->isEditing = false;
         $this->discount_type = 'None';
         $this->discount_id_number = null;
@@ -587,6 +614,13 @@ class CertificateRequestsResident extends Component
             if ($this->receipt && $this->payment_method == 'GCash') {
                 $receipt_path = $this->receipt->store('receipts', 'public');
             }
+
+            // Process cedula image if uploaded
+            $cedula_image_path = null;
+            if ($this->cedula_image) {
+                $cedula_image_path = $this->cedula_image->store('cedula_images', 'public');
+            }
+
             if ($this->isEditing) {
                 $control_number = $request->control_number;
             } else {
@@ -605,6 +639,7 @@ class CertificateRequestsResident extends Component
                     'payment_method' => $this->payment_method,
                     'pickup_datetime' => $this->pickup_datetime,
                     'receipt_path' => $receipt_path ?: ($this->isEditing ? $request->receipt_path : null),
+                    'cedula_image_path' => $cedula_image_path ?: ($this->isEditing ? $request->cedula_image_path : null),
                     'requested_at' => now(),
                     'processed_by' => $this->isEditing ? $request->processed_by : null,
                     'discount_type' => $this->discount_type,

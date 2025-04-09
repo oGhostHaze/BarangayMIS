@@ -31,6 +31,7 @@ class CertificateRequest extends Model
         'payment_status',          // unpaid, pending_verification, paid
         'payment_submitted_at',    // when payment was submitted
         'payment_verified_at',     // when payment was verified
+        'cedula_image_path'
     ];
 
     protected $casts = [
@@ -43,15 +44,18 @@ class CertificateRequest extends Model
         'payment_verified_at' => 'datetime',
     ];
 
-    public function resident() {
+    public function resident()
+    {
         return $this->belongsTo(Resident::class);
     }
 
-    public function processedBy() {
+    public function processedBy()
+    {
         return $this->belongsTo(User::class, 'processed_by');
     }
 
-    public function capt() {
+    public function capt()
+    {
         return $this->belongsTo(BarangayOfficial::class, 'barangay_official_id');
     }
 }
