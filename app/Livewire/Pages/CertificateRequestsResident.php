@@ -32,6 +32,7 @@ class CertificateRequestsResident extends Component
     public $payment_method;
     public $pickup_datetime;
     public $receipt;
+    public $cedula_image;
 
     // Discount properties (new)
     public $discount_type = 'None';
@@ -93,170 +94,6 @@ class CertificateRequestsResident extends Component
             'discount_type' => 'required|in:None,Student,Senior Citizen',
             'discount_id_number' => 'nullable|required_if:discount_type,Student,Senior Citizen|string|max:50',
         ];
-    }
-
-    protected $messages = [
-        'certificate_type.required' => 'Please select a certificate type',
-        'purpose.required' => 'Please provide a purpose for requesting this certificate',
-        'purpose.min' => 'The purpose should be at least 5 characters',
-        'payment_method.required' => 'Please select a payment method',
-        'pickup_datetime.required' => 'Please select a pickup date and time',
-        'pickup_datetime.after' => 'Pickup date must be in the future',
-        'receipt.required' => 'Please upload a GCash payment receipt',
-        'receipt.file' => 'The receipt must be a file',
-        'receipt.mimes' => 'The receipt must be a JPG, PNG, or PDF file',
-        'receipt.max' => 'The receipt must not exceed 2MB',
-        'discount_id_number.required_if' => 'ID number is required when applying a discount',
-    ];
-
-    public $residents = [];
-
-    /**
-     * Calculate discount based on type
-     */
-    public function calculateDiscount()
-    {
-        $this->original_fee = $this->getCertificateFee($this->certificate_type);
-
-        switch ($this->discount_type) {
-            case 'Student':
-                $this->discount_amount = $this->original_fee * 0.2; // 20% discount for students
-                break;
-            case 'Senior Citizen':
-                $this->discount_amount = $this->original_fee * 0.3; // 30% discount for senior citizens
-                break;
-            default:
-                $this->discount_amount = 0; // No discount
-                break;
-        }
-
-        $this->discounted_fee = max(0, $this->original_fee - $this->discount_amount);
-    }
-
-    /**
-     * Get certificate fee based on type
-     *
-     * @param string $certificateType
-     * @return float
-     */
-    private function getCertificateFee($certificateType)
-    {
-        $fees = [
-            'Barangay Clearance' => 50.00,
-            'Certificate of Residency' => 50.00,
-            'Certificate of Indigency' => 0.00,
-            'Business Clearance' => 100.00,
-            'Good Moral Character' => 50.00,
-        ];
-
-        return $fees[$certificateType] ?? 50.00;
-    }
-
-    public function isPickupToday($date)
-    {
-        return Carbon::parse($date)->isToday();
-    }
-
-    public function mount()
-    {
-        // Ensure the user has a resident profile
-        if (Auth::check() && Auth::user()->resident) {
-            $this->resident_id = Auth::user()->resident->id;
-
-            // For regular residents, they can only see themselves
-            if (Auth::user()->hasRole('resident')) {
-                $this->residents = collect([Auth::user()->resident]);
-            }
-            // For admins/staff, they can see all residents
-            else if (Auth::user()->hasAnyRole(['barangay_official', 'admin', 'staff'])) {
-                $this->residents = Resident::orderBy('last_name')->orderBy('first_name')->get();
-            }
-        }
-    }
-
-    public function showRequestForm()
-    {
-        $this->resetValidation();
-        $this->resetFields();
-        $this->isEditing = false;
-        $this->showing_form = true;
-    }
-
-    public function hideRequestForm()
-    {
-        $this->showing_form = false;
-    }
-
-    public function updatedDiscountType()
-    {
-        $this->calculateDiscount();
-    }
-
-    public function updatedCertificateType()
-    {
-        $this->calculateDiscount();
-    }
-
-    public function saveRequest()
-    {
-        $this->validate();
-
-        try {
-            if ($this->isEditing) {
-                // Check if the request belongs to the current user
-                $request = CertificateRequest::findOrFail($this->request_id);
-                if ($request->resident_id != Auth::user()->resident->id) {
-                    $this->alert('error', 'You are not authorized to edit this request.');
-                    return;
-                }
-
-                // Only allow editing if status is still pending
-                if ($request->status != 'Pending') {
-                    $this->alert('error', 'You cannot edit a request that has already been processed.');
-                    return;
-                }
-            }
-
-            // Calculate discount
-            $this->calculateDiscount();
-
-            // Process receipt if uploaded
-            $receipt_path = null;
-            if ($this->receipt && $this->payment_method == 'GCash') {
-                $receipt_path = $this->receipt->store('receipts', 'public');
-            }
-            if($this->isEditing){
-                $control_number = $request->control_number;
-            }else{
-                $control_number = Str::random(10);
-            }
-            CertificateRequest::updateOrCreate(
-                [
-                    'id' => $this->request_id,
-                    'control_number' => $control_number,
-                ],
-                [
-                    'resident_id' => $this->resident_id,
-                    'certificate_type' => $this->certificate_type,
-                    'purpose' => $this->purpose,
-                    'status' => $this->status,
-                    'payment_method' => $this->payment_method,
-                    'pickup_datetime' => $this->pickup_datetime,
-                    'receipt_path' => $receipt_path ?: ($this->isEditing ? $request->receipt_path : null),
-                    'requested_at' => now(),
-                    'processed_by' => $this->isEditing ? $request->processed_by : null,
-                    'discount_type' => $this->discount_type,
-                    'discount_id_number' => $this->discount_type !== 'None' ? $this->discount_id_number : null,
-                    'discount_amount' => $this->discount_amount,
-                ]
-            );
-
-            $this->alert('success', $this->isEditing ? 'Request updated successfully!' : 'Request submitted successfully!');
-            $this->hideRequestForm();
-            $this->resetFields();
-        } catch (\Exception $e) {
-            $this->alert('error', 'Error: ' . $e->getMessage());
-        }
     }
 
     /**
@@ -420,14 +257,41 @@ class CertificateRequestsResident extends Component
         }
     }
 
+    /**
+     * View cedula image
+     */
+    public function viewCedula($id)
+    {
+        try {
+            $request = CertificateRequest::findOrFail($id);
+
+            // Check if request belongs to current user
+            if ($request->resident_id != Auth::user()->resident->id) {
+                $this->alert('error', 'You are not authorized to view this cedula.');
+                return;
+            }
+
+            if ($request->cedula_image_path) {
+                $this->currentReceipt = Storage::url($request->cedula_image_path);
+                $this->viewingReceipt = true;
+            } else {
+                $this->alert('error', 'No cedula image found for this request.');
+            }
+        } catch (\Exception $e) {
+            $this->alert('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
     public function resetFields()
     {
         $this->certificate_type = '';
         $this->purpose = '';
         $this->request_id = null;
         $this->payment_method = '';
-        $this->pickup_datetime = '';
+        // Set the pickup date to 2 business days from now
+        $this->pickup_datetime = $this->calculateNextBusinessDay(2)->format('Y-m-d\TH:i');
         $this->receipt = null;
+        $this->cedula_image = null;
         $this->isEditing = false;
         $this->discount_type = 'None';
         $this->discount_id_number = null;
@@ -454,7 +318,7 @@ class CertificateRequestsResident extends Component
 
     public function getRequestStatusColor($status)
     {
-        return match($status) {
+        return match ($status) {
             'Pending' => 'bg-warning',
             'Approved' => 'bg-success',
             'Released' => 'bg-info',
@@ -534,18 +398,14 @@ class CertificateRequestsResident extends Component
 
     public function render()
     {
-        // Make sure user has a resident profile
-        if (!Auth::check() || !Auth::user()->resident) {
-            return view('livewire.pages.resident-profile-incomplete')->layout('back.layouts.pages-layout');
-        }
 
         $query = CertificateRequest::where('resident_id', Auth::user()->resident->id);
 
         // Apply filters
         if ($this->search) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('certificate_type', 'like', "%{$this->search}%")
-                ->orWhere('purpose', 'like', "%{$this->search}%");
+                    ->orWhere('purpose', 'like', "%{$this->search}%");
             });
         }
 
@@ -586,5 +446,213 @@ class CertificateRequestsResident extends Component
             'counts' => $counts,
             'stats' => $stats,
         ])->layout('back.layouts.pages-layout');
+    }
+
+    protected $messages = [
+        'certificate_type.required' => 'Please select a certificate type',
+        'purpose.required' => 'Please provide a purpose for requesting this certificate',
+        'purpose.min' => 'The purpose should be at least 5 characters',
+        'payment_method.required' => 'Please select a payment method',
+        'pickup_datetime.required' => 'Please select a pickup date and time',
+        'pickup_datetime.after' => 'Pickup date must be in the future',
+        'receipt.required' => 'Please upload a GCash payment receipt',
+        'receipt.file' => 'The receipt must be a file',
+        'receipt.mimes' => 'The receipt must be a JPG, PNG, or PDF file',
+        'receipt.max' => 'The receipt must not exceed 2MB',
+        'discount_id_number.required_if' => 'ID number is required when applying a discount',
+    ];
+
+    public $residents = [];
+
+    /**
+     * Calculate the next valid business day (Mon-Fri) starting from a given date
+     * and adding the specified number of business days
+     *
+     * @param int $daysToAdd Number of business days to add
+     * @param Carbon|null $startDate Starting date (defaults to today)
+     * @return Carbon The resulting business day
+     */
+    public function calculateNextBusinessDay($daysToAdd = 2, Carbon $startDate = null)
+    {
+        $date = $startDate ? $startDate->copy() : Carbon::now();
+        $businessDaysAdded = 0;
+
+        while ($businessDaysAdded < $daysToAdd) {
+            $date->addDay();
+            // Skip weekends (6 = Saturday, 0 = Sunday)
+            if ($date->dayOfWeek !== 6 && $date->dayOfWeek !== 0) {
+                $businessDaysAdded++;
+            }
+        }
+
+        // Set to 10:00 AM (default pickup time)
+        return $date->setHour(10)->setMinute(0)->setSecond(0);
+    }
+
+    /**
+     * Calculate discount based on type
+     */
+    public function calculateDiscount()
+    {
+        $this->original_fee = $this->getCertificateFee($this->certificate_type);
+
+        switch ($this->discount_type) {
+            case 'Student':
+                $this->discount_amount = $this->original_fee * 0.2; // 20% discount for students
+                break;
+            case 'Senior Citizen':
+                $this->discount_amount = $this->original_fee * 0.3; // 30% discount for senior citizens
+                break;
+            default:
+                $this->discount_amount = 0; // No discount
+                break;
+        }
+
+        $this->discounted_fee = max(0, $this->original_fee - $this->discount_amount);
+    }
+
+    /**
+     * Get certificate fee based on type
+     *
+     * @param string $certificateType
+     * @return float
+     */
+    private function getCertificateFee($certificateType)
+    {
+        $fees = [
+            'Barangay Clearance' => 50.00,
+            'Certificate of Residency' => 50.00,
+            'Certificate of Indigency' => 0.00,
+            'Business Clearance' => 100.00,
+            'Good Moral Character' => 50.00,
+        ];
+
+        return $fees[$certificateType] ?? 50.00;
+    }
+
+    public function isPickupToday($date)
+    {
+        return Carbon::parse($date)->isToday();
+    }
+
+    public function mount()
+    {
+        // Ensure the user has a resident profile
+        if (Auth::check() && Auth::user()->resident) {
+            $this->resident_id = Auth::user()->resident->id;
+
+            // Set default pickup date (2 business days from now)
+            $this->pickup_datetime = $this->calculateNextBusinessDay(2)->format('Y-m-d\TH:i');
+
+            // For regular residents, they can only see themselves
+            if (Auth::user()->hasRole('resident')) {
+                $this->residents = collect([Auth::user()->resident]);
+            }
+            // For admins/staff, they can see all residents
+            else if (Auth::user()->hasAnyRole(['barangay_official', 'admin', 'staff'])) {
+                $this->residents = Resident::orderBy('last_name')->orderBy('first_name')->get();
+            }
+        }
+    }
+
+    public function showRequestForm()
+    {
+        $this->resetValidation();
+        $this->resetFields();
+        $this->isEditing = false;
+        $this->showing_form = true;
+
+        // Set the pickup date to 2 business days from now
+        $this->pickup_datetime = $this->calculateNextBusinessDay(2)->format('Y-m-d\TH:i');
+    }
+
+    public function hideRequestForm()
+    {
+        $this->showing_form = false;
+    }
+
+    public function updatedDiscountType()
+    {
+        $this->calculateDiscount();
+    }
+
+    public function updatedCertificateType()
+    {
+        $this->calculateDiscount();
+    }
+
+    public function saveRequest()
+    {
+        $this->validate();
+
+        try {
+            if ($this->isEditing) {
+                // Check if the request belongs to the current user
+                $request = CertificateRequest::findOrFail($this->request_id);
+                if ($request->resident_id != Auth::user()->resident->id) {
+                    $this->alert('error', 'You are not authorized to edit this request.');
+                    return;
+                }
+
+                // Only allow editing if status is still pending
+                if ($request->status != 'Pending') {
+                    $this->alert('error', 'You cannot edit a request that has already been processed.');
+                    return;
+                }
+            }
+
+            // Calculate discount
+            $this->calculateDiscount();
+
+            // Ensure pickup date is 2 business days from now and is on a weekday
+            if (!$this->isEditing) {
+                $this->pickup_datetime = $this->calculateNextBusinessDay(2)->format('Y-m-d\TH:i');
+            }
+
+            // Process receipt if uploaded
+            $receipt_path = null;
+            if ($this->receipt && $this->payment_method == 'GCash') {
+                $receipt_path = $this->receipt->store('receipts', 'public');
+            }
+
+            // Process cedula image if uploaded
+            $cedula_image_path = null;
+            if ($this->cedula_image) {
+                $cedula_image_path = $this->cedula_image->store('cedula_images', 'public');
+            }
+
+            if ($this->isEditing) {
+                $control_number = $request->control_number;
+            } else {
+                $control_number = Str::random(10);
+            }
+            CertificateRequest::updateOrCreate(
+                [
+                    'id' => $this->request_id,
+                    'control_number' => $control_number,
+                ],
+                [
+                    'resident_id' => $this->resident_id,
+                    'certificate_type' => $this->certificate_type,
+                    'purpose' => $this->purpose,
+                    'status' => $this->status,
+                    'payment_method' => $this->payment_method,
+                    'pickup_datetime' => $this->pickup_datetime,
+                    'receipt_path' => $receipt_path ?: ($this->isEditing ? $request->receipt_path : null),
+                    'cedula_image_path' => $cedula_image_path ?: ($this->isEditing ? $request->cedula_image_path : null),
+                    'requested_at' => now(),
+                    'processed_by' => $this->isEditing ? $request->processed_by : null,
+                    'discount_type' => $this->discount_type,
+                    'discount_id_number' => $this->discount_type !== 'None' ? $this->discount_id_number : null,
+                    'discount_amount' => $this->discount_amount,
+                ]
+            );
+
+            $this->alert('success', $this->isEditing ? 'Request updated successfully!' : 'Request submitted successfully!');
+            $this->hideRequestForm();
+            $this->resetFields();
+        } catch (\Exception $e) {
+            $this->alert('error', 'Error: ' . $e->getMessage());
+        }
     }
 }

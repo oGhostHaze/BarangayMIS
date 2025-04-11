@@ -100,7 +100,7 @@
                         </div>
                     </li>
                 @endrole
-                @role('barangay_official')
+                @hasanyrole('barangay_official|admin|super-admin')
                     <li class="nav-item dropdown {{ request()->routeIs('auth.residents.*') ? 'active fw-bold' : '' }}">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.residents.*') ? 'show' : '' }}"
                             href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
@@ -131,14 +131,16 @@
                                     <a class="dropdown-item" href="{{ route('auth.residents.pending') }}">
                                         Pending Approval
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
-                                        Add New Resident
-                                    </a>
+                                    @role('barangay_official')
+                                        <a class="dropdown-item" href="{{ route('auth.residents.create') }}">
+                                            Add New Resident
+                                        </a>
+                                    @endrole
                                 </div>
                             </div>
                         </div>
                     </li>
-                @endrole
+                @endhasanyrole
                 <li class="nav-item dropdown {{ request()->routeIs('auth.events.*') ? 'active fw-bold' : '' }}">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.events.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"

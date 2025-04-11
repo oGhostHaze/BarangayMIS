@@ -2,7 +2,9 @@
     <div class="mt-4 card">
         <div class="card-header d-flex justify-content-between">
             <h2 class="card-title">Residents List</h2>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addResidentModal">Add Resident</button>
+            @role('barangay_official')
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addResidentModal">Add Resident</button>
+            @endrole
         </div>
         <div class="card-body">
             <table class="table table-bordered">
