@@ -51,6 +51,7 @@ class CertificateRequestsResident extends Component
         'Barangay Clearance' => 'Barangay Clearance',
         'Certificate of Residency' => 'Certificate of Residency',
         'Certificate of Indigency' => 'Certificate of Indigency',
+        'Certificate of Low Income' => 'Certificate of Low Income',
         'Business Clearance' => 'Business Clearance',
         'Good Moral Character' => 'Good Moral Character',
         'Barangay Business Permit' => 'Barangay Business Permit',
