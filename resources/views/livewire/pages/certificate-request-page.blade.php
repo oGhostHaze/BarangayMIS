@@ -456,11 +456,9 @@
                                 <select class="form-select @error('certificate_type') is-invalid @enderror"
                                     wire:model="certificate_type">
                                     <option value="">Select Certificate Type</option>
-                                    <option value="Barangay Clearance">Barangay Clearance</option>
-                                    <option value="Certificate of Residency">Certificate of Residency</option>
-                                    <option value="Certificate of Indigency">Certificate of Indigency</option>
-                                    <option value="Business Clearance">Business Clearance</option>
-                                    <option value="Good Moral Character">Good Moral Character</option>
+                                    @foreach ($certificateTypes as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
                                 </select>
                                 @error('certificate_type')
                                     <div class="invalid-feedback">{{ $message }}</div>

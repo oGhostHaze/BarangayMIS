@@ -60,6 +60,17 @@ class CertificateRequestPage extends Component
     public $currentDiscountType;
     public $currentDiscountAmount;
 
+    public $certificateTypes = [
+        'Barangay Clearance' => 'Barangay Clearance',
+        'Certificate of Residency' => 'Certificate of Residency',
+        'Certificate of Indigency' => 'Certificate of Indigency',
+        'Certificate of Low Income' => 'Certificate of Low Income',
+        'Business Clearance' => 'Business Clearance',
+        'Good Moral Character' => 'Good Moral Character',
+        'Barangay Business Permit' => 'Barangay Business Permit',
+        'First Time Jobseeker Certificate' => 'First Time Jobseeker Certificate',
+    ];
+
     protected $queryString = [
         'search' => ['except' => ''],
         'statusFilter' => ['except' => ''],
@@ -251,7 +262,7 @@ class CertificateRequestPage extends Component
             if ($this->request_id) {
                 $existingRequest = CertificateRequest::find($this->request_id);
                 $control_number = $existingRequest->control_number;
-            }else{
+            } else {
                 $control_number = Str::random(10);
             }
 
@@ -338,8 +349,10 @@ class CertificateRequestPage extends Component
             $request = CertificateRequest::findOrFail($id);
 
             // Optional: Check if the user has permission to delete
-            if (!Auth::user()->hasRole(['barangay_official', 'admin']) &&
-                ($request->resident_id != Auth::user()->resident->id)) {
+            if (
+                !Auth::user()->hasRole(['barangay_official', 'admin']) &&
+                ($request->resident_id != Auth::user()->resident->id)
+            ) {
                 $this->alert('error', 'You are not authorized to delete this request.');
                 return;
             }
@@ -414,8 +427,7 @@ class CertificateRequestPage extends Component
                 ]);
 
                 $this->alert('success', 'Request approved. Resident will be notified to make payment.');
-            }
-            elseif ($newStatus == 'Payment Verified') {
+            } elseif ($newStatus == 'Payment Verified') {
                 // Step 4: Admin verifies payment
                 $request->update([
                     'status' => 'Ready for Pickup',
@@ -426,8 +438,7 @@ class CertificateRequestPage extends Component
                 ]);
 
                 $this->alert('success', 'Payment verified. Certificate is ready for pickup.');
-            }
-            elseif ($newStatus == 'Released') {
+            } elseif ($newStatus == 'Released') {
                 // Step 5: Admin releases certificate to resident
                 if ($request->payment_status != 'paid' && $request->certificate_type !== 'Certificate of Indigency') {
                     $this->alert('error', 'Cannot release certificate. Payment hasn\'t been verified.');
@@ -441,8 +452,7 @@ class CertificateRequestPage extends Component
                 ]);
 
                 $this->alert('success', 'Certificate successfully released to resident.');
-            }
-            elseif ($newStatus == 'Rejected') {
+            } elseif ($newStatus == 'Rejected') {
                 $request->update([
                     'status' => $newStatus,
                     'processed_by' => Auth::id(),
@@ -478,7 +488,7 @@ class CertificateRequestPage extends Component
 
     public function getRequestStatusColor($status)
     {
-        return match($status) {
+        return match ($status) {
             'Pending' => 'bg-warning',
             'Approved' => 'bg-success',
             'Released' => 'bg-info',
@@ -529,15 +539,15 @@ class CertificateRequestPage extends Component
 
         // Apply filters
         if ($this->search) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('certificate_type', 'like', "%{$this->search}%")
-                  ->orWhere('purpose', 'like', "%{$this->search}%");
+                    ->orWhere('purpose', 'like', "%{$this->search}%");
 
                 // If admin, also search by resident name
                 if (Auth::user()->hasAnyRole('barangay_official|admin')) {
-                    $q->orWhereHas('resident', function($q2) {
+                    $q->orWhereHas('resident', function ($q2) {
                         $q2->where('first_name', 'like', "%{$this->search}%")
-                           ->orWhere('last_name', 'like', "%{$this->search}%");
+                            ->orWhere('last_name', 'like', "%{$this->search}%");
                     });
                 }
             });
