@@ -123,7 +123,6 @@ class ResidentsManagePending extends Component
     public function approve()
     {
         $resident = Resident::findOrFail($this->residentToApprove);
-        dd($resident);
         $user = User::where([
             'email' => $resident->email,
         ])->first();
