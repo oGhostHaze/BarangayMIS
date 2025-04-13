@@ -53,6 +53,8 @@ class CertificateRequestsResident extends Component
         'Certificate of Indigency' => 'Certificate of Indigency',
         'Business Clearance' => 'Business Clearance',
         'Good Moral Character' => 'Good Moral Character',
+        'Barangay Business Permit' => 'Barangay Business Permit',
+        'First Time Jobseeker Certificate' => 'First Time Jobseeker Certificate',
     ];
 
     // Discount types for dropdown
