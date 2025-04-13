@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire\Pages;
+
 use App\Models\Resident;
 use App\Models\User;
 use App\Traits\Toastr;
@@ -119,15 +120,24 @@ class ResidentsManagePending extends Component
         return $this->validate($this->rules());
     }
 
-    public function approve($id)
+    public function approve()
     {
-        $resident = Resident::findOrFail($id);
+        $resident = Resident::findOrFail($this->residentToApprove);
+        dd($resident);
         $user = User::where([
             'email' => $resident->email,
         ])->first();
+
         $resident->user_id = $user->id;
         $resident->save();
         $this->resetFields();
         $this->alert('info', 'Selected resident has been approved.');
+    }
+
+    public $residentToApprove = null;
+
+    public function setResidentForApproval($id)
+    {
+        $this->residentToApprove = $id;
     }
 }
