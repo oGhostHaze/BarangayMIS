@@ -27,8 +27,9 @@
                             <td>
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('auth.residents.show', $resident->id) }}">View</a>
-                                <button class="btn btn-primary btn-sm" wire:click="approve({{ $resident->id }})"
-                                    wire:confirm='Are you sure you want to approve this resident record?'>Approve</button>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#approveResidentModal"
+                                    wire:click="setResidentForApproval({{ $resident->id }})">Approve</button>
                                 <button class="btn btn-danger btn-sm" wire:click="delete({{ $resident->id }})"
                                     wire:confirm='Are you sure you want to delete this resident record?'>Delete</button>
                             </td>
@@ -352,5 +353,26 @@
         </form>
     </div>
     {{-- Add Resident Modal --}}
+
+    {{-- Approve Resident Modal --}}
+    <div class="modal fade" id="approveResidentModal" tabindex="-1" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Approval</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to approve this resident record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" wire:click="approve"
+                        data-bs-dismiss="modal">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Approve Resident Modal --}}
 
 </div>
