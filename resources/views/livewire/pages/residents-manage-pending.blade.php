@@ -25,6 +25,8 @@
                             <td>{{ \Carbon\Carbon::parse($resident->date_of_birth)->age }}</td>
                             <td>{{ $resident->gender }}</td>
                             <td>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{{ route('auth.residents.show', $resident->id) }}">View</a>
                                 <button class="btn btn-primary btn-sm" wire:click="approve({{ $resident->id }})"
                                     wire:confirm='Are you sure you want to approve this resident record?'>Approve</button>
                                 <button class="btn btn-danger btn-sm" wire:click="delete({{ $resident->id }})"
