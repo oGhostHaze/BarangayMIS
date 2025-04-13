@@ -15,6 +15,7 @@
             <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
+                        <th>Photo</th>
                         <th>Name</th>
                         <th>Position</th>
                         <th>Status</th>
@@ -24,6 +25,11 @@
                 <tbody>
                     @forelse ($officials as $official)
                         <tr>
+                            <td class="text-center">
+                                <img src="{{ $official->photo ? Storage::url($official->photo) : asset('images/default-avatar.png') }}"
+                                    alt="{{ $official->first_name }}" class="rounded-circle" width="50"
+                                    height="50">
+                            </td>
                             <td>{{ $official->last_name }}, {{ $official->first_name }} {{ $official->middle_name }}
                             </td>
                             <td>{{ $official->position }}</td>
@@ -46,7 +52,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center">No Officials Found</td>
+                            <td colspan="5" class="text-center">No Officials Found</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -69,6 +75,29 @@
                 </div>
                 <div class="modal-body">
                     <form wire:submit.prevent="save">
+                        <div class="mb-3">
+                            <label class="form-label">Photo</label>
+                            <input type="file" class="form-control" wire:model="photo" accept="image/*">
+                            <div wire:loading wire:target="photo" class="mt-1 text-primary">Uploading...</div>
+                            @error('photo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            @if ($photo)
+                                <div class="mt-2">
+                                    <p>Photo Preview:</p>
+                                    <img src="{{ $photo->temporaryUrl() }}" alt="Preview" class="rounded-circle"
+                                        width="100" height="100">
+                                </div>
+                            @elseif ($current_photo)
+                                <div class="mt-2">
+                                    <p>Current Photo:</p>
+                                    <img src="{{ Storage::url($current_photo) }}" alt="Current" class="rounded-circle"
+                                        width="100" height="100">
+                                </div>
+                            @endif
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label">First Name</label>
                             <input type="text" class="form-control" wire:model.defer="first_name">
