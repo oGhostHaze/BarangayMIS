@@ -344,6 +344,12 @@
                                     <p class="empty-subtitle text-muted">
                                         This resident has not requested any certificates yet.
                                     </p>
+
+                                    <div class="empty-action">
+                                        <a href="{{ route('auth.certs.requests') }}" class="btn btn-primary">
+                                            Go to certificate requests
+                                        </a>
+                                    </div>
                                 </div>
                             @endif
                         </div>

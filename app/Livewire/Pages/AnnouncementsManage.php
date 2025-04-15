@@ -15,4 +15,15 @@ class AnnouncementsManage extends Component
             'announcements' => Announcement::paginate(10),
         ]);
     }
+
+    public function delete($id)
+    {
+        $announcement = Announcement::find($id);
+        if ($announcement) {
+            $announcement->delete();
+            session()->flash('success', 'Announcement deleted successfully.');
+        } else {
+            session()->flash('error', 'Announcement not found.');
+        }
+    }
 }
