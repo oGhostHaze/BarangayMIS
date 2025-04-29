@@ -230,6 +230,7 @@
                                 <th>Status</th>
                                 <th>Payment</th>
                                 <th>Discount</th>
+                                <th>Cedula</th>
                                 <th>Pickup Date</th>
                                 <th>Requested At</th>
                                 <th>Actions</th>
@@ -298,6 +299,31 @@
                                             </div>
                                         @else
                                             <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($request->cedula_image_path)
+                                            <a href="#" wire:click="viewCedula({{ $request->id }})"
+                                                data-bs-toggle="modal" data-bs-target="#cedulaModal"
+                                                class="badge bg-blue-lt d-flex align-items-center justify-content-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-id" width="24"
+                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path
+                                                        d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z">
+                                                    </path>
+                                                    <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                    <path d="M15 8l2 0"></path>
+                                                    <path d="M15 12l2 0"></path>
+                                                    <path d="M7 16l10 0"></path>
+                                                </svg>
+                                                View Cedula
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
                                         @endif
                                     </td>
                                     <td>
@@ -744,4 +770,94 @@
             </div>
         </div>
     @endif
+
+    <!-- Now let's add the Cedula Modal -->
+    <div wire:ignore.self class="modal fade" id="cedulaModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id me-1"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z">
+                            </path>
+                            <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            <path d="M15 8l2 0"></path>
+                            <path d="M15 12l2 0"></path>
+                            <path d="M7 16l10 0"></path>
+                        </svg>
+                        Cedula (Community Tax Certificate)
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="text-center modal-body">
+                    @if ($viewingCedula)
+                        @if (Str::endsWith($currentCedula, '.pdf'))
+                            <div class="mb-3">
+                                <a href="{{ $currentCedula }}" class="btn btn-primary" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-file-type-pdf" width="24"
+                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                        <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"></path>
+                                        <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6"></path>
+                                        <path d="M17 18h2"></path>
+                                        <path d="M20 15h-3v6"></path>
+                                        <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z"></path>
+                                    </svg>
+                                    View PDF Cedula
+                                </a>
+                            </div>
+                        @else
+                            <img src="{{ $currentCedula }}" class="rounded img-fluid" alt="Cedula Image">
+                        @endif
+                    @else
+                        <div class="empty">
+                            <div class="empty-img">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-file-search" width="40" height="40"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                    <path d="M12 21h-5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v4.5"></path>
+                                    <path d="M16.5 17.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"></path>
+                                    <path d="M18.5 19.5l2.5 2.5"></path>
+                                </svg>
+                            </div>
+                            <p class="empty-title">No cedula found</p>
+                            <p class="empty-subtitle text-muted">
+                                The cedula image could not be loaded or is not available.
+                            </p>
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Add script to handle Cedula Modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('showCedulaModal', event => {
+            // Show modal
+            var modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
+            modal.show();
+        });
+
+        window.addEventListener('closeCedulaModal', event => {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('cedulaModal'));
+            if (modal) {
+                modal.hide();
+            }
+        });
+    });
+</script>

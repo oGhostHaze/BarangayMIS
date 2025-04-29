@@ -309,11 +309,11 @@
                                 <!-- Cedula Upload Field -->
                                 <div class="row">
                                     <div class="mb-3 col-md-12">
-                                        <label class="form-label">Cedula (Optional)</label>
+                                        <label class="form-label required">Cedula (Required)</label>
                                         <div class="input-group">
                                             <input type="file"
                                                 class="form-control @error('cedula_image') is-invalid @enderror"
-                                                wire:model.live="cedula_image" accept="image/*,.pdf">
+                                                wire:model.live="cedula_image" accept="image/*,.pdf" required>
                                             @error('cedula_image')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
