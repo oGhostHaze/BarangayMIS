@@ -32,8 +32,9 @@ class CertificateRequestPage extends Component
     public $payment_method;
     public $pickup_datetime;
     public $receipt;
+    public $cedula_image; // New property for cedula image upload
 
-    // Discount properties (new)
+    // Discount properties
     public $discount_type = 'None';
     public $discount_id_number;
     public $discount_amount = 0;
@@ -48,10 +49,15 @@ class CertificateRequestPage extends Component
     public $pickupDateFilter = '';
     public $perPage = 10;
     public $discountFilter = '';
+    public $paymentStatusFilter = '';
 
     // Receipt viewer properties
     public $viewingReceipt = false;
     public $currentReceipt;
+
+    // Cedula viewer properties
+    public $viewingCedula = false;
+    public $currentCedula;
 
     // Payment confirmation properties
     public $paymentRequestId;
@@ -76,6 +82,7 @@ class CertificateRequestPage extends Component
         'statusFilter' => ['except' => ''],
         'paymentFilter' => ['except' => ''],
         'discountFilter' => ['except' => ''],
+        'paymentStatusFilter' => ['except' => ''],
         'page' => ['except' => 1],
     ];
 
@@ -88,6 +95,7 @@ class CertificateRequestPage extends Component
         'status' => 'required|in:Pending,Approved,Released,Rejected,Cancelled',
         'discount_type' => 'required|in:None,Student,Senior Citizen',
         'discount_id_number' => 'nullable|required_if:discount_type,Student,Senior Citizen|string|max:50',
+        'cedula_image' => 'nullable|file|max:3072|mimes:jpg,jpeg,png,pdf', // 3MB max, common image formats and PDF
     ];
 
     protected $messages = [
@@ -97,6 +105,8 @@ class CertificateRequestPage extends Component
         'payment_method.required' => 'Please select a payment method',
         'pickup_datetime.required' => 'Please select a pickup date and time',
         'discount_id_number.required_if' => 'ID number is required when applying a discount',
+        'cedula_image.max' => 'The cedula image must not be larger than 3MB',
+        'cedula_image.mimes' => 'The cedula image must be a JPG, PNG, or PDF file',
     ];
 
     public function mount()
@@ -206,6 +216,28 @@ class CertificateRequestPage extends Component
     }
 
     /**
+     * View cedula image
+     *
+     * @param int $id
+     */
+    public function viewCedula($id)
+    {
+        try {
+            $request = CertificateRequest::findOrFail($id);
+
+            if ($request->cedula_image_path) {
+                $this->currentCedula = Storage::url($request->cedula_image_path);
+                $this->viewingCedula = true;
+                $this->dispatch('showCedulaModal');
+            } else {
+                $this->alert('error', 'No cedula found for this request.');
+            }
+        } catch (\Exception $e) {
+            $this->alert('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Confirm payment received and release certificate
      */
     public function confirmPaymentAndRelease()
@@ -258,6 +290,12 @@ class CertificateRequestPage extends Component
                 $receipt_path = $this->receipt->store('receipts', 'public');
             }
 
+            // Process cedula image if uploaded
+            $cedula_path = null;
+            if ($this->cedula_image) {
+                $cedula_path = $this->cedula_image->store('cedulas', 'public');
+            }
+
             $existingRequest = null;
             if ($this->request_id) {
                 $existingRequest = CertificateRequest::find($this->request_id);
@@ -286,6 +324,13 @@ class CertificateRequestPage extends Component
                 $data['receipt_path'] = $receipt_path;
             } elseif ($existingRequest && $existingRequest->receipt_path) {
                 $data['receipt_path'] = $existingRequest->receipt_path;
+            }
+
+            // Only set cedula_image_path if we have a new one or keep the old one
+            if ($cedula_path) {
+                $data['cedula_image_path'] = $cedula_path;
+            } elseif ($existingRequest && $existingRequest->cedula_image_path) {
+                $data['cedula_image_path'] = $existingRequest->cedula_image_path;
             }
 
             // Update timestamps based on status
@@ -335,7 +380,7 @@ class CertificateRequestPage extends Component
 
             $this->calculateDiscount();
 
-            // We don't set the receipt here because it's a file upload
+            // We don't set the receipt or cedula_image here because they're file uploads
 
             $this->dispatch('showModal');
         } catch (\Exception $e) {
@@ -373,6 +418,7 @@ class CertificateRequestPage extends Component
         $this->payment_method = null;
         $this->pickup_datetime = null;
         $this->receipt = null;
+        $this->cedula_image = null;
         $this->request_id = null;
         $this->discount_type = 'None';
         $this->discount_id_number = null;
@@ -486,6 +532,11 @@ class CertificateRequestPage extends Component
         $this->resetPage();
     }
 
+    public function updatingPaymentStatusFilter()
+    {
+        $this->resetPage();
+    }
+
     public function getRequestStatusColor($status)
     {
         return match ($status) {
@@ -563,6 +614,10 @@ class CertificateRequestPage extends Component
 
         if ($this->discountFilter) {
             $query->where('discount_type', $this->discountFilter);
+        }
+
+        if ($this->paymentStatusFilter) {
+            $query->where('payment_status', $this->paymentStatusFilter);
         }
 
         // Apply date range filter if provided
