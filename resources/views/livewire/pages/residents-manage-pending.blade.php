@@ -7,177 +7,34 @@
             @endrole
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th class="text-center">Basic Information</th>
-                        <th class="text-center">Contact Details</th>
-                        <th class="text-center">Identification Numbers</th>
-                        <th class="text-center">Special Categories</th>
-                        <th class="text-center">Actions</th>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($residents as $resident)
+                    @foreach ($residents as $resident)
                         <tr>
+                            <td>{{ $resident->first_name }} {{ $resident->last_name }}</td>
+                            <td>{{ $resident->date_of_birth }}</td>
+                            <td>{{ \Carbon\Carbon::parse($resident->date_of_birth)->age }}</td>
+                            <td>{{ $resident->gender }}</td>
                             <td>
-                                <div class="d-flex flex-column">
-                                    <span class="fw-bold">{{ $resident->prefix }} {{ $resident->first_name }}
-                                        {{ $resident->middle_name }} {{ $resident->last_name }}
-                                        {{ $resident->suffix }}</span>
-                                    <span><span class="text-muted">Age:</span>
-                                        {{ \Carbon\Carbon::parse($resident->date_of_birth)->age }} <span
-                                            class="text-muted">({{ $resident->date_of_birth }})</span></span>
-                                    <span><span class="text-muted">Gender:</span> {{ $resident->gender }}</span>
-                                    <span><span class="text-muted">Civil Status:</span>
-                                        {{ $resident->civil_status }}</span>
-                                    <span><span class="text-muted">Education:</span>
-                                        {{ $resident->educational_attainment ?: 'Not specified' }}</span>
-                                    <span><span class="text-muted">Sitio:</span>
-                                        {{ $resident->sitio ?: 'Not specified' }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-column">
-                                    <span><span class="text-muted">Email:</span>
-                                        {{ $resident->email ?: 'Not provided' }}</span>
-                                    <span><span class="text-muted">Contact:</span>
-                                        {{ $resident->contact_no ?: 'Not provided' }}</span>
-
-                                    @if ($resident->is_ofw)
-                                        <div class="mt-2">
-                                            <span class="badge bg-blue-lt">OFW</span>
-                                            <span class="text-muted">Country:</span> {{ $resident->ofw_country }}
-                                            @if ($resident->ofw_is_domestic_helper)
-                                                <span class="badge bg-azure-lt">Domestic Helper</span>
-                                            @endif
-                                            @if ($resident->ofw_professional)
-                                                <span class="badge bg-indigo-lt">Professional</span>
-                                            @endif
-                                        </div>
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-column">
-                                    @if ($resident->rfid_number)
-                                        <span><span class="text-muted">RFID:</span> {{ $resident->rfid_number }}</span>
-                                    @endif
-                                    @if ($resident->philhealth_id)
-                                        <span><span class="text-muted">PhilHealth:</span>
-                                            {{ $resident->philhealth_id }}</span>
-                                    @endif
-                                    @if ($resident->sss_id)
-                                        <span><span class="text-muted">SSS:</span> {{ $resident->sss_id }}</span>
-                                    @endif
-                                    @if ($resident->gsis_id)
-                                        <span><span class="text-muted">GSIS:</span> {{ $resident->gsis_id }}</span>
-                                    @endif
-                                    @if ($resident->social_pension_id)
-                                        <span><span class="text-muted">Social Pension:</span>
-                                            {{ $resident->social_pension_id }}</span>
-                                    @endif
-                                    @if (!$resident->philhealth_id && !$resident->sss_id && !$resident->gsis_id && !$resident->social_pension_id)
-                                        <span class="text-muted">No IDs provided</span>
-                                    @endif
-
-                                    <div class="col-sm-6"><strong>ID Type:</strong>
-                                        {{ $resident->valid_id_type ?? 'N/A' }}</div>
-                                    <div class="col-sm-6">
-                                        <strong>Valid ID:</strong>
-                                        @if ($resident->valid_id_path)
-                                            <a href="{{ asset('storage/' . $resident->valid_id_path) }}"
-                                                target="_blank" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-eye"></i> View ID
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Not provided</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-column">
-                                    @if ($resident->is_pwd)
-                                        <div class="mb-1">
-                                            <span class="badge bg-purple">PWD</span>
-                                            @if ($resident->pwd_id)
-                                                <span class="text-muted">ID:</span> {{ $resident->pwd_id }}
-                                            @endif
-                                            @if ($resident->type_of_disability)
-                                                <br><span class="text-muted">Type:</span>
-                                                {{ $resident->type_of_disability }}
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                    @if ($resident->is_solo_parent)
-                                        <div class="mb-1">
-                                            <span class="badge bg-pink">Solo Parent</span>
-                                            @if ($resident->solo_parent_id)
-                                                <span class="text-muted">ID:</span> {{ $resident->solo_parent_id }}
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                    @if ($resident->is_senior_citizen)
-                                        <div class="mb-1">
-                                            <span class="badge bg-orange">Senior Citizen</span>
-                                            @if ($resident->senior_citizen_id)
-                                                <span class="text-muted">ID:</span> {{ $resident->senior_citizen_id }}
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                    @if ($resident->illness)
-                                        <div>
-                                            <span class="badge bg-red-lt">Medical</span>
-                                            <span class="text-muted">Illness:</span> {{ $resident->illness }}
-                                        </div>
-                                    @endif
-
-                                    @if (!$resident->is_pwd && !$resident->is_solo_parent && !$resident->is_senior_citizen && !$resident->illness)
-                                        <span class="text-muted">No special categories</span>
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                <div class="gap-1 d-flex flex-column">
-                                    <a class="btn btn-primary btn-sm"
-                                        href="{{ route('auth.residents.show', $resident->id) }}">
-                                        <i class="ti ti-eye"></i> View
-                                    </a>
-                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#approveResidentModal"
-                                        wire:click="setResidentForApproval({{ $resident->id }})">
-                                        <i class="ti ti-check"></i> Approve
-                                    </button>
-                                    <button class="btn btn-warning btn-sm" wire:click="edit({{ $resident->id }})"
-                                        data-bs-toggle="modal" data-bs-target="#addResidentModal">
-                                        <i class="ti ti-edit"></i> Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm"
-                                        wire:click="confirmDelete({{ $resident->id }})">
-                                        <i class="ti ti-trash"></i> Delete
-                                    </button>
-                                </div>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{{ route('auth.residents.show', $resident->id) }}">View</a>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#approveResidentModal"
+                                    wire:click="setResidentForApproval({{ $resident->id }})">Approve</button>
+                                <button class="btn btn-danger btn-sm"
+                                    wire:click="confirmDelete({{ $resident->id }})">Delete</button>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="py-4 text-center">
-                                <div class="empty">
-                                    <div class="empty-img"><img
-                                            src="{{ asset('static/illustrations/undraw_printing_invoices_5r4r.svg') }}"
-                                            height="128" alt=""></div>
-                                    <p class="empty-title">No pending residents found</p>
-                                    <p class="empty-subtitle text-muted">
-                                        There are no pending resident records that need to be approved.
-                                    </p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
