@@ -843,21 +843,22 @@
         </div>
     </div>
 </div>
+@script
+    <!-- Add script to handle Cedula Modal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.addEventListener('showCedulaModal', event => {
+                // Show modal
+                var modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
+                modal.show();
+            });
 
-<!-- Add script to handle Cedula Modal -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.addEventListener('showCedulaModal', event => {
-            // Show modal
-            var modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
-            modal.show();
+            window.addEventListener('closeCedulaModal', event => {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('cedulaModal'));
+                if (modal) {
+                    modal.hide();
+                }
+            });
         });
-
-        window.addEventListener('closeCedulaModal', event => {
-            var modal = bootstrap.Modal.getInstance(document.getElementById('cedulaModal'));
-            if (modal) {
-                modal.hide();
-            }
-        });
-    });
-</script>
+    </script>
+@endscript
