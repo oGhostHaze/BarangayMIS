@@ -18,6 +18,7 @@ class ResidentsManage extends Component
         $source_of_income, $monthly_income, $income_type, $is_ofw = false, $ofw_country, $ofw_is_domestic_helper = false,
         $ofw_professional = false;
     public $resident_id;
+    public $deleteId; // Store the ID of the resident to be deleted
 
     public function rules()
     {
@@ -102,15 +103,30 @@ class ResidentsManage extends Component
         $this->resetFields();
     }
 
-    public function delete($id)
+    /**
+     * Show the delete confirmation modal
+     */
+    public function confirmDelete($id)
     {
-        Resident::findOrFail($id)->delete();
+        $this->deleteId = $id;
+        $this->dispatch('show-delete-modal');
+    }
+
+    /**
+     * Delete the resident after confirmation
+     */
+    public function deleteConfirmed()
+    {
+        Resident::findOrFail($this->deleteId)->delete();
         $this->alert('info', 'Selected resident has been deleted.');
+        $this->dispatch('close-delete-modal');
+        $this->deleteId = null;
     }
 
     private function resetFields()
     {
         $this->resident_id = null;
+        $this->deleteId = null;
         $this->fill(array_fill_keys(array_keys($this->validateFields()), null));
     }
 

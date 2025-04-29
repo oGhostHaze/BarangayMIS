@@ -16,6 +16,7 @@ class BarangayOfficialsManage extends Component
     public $photo, $current_photo;
     public $modalTitle = "Add Barangay Official";
     public $isEditMode = false;
+    public $deleteId; // Store ID of the official to delete
 
     // List of barangay positions
     public $positions = [
@@ -102,9 +103,21 @@ class BarangayOfficialsManage extends Component
         $this->dispatch('close-modal');
     }
 
-    public function delete($id)
+    /**
+     * Show delete confirmation modal
+     */
+    public function confirmDelete($id)
     {
-        $official = BarangayOfficial::findOrFail($id);
+        $this->deleteId = $id;
+        $this->dispatch('show-delete-modal');
+    }
+
+    /**
+     * Delete the official after confirmation
+     */
+    public function deleteConfirmed()
+    {
+        $official = BarangayOfficial::findOrFail($this->deleteId);
 
         // Delete photo if it exists and is not the default
         if ($official->photo && !str_contains($official->photo, 'default-avatar.png')) {
@@ -113,10 +126,12 @@ class BarangayOfficialsManage extends Component
 
         $official->delete();
         session()->flash('message', 'Official deleted successfully!');
+
+        $this->dispatch('close-delete-modal');
     }
 
     private function resetFields()
     {
-        $this->reset(['official_id', 'first_name', 'last_name', 'middle_name', 'position', 'status', 'photo', 'current_photo']);
+        $this->reset(['official_id', 'first_name', 'last_name', 'middle_name', 'position', 'status', 'photo', 'current_photo', 'deleteId']);
     }
 }
