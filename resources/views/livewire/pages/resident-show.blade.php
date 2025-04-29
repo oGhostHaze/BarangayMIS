@@ -6,11 +6,6 @@
                 <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
                     <i class="ti ti-arrow-left"></i> Back
                 </a>
-                @if (!$resident->user_id)
-                    <button class="btn btn-success" wire:click="confirmApproval">
-                        <i class="ti ti-check"></i> Approve Resident
-                    </button>
-                @endif
             </div>
         </div>
         <div class="card-body">
@@ -233,6 +228,12 @@
                     </div>
                 </div>
             </div>
+
+            @if (!$resident->user_id)
+                <button class="btn btn-success" wire:click="confirmApproval">
+                    <i class="ti ti-check"></i> Approve Resident
+                </button>
+            @endif
         </div>
     </div>
 
