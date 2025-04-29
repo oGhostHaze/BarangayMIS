@@ -80,6 +80,20 @@
                                     @if (!$resident->philhealth_id && !$resident->sss_id && !$resident->gsis_id && !$resident->social_pension_id)
                                         <span class="text-muted">No IDs provided</span>
                                     @endif
+
+                                    <div class="col-sm-6"><strong>ID Type:</strong>
+                                        {{ $resident->valid_id_type ?? 'N/A' }}</div>
+                                    <div class="col-sm-6">
+                                        <strong>Valid ID:</strong>
+                                        @if ($resident->valid_id_path)
+                                            <a href="{{ asset('storage/' . $resident->valid_id_path) }}"
+                                                target="_blank" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i> View ID
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </td>
                             <td>
