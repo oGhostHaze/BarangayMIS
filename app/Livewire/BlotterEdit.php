@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Livewire\Pages;
+namespace App\Livewire;
 
+use Livewire\Component;
 use App\Models\Blotter;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Livewire\Component;
 
-class CreateBlotterResident extends Component
+class BlotterEdit extends Component
 {
+    public $id; // Using $id instead of $blotter_id for route model binding
     public $case_number, $complainant_name, $complainant_address, $complainant_contact;
     public $respondent_name, $respondent_address, $respondent_contact, $witnesses, $incident_details;
-    public $incident_date, $location, $status = 'Pending', $remarks;
+    public $incident_date, $location, $status, $remarks;
 
     protected function rules()
     {
@@ -31,25 +31,24 @@ class CreateBlotterResident extends Component
         ];
     }
 
-    public function mount()
+    public function mount($id)
     {
-        // Generate case number
-        $this->case_number = 'CIF-' . now()->format('Ymd') . '-' . Str::upper(Str::random(5));
+        $this->id = $id;
+        $blotter = Blotter::findOrFail($id);
 
-        // Pre-fill complainant details from authenticated user
-        $this->complainant_name = Auth::user()->resident->last_name . ', ' . Auth::user()->resident->first_name . ' ' . Auth::user()->resident->middle_name;
-        $this->complainant_address = Auth::user()->resident->sitio;
-        $this->complainant_contact = Auth::user()->resident->contact_no;
+        // Security check - ensure the user has permission to edit this blotter
+        if (!Auth::user()->hasRole(['admin', 'barangay_official']) && $blotter->recorded_by != Auth::id()) {
+            abort(403, 'You do not have permission to edit this blotter record.');
+        }
 
-        // Default incident date to today
-        $this->incident_date = now()->format('Y-m-d');
+        $this->fill($blotter->toArray());
     }
 
-    public function store()
+    public function save()
     {
+        $this->validate();
 
-        Blotter::create([
-            'case_number' => $this->case_number,
+        Blotter::findOrFail($this->id)->update([
             'complainant_name' => $this->complainant_name,
             'complainant_address' => $this->complainant_address,
             'complainant_contact' => $this->complainant_contact,
@@ -65,15 +64,12 @@ class CreateBlotterResident extends Component
             'recorded_by' => Auth::id(),
         ]);
 
-        session()->flash('success', 'Blotter record created successfully.');
-
-        // Redirect back to the blotter list
-        return redirect()->route('resident.blotters.index');
+        session()->flash('success', 'Blotter record updated successfully.');
+        return redirect()->route('blotters.show', $this->id);
     }
 
     public function render()
     {
-        return view('livewire.pages.create-blotter-resident')
-            ->layout('back.layouts.pages-layout');
+        return view('livewire.blotter-edit');
     }
 }

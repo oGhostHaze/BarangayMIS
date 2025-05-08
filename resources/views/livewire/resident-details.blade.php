@@ -421,7 +421,7 @@
                                         This resident has no blotter records.
                                     </p>
                                     <div class="empty-action">
-                                        <a href="{{ route('auth.blotters.create') }}" class="btn btn-primary">
+                                        <a href="{{ route('blotters.create') }}" class="btn btn-primary">
                                             Create New Blotter
                                         </a>
                                     </div>

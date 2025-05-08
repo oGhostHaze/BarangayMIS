@@ -31,7 +31,8 @@
                                 class="badge bg-{{ $blotter->status == 'Pending' ? 'warning' : ($blotter->status == 'Resolved' ? 'success' : 'danger') }}">{{ $blotter->status }}</span>
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm" wire:click="edit({{ $blotter->id }})"
+                            <a href="{{ route('blotters.show', $blotter->id) }}" class="btn btn-info btn-sm">View</a>
+                            <button class="btn btn-primary btn-sm" wire:click="edit({{ $blotter->id }})"
                                 data-bs-toggle="modal" data-bs-target="#blotterModal">Edit</button>
                             <button class="btn btn-danger btn-sm" wire:click="delete({{ $blotter->id }})"
                                 onclick="return confirm('Are you sure?')">Delete</button>
@@ -145,7 +146,7 @@
                     </div>
 
                     <button wire:click="{{ $updateMode ? 'save' : 'store' }}"
-                        class="btn btn-success">{{ $updateMode ? 'Update' : 'Save' }}</button>
+                        class="btn btn-primary">{{ $updateMode ? 'Update' : 'Save' }}</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>

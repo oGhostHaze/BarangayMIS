@@ -159,7 +159,7 @@
 
                 <div class="mt-4 row">
                     <div class="col-12 d-flex justify-content-between">
-                        <a href="{{ route('auth.blotter.resident') }}" class="btn btn-secondary">
+                        <a href="{{ route('resident.blotters.index') }}" class="btn btn-secondary">
                             <i class="ti ti-arrow-left me-1"></i> Back to List
                         </a>
                         <button type="submit" class="btn btn-primary">

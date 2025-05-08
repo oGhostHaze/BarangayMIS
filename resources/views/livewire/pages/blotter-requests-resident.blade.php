@@ -1,7 +1,7 @@
 <div class="mt-4 container-fluid card">
     <div class="d-flex card-header justify-content-between">
         <h2>Barangay Blotter Records</h2>
-        <a class="btn btn-primary" href="{{ route('auth.blotter.create.res') }}">New
+        <a class="btn btn-primary" href="{{ route('resident.blotters.create') }}">New
             Record</a>
     </div>
     <div class="card-body">
@@ -32,7 +32,7 @@
                         </td>
                         <td>
                             <a class="btn btn-warning btn-sm"
-                                href="{{ route('auth.blotter.edit.res', ['id' => $blotter->id]) }}">Edit</a>
+                                href="{{ route('resident.blotters.edit', ['id' => $blotter->id]) }}">Edit</a>
                             <button class="btn btn-danger btn-sm" wire:click="delete({{ $blotter->id }})"
                                 onclick="return confirm('Are you sure?')">Delete</button>
                         </td>

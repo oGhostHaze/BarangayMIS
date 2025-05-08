@@ -245,8 +245,8 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown {{ request()->routeIs('auth.blotters.*') ? 'active fw-bold' : '' }}">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.blotters.*') ? 'show' : '' }}"
+                <li class="nav-item dropdown {{ request()->routeIs('blotters.*') ? 'active fw-bold' : '' }}">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('blotters.*') ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="false">
                         <span
@@ -266,13 +266,13 @@
                             Blotter
                         </span>
                     </a>
-                    <div class="dropdown-menu {{ request()->routeIs('auth.blotters.*') ? 'show' : '' }}">
+                    <div class="dropdown-menu {{ request()->routeIs('blotters.*') ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="{{ route('auth.blotters.index') }}">
+                                <a class="dropdown-item" href="{{ route('blotters.index') }}">
                                     All Blotter Records
                                 </a>
-                                <a class="dropdown-item" href="{{ route('auth.blotters.create') }}">
+                                <a class="dropdown-item" href="{{ route('blotters.create') }}">
                                     Add New Blotter Record
                                 </a>
                             </div>

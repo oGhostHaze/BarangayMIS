@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Blotter;
+use App\Livewire\BlotterEdit;
 use App\Livewire\LandingPage;
 use App\Livewire\BlotterCreate;
+use App\Livewire\BlotterDetail;
 use App\Livewire\BlotterManage;
 use App\Livewire\AdminDashboard;
-use App\Livewire\Pages\ResidentsManagePending;
 use App\Livewire\SystemSettings;
 use App\Livewire\BarangayOrgChart;
 use App\Livewire\Pages\ResidentShow;
@@ -21,21 +23,26 @@ use App\Http\Controllers\UsersController;
 use App\Livewire\Pages\AnnouncementsForm;
 use App\Livewire\Pages\AnnouncementsShow;
 use App\Livewire\Pages\EventsManageTable;
-use App\Http\Controllers\SearchController;
 use App\Livewire\User\UserAccountSettings;
 use App\Livewire\Pages\AnnouncementsManage;
 use App\Livewire\Pages\AnnouncementsPublic;
+use App\Livewire\Pages\BlotterEditResident;
 use App\Livewire\Pages\EditBlotterResident;
 use App\Livewire\Pages\ResidentsCreateForm;
-use App\Http\Controllers\ResidentController;
+use App\Livewire\Pages\BlotterCreateResident;
 use App\Livewire\Pages\CertificateIssuedPage;
 use App\Livewire\Pages\CreateBlotterResident;
+use App\Livewire\Pages\BlotterDetailsResident;
 use App\Livewire\Pages\CertificateRequestPage;
-use App\Http\Controllers\CertificateController;
+use App\Livewire\Pages\ResidentsManagePending;
 use App\Livewire\Auth\ResidentSelfRegistration;
 use App\Livewire\Pages\BarangayOfficialsManage;
 use App\Livewire\Pages\BlotterRequestsResident;
 use App\Livewire\Pages\CertificateRequestsResident;
+
+
+
+
 
 
 Route::get('/', LandingPage::class)->name('landing');
@@ -49,7 +56,6 @@ Route::middleware(['guest:web'])->group(function () {
     Route::view('/auth/login', 'back.pages.auth.login')->name('auth.login');
     Route::view('/forgot-password', 'back.pages.auth.forgot')->name('auth.forgot-password');
     Route::get('/password/reset/{token}', [AuthController::class, 'ResetForm'])->name('auth.reset-form');
-
 });
 
 Route::get('/home', function () {
@@ -113,7 +119,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
     Route::get('/announcements/{id}', AnnouncementsShow::class)->name('announcements.show');
 
     Route::get('/my-certificates', CertificateRequestsResident::class)->name('certs.resident');
-    Route::get('/my-reports', BlotterRequestsResident::class)->name('blotter.resident');
+    Route::get('/my-reports', BlotterRequestsResident::class)->name('blotters.resident');
     Route::get('/my-reports/create', CreateBlotterResident::class)->name('blotter.create.res');
     Route::get('/my-report/{id}/edit', EditBlotterResident::class)->name('blotter.edit.res');
 
@@ -128,9 +134,6 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
 
     Route::get('/barangay-officials', BarangayOfficialsManage::class)->name('barangay.officials');
     Route::get('/barangay-org-chart', BarangayOrgChart::class)->name('barangay.org.chart');
-
-    Route::get('/blotters', BlotterManage::class)->name('blotters.index');
-    Route::get('/blotters/create', BlotterCreate::class)->name('blotters.create');
 });
 
 
@@ -149,4 +152,42 @@ Route::middleware(['auth', 'role:barangay_official|admin'])->group(function () {
         ->name('admin.residents.assign-rfid');
 
     Route::post('/admin/residents/{resident}/assign-rfid', [App\Http\Controllers\ResidentController::class, 'assignRfid']);
+});
+
+// Blotter routes for admin/barangay officials
+Route::middleware(['auth', 'role:admin|barangay_official'])->group(function () {
+    Route::get('/blotters', BlotterManage::class)->name('blotters.index');
+    Route::get('/blotters/create', BlotterCreate::class)->name('blotters.create');
+    Route::get('/blotters/{id}', BlotterDetail::class)->name('blotters.show');
+    Route::get('/blotters/{id}/edit', BlotterEdit::class)->name('blotters.edit');
+
+    // This is the only route that needs a controller action since it's a direct action not a page
+    Route::get('/blotters/{id}/delete', function ($id) {
+        $blotter = \App\Models\Blotter::findOrFail($id);
+        $blotter->delete();
+        session()->flash('success', 'Blotter record deleted successfully.');
+        return redirect()->route('blotters.index');
+    })->name('blotters.delete');
+});
+
+// Blotter routes for residents
+Route::middleware(['auth', 'role:resident'])->group(function () {
+    Route::get('/res/blotters', BlotterRequestsResident::class)->name('resident.blotters.index');
+    Route::get('/res/blotters/create', BlotterCreateResident::class)->name('resident.blotters.create');
+    Route::get('/res/blotters/{id}', BlotterDetailsResident::class)->name('resident.blotters.show');
+    Route::get('/res/blotters/{id}/edit', BlotterEditResident::class)->name('resident.blotters.edit');
+
+    // Delete route for residents
+    Route::get('/res/blotters/{id}/delete', function ($id) {
+        $blotter = \App\Models\Blotter::findOrFail($id);
+
+        // Security check - ensure the resident can only delete their own blotters
+        if ($blotter->recorded_by != auth()->id()) {
+            abort(403, 'You do not have permission to delete this blotter record.');
+        }
+
+        $blotter->delete();
+        session()->flash('success', 'Blotter record deleted successfully.');
+        return redirect()->route('resident.blotters.index');
+    })->name('resident.blotters.delete');
 });

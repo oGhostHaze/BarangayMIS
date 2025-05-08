@@ -8,10 +8,11 @@ use App\Traits\Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 
 class ResidentsManagePending extends Component
 {
+    use WithPagination;
     use Toastr;
     public $last_name, $first_name, $middle_name, $suffix, $prefix, $contact_no, $sitio, $date_of_birth, $gender, $civil_status,
         $philhealth_id, $sss_id, $gsis_id, $social_pension_id, $is_pwd = false, $pwd_id, $type_of_disability, $illness,
@@ -21,7 +22,26 @@ class ResidentsManagePending extends Component
     public $resident_id;
     public $residentToApprove = null;
     public $deleteId; // Store the ID of the resident to be deleted
+    // Search functionality
+    public $search = '';
+    public $filter_status = '';
+    public $filter_gender = '';
+    public $perPage = 10;
 
+    // Reset filters method
+    public function resetFilters()
+    {
+        $this->search = '';
+        $this->filter_gender = '';
+        $this->filter_status = '';
+        $this->resetPage();
+    }
+
+    // Reset page method for search updates
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
     public function rules()
     {
         return [
@@ -59,7 +79,39 @@ class ResidentsManagePending extends Component
     }
     public function render()
     {
-        $residents = Resident::doesntHave('user')->get();
+        $residents = Resident::where(function ($query) {
+            $query->where('first_name', 'like', '%' . $this->search . '%')
+                ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                ->orWhere('middle_name', 'like', '%' . $this->search . '%')
+                ->orWhere('contact_no', 'like', '%' . $this->search . '%')
+                ->orWhere('email', 'like', '%' . $this->search . '%')
+                ->orWhere('sitio', 'like', '%' . $this->search . '%');
+        });
+
+        // Apply gender filter if selected
+        if ($this->filter_gender) {
+            $residents->where('gender', $this->filter_gender);
+        }
+
+        // Apply special status filters if selected
+        if ($this->filter_status) {
+            switch ($this->filter_status) {
+                case 'pwd':
+                    $residents->where('is_pwd', true);
+                    break;
+                case 'senior':
+                    $residents->where('is_senior_citizen', true);
+                    break;
+                case 'solo_parent':
+                    $residents->where('is_solo_parent', true);
+                    break;
+                case 'ofw':
+                    $residents->where('is_ofw', true);
+                    break;
+            }
+        }
+
+        $residents = $residents->doesntHave('user')->paginate($this->perPage);
         return view('livewire.pages.residents-manage-pending', compact('residents'));
     }
 

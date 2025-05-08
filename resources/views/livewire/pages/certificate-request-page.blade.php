@@ -199,11 +199,6 @@
                                 <option value="Senior Citizen">Senior Citizen</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Date Range</label>
-                            <input type="text" class="form-control" placeholder="Select date range"
-                                wire:model.live="dateRange">
-                        </div>
                         <div class="col-md-2">
                             <label class="form-label">Pickup Date</label>
                             <input type="text" class="form-control" placeholder="Select pickup date"

@@ -1,10 +1,13 @@
 <div class="container mt-4 card">
     <div class="d-flex card-header justify-content-between">
-        <h2>Create New Blotter Record</h2>
-        <a href="{{ route('blotters.index') }}" class="mb-3 btn btn-secondary">Back to List</a>
+        <h2>Edit Blotter Record</h2>
+        <div>
+            <a href="{{ route('blotters.show', $blotter_id) }}" class="btn btn-info">View Details</a>
+            <a href="{{ route('blotters.index') }}" class="btn btn-secondary">Back to List</a>
+        </div>
     </div>
 
-    <form wire:submit.prevent="store" class="card-body">
+    <form wire:submit.prevent="save" class="card-body">
         <div class="row">
             <div class="mb-3 col-md-6">
                 <label>Case Number</label>
@@ -65,7 +68,7 @@
         </div>
         <div class="mb-3">
             <label>Description</label>
-            <textarea class="form-control" wire:model="incident_details"></textarea>
+            <textarea class="form-control" wire:model="incident_details" rows="4"></textarea>
             @error('incident_details')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -93,7 +96,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{{ route('blotters.index') }}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ route('blotters.show', $blotter_id) }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>

@@ -7,6 +7,55 @@
             @endrole
         </div>
         <div class="card-body">
+            <!-- Search and Filter Section -->
+            <div class="mb-4 row">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search"
+                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="10" cy="10" r="7"></circle>
+                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                            </svg>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Search resident name, contact, email..."
+                            wire:model.live="search">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" wire:model.live="filter_gender">
+                        <option value="">All Genders</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" wire:model.live="filter_status">
+                        <option value="">All Statuses</option>
+                        <option value="pwd">PWD</option>
+                        <option value="senior">Senior Citizen</option>
+                        <option value="solo_parent">Solo Parent</option>
+                        <option value="ofw">OFW</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" wire:model.live="perPage">
+                        <option value="10">10 per page</option>
+                        <option value="25">25 per page</option>
+                        <option value="50">50 per page</option>
+                        <option value="100">100 per page</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-secondary w-100" wire:click="resetFilters">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+
             <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
@@ -14,6 +63,8 @@
                         <th>Date of Birth</th>
                         <th>Age</th>
                         <th>Gender</th>
+                        <th>Contact</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -24,6 +75,21 @@
                             <td>{{ $resident->date_of_birth }}</td>
                             <td>{{ \Carbon\Carbon::parse($resident->date_of_birth)->age }}</td>
                             <td>{{ $resident->gender }}</td>
+                            <td>{{ $resident->contact_no }}</td>
+                            <td>
+                                @if ($resident->is_pwd)
+                                    <span class="badge bg-blue">PWD</span>
+                                @endif
+                                @if ($resident->is_senior_citizen)
+                                    <span class="badge bg-purple">Senior</span>
+                                @endif
+                                @if ($resident->is_solo_parent)
+                                    <span class="badge bg-green">Solo Parent</span>
+                                @endif
+                                @if ($resident->is_ofw)
+                                    <span class="badge bg-orange">OFW</span>
+                                @endif
+                            </td>
                             <td>
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('auth.residents.show', $resident->id) }}">View</a>
@@ -41,6 +107,10 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="mt-4">
+                {{ $residents->links() }}
+            </div>
         </div>
     </div>
 
@@ -50,7 +120,7 @@
             wire:submit.prevent="{{ $resident_id ? 'update' : 'store' }}">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title">Add New Resident</h2>
+                    <h2 class="modal-title">{{ $resident_id ? 'Edit Resident' : 'Add New Resident' }}</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -158,7 +228,7 @@
                         <div class="col-md-3">
                             <label for="email">Email</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                wire:model="email" placeholder="Contact Number">
+                                wire:model="email" placeholder="Email Address">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -216,11 +286,11 @@
                             <div class="card-header">Occupation</div>
                             <div class="card-body row">
                                 <div class="mb-3 col-md-6">
-                                    <label for="source_of_income">Souce of Income</label>
+                                    <label for="source_of_income">Source of Income</label>
                                     <input type="text"
-                                        class="form-control @error('enderror') is-invalid @enderror"
+                                        class="form-control @error('source_of_income') is-invalid @enderror"
                                         wire:model="source_of_income" placeholder="Source of Income">
-                                    @error('enderror')
+                                    @error('source_of_income')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

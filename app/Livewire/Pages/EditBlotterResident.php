@@ -38,7 +38,7 @@ class EditBlotterResident extends Component
         // Check if the logged-in user is the one who recorded this blotter
         if ($blotter->recorded_by !== Auth::id()) {
             session()->flash('error', 'You are not authorized to edit this blotter record.');
-            return redirect()->route('auth.blotter.resident');
+            return redirect()->route('resident.blotters.index');
         }
 
         // Fill the properties with the blotter data
@@ -59,7 +59,7 @@ class EditBlotterResident extends Component
 
         if ($blotter->recorded_by !== Auth::id()) {
             session()->flash('error', 'You are not authorized to edit this blotter record.');
-            return redirect()->route('auth.blotter.resident');
+            return redirect()->route('resident.blotters.index');
         }
 
         $blotter->update([
@@ -80,7 +80,7 @@ class EditBlotterResident extends Component
         session()->flash('success', 'Blotter record updated successfully.');
 
         // Redirect back to the blotter list
-        return redirect()->route('auth.blotter.resident');
+        return redirect()->route('resident.blotters.index');
     }
 
     public function render()
