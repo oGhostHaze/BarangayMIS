@@ -31,7 +31,7 @@
                         </span>
                     </a>
                 </li>
-                @role('admin')
+                @role('admin|barangay_official|super-admin')
                     <li class="nav-item dropdown {{ request()->routeIs('auth.admin.users.*') ? 'active fw-bold' : '' }}">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('auth.admin.users.*') ? 'show' : '' }}"
                             href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"

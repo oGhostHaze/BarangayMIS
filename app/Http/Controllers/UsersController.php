@@ -92,4 +92,24 @@ class UsersController extends Controller
         session()->flash('success', 'User has been updated !!');
         return back();
     }
+
+    public function destroy(int $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Optional: Check if user is not trying to delete themselves
+        if (Auth::id() === $user->id) {
+            session()->flash('error', 'You cannot delete your own account!');
+            return back();
+        }
+
+        // Remove roles before deleting
+        $user->roles()->detach();
+
+        // Delete the user
+        $user->delete();
+
+        session()->flash('success', 'User has been deleted successfully!');
+        return redirect()->route('auth.admin.users.list');
+    }
 }

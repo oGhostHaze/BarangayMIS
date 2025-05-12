@@ -98,6 +98,7 @@ Route::name('auth.')->middleware(['auth:web'])->group(function () {
             Route::post('/store', [UsersController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [UsersController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [UsersController::class, 'update'])->name('update');
+            Route::delete('/destroy/{id}', [UsersController::class, 'destroy'])->name('destroy');
         });
 
         Route::resource('roles', RolesController::class, ['names' => 'roles']);

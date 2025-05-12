@@ -93,7 +93,7 @@
                             <td>
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('auth.residents.show', $resident->id) }}">View</a>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#approveResidentModal"
                                     wire:click="setResidentForApproval({{ $resident->id }})">Approve</button>
                                 <button class="btn btn-danger btn-sm"
