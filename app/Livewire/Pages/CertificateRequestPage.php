@@ -7,6 +7,7 @@ use App\Traits\Toastr;
 use Livewire\Component;
 use App\Models\Resident;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use App\Models\BarangayOfficial;
@@ -20,6 +21,9 @@ class CertificateRequestPage extends Component
 
     protected $paginationTheme = 'bootstrap';
 
+    protected $listeners = [
+        'processRequest' => 'processRequest',
+    ];
     // Form properties
     public $residents;
     public $resident_id;
@@ -452,6 +456,7 @@ class CertificateRequestPage extends Component
     /**
      * Process a request status change with payment verification
      */
+    #[On('processRequest')]
     public function processRequest($id, $newStatus)
     {
         try {

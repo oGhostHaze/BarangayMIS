@@ -337,26 +337,22 @@
                                             @if ($request->status == 'Pending')
                                                 @if ($request->payment_method == 'GCash' && $request->receipt_path or $request->payment_method == 'Cash')
                                                     <button class="btn btn-sm btn-success"
-                                                        wire:click="processRequest({{ $request->id }}, 'Approved')"
-                                                        onclick="confirm('Are you sure you want to approve this request?') || event.stopImmediatePropagation()">
+                                                        wire:click="$dispatch('openConfirmModal', { requestId: {{ $request->id }}, action: 'approve', status: 'Approved' })">
                                                         Approve
                                                     </button>
                                                 @endif
                                                 <button class="btn btn-sm btn-danger"
-                                                    wire:click="processRequest({{ $request->id }}, 'Rejected')"
-                                                    onclick="confirm('Are you sure you want to reject this request?') || event.stopImmediatePropagation()">
+                                                    wire:click="$dispatch('openConfirmModal', { requestId: {{ $request->id }}, action: 'reject', status: 'Rejected' })">
                                                     Reject
                                                 </button>
                                             @elseif ($request->status == 'Approved' && $request->payment_status == 'pending_verification')
                                                 <button class="btn btn-sm btn-warning"
-                                                    wire:click="processRequest({{ $request->id }}, 'Payment Verified')"
-                                                    onclick="confirm('Have you verified the payment?') || event.stopImmediatePropagation()">
+                                                    wire:click="$dispatch('openConfirmModal', { requestId: {{ $request->id }}, action: 'verify-payment', status: 'Payment Verified' })">
                                                     Verify Payment
                                                 </button>
                                             @elseif ($request->status == 'Ready for Pickup')
                                                 <button class="btn btn-sm btn-info"
-                                                    wire:click="processRequest({{ $request->id }}, 'Released')"
-                                                    onclick="confirm('Confirm that this certificate has been released to the resident?') || event.stopImmediatePropagation()">
+                                                    wire:click="$dispatch('openConfirmModal', { requestId: {{ $request->id }}, action: 'release', status: 'Released' })">
                                                     Mark Released
                                                 </button>
                                             @endif
@@ -383,6 +379,7 @@
                                             @endif
                                         </div>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>
@@ -837,23 +834,126 @@
             </div>
         </div>
     </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status" id="modalStatus"></div>
+                <div class="py-4 text-center modal-body">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mb-2 icon text-danger icon-lg" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 9v2m0 4v.01" />
+                        <path
+                            d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                    </svg>
+                    <h3 id="confirmTitle">Are you sure?</h3>
+                    <div class="text-muted" id="confirmMessage">Do you really want to perform this action?</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn w-100" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" id="confirmActionBtn" class="btn btn-danger w-100"
+                                    wire:click="processRequest(document.getElementById('requestIdField').value, document.getElementById('statusField').value)"
+                                    data-bs-dismiss="modal">
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="requestIdField" value="">
+                <input type="hidden" id="statusField" value="">
+            </div>
+        </div>
+    </div>
 </div>
+
 @script
     <!-- Add script to handle Cedula Modal -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            window.addEventListener('showCedulaModal', event => {
-                // Show modal
-                var modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
-                modal.show();
-            });
+        // Listen for the openConfirmModal event
+        window.addEventListener('openConfirmModal', event => {
+            const data = event.detail;
+            const requestId = data.requestId;
+            const action = data.action;
+            const status = data.status;
 
-            window.addEventListener('closeCedulaModal', event => {
-                var modal = bootstrap.Modal.getInstance(document.getElementById('cedulaModal'));
-                if (modal) {
-                    modal.hide();
-                }
-            });
+            // Set hidden field values
+            document.getElementById('requestIdField').value = requestId;
+            document.getElementById('statusField').value = status;
+
+            // Update modal appearance
+            const modalTitle = document.getElementById('confirmTitle');
+            const modalMessage = document.getElementById('confirmMessage');
+            const modalStatus = document.getElementById('modalStatus');
+            const confirmButton = document.getElementById('confirmActionBtn');
+
+            // Configure modal based on action type
+            switch (action) {
+                case 'approve':
+                    modalStatus.className = 'modal-status bg-success';
+                    modalTitle.textContent = 'Approve Request';
+                    modalMessage.textContent =
+                        'Are you sure you want to approve this certificate request?';
+                    confirmButton.className = 'btn btn-success w-100';
+                    confirmButton.textContent = 'Yes, Approve';
+                    break;
+                case 'reject':
+                    modalStatus.className = 'modal-status bg-danger';
+                    modalTitle.textContent = 'Reject Request';
+                    modalMessage.textContent =
+                        'Are you sure you want to reject this certificate request?';
+                    confirmButton.className = 'btn btn-danger w-100';
+                    confirmButton.textContent = 'Yes, Reject';
+                    break;
+                case 'verify-payment':
+                    modalStatus.className = 'modal-status bg-warning';
+                    modalTitle.textContent = 'Verify Payment';
+                    modalMessage.textContent =
+                        'Have you verified the payment for this certificate request?';
+                    confirmButton.className = 'btn btn-warning w-100';
+                    confirmButton.textContent = 'Yes, Verified';
+                    break;
+                case 'release':
+                    modalStatus.className = 'modal-status bg-info';
+                    modalTitle.textContent = 'Mark as Released';
+                    modalMessage.textContent =
+                        'Confirm that this certificate has been released to the resident?';
+                    confirmButton.className = 'btn btn-info w-100';
+                    confirmButton.textContent = 'Yes, Mark Released';
+                    break;
+                default:
+                    modalStatus.className = 'modal-status bg-primary';
+                    modalTitle.textContent = 'Confirm Action';
+                    modalMessage.textContent = 'Are you sure you want to perform this action?';
+                    confirmButton.className = 'btn btn-primary w-100';
+                    confirmButton.textContent = 'Confirm';
+            }
+
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            modal.show();
+        });
+        window.addEventListener('showCedulaModal', event => {
+            // Show modal
+            var modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
+            modal.show();
+        });
+
+        window.addEventListener('closeCedulaModal', event => {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('cedulaModal'));
+            if (modal) {
+                modal.hide();
+            }
         });
     </script>
 @endscript

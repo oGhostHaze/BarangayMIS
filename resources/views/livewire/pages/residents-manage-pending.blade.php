@@ -78,16 +78,16 @@
                             <td>{{ $resident->contact_no }}</td>
                             <td>
                                 @if ($resident->is_pwd)
-                                    <span class="badge bg-blue">PWD</span>
+                                    <span class="badge bg-blue-lt">PWD</span>
                                 @endif
                                 @if ($resident->is_senior_citizen)
-                                    <span class="badge bg-purple">Senior</span>
+                                    <span class="badge bg-purple-lt">Senior</span>
                                 @endif
                                 @if ($resident->is_solo_parent)
-                                    <span class="badge bg-green">Solo Parent</span>
+                                    <span class="badge bg-green-lt">Solo Parent</span>
                                 @endif
                                 @if ($resident->is_ofw)
-                                    <span class="badge bg-orange">OFW</span>
+                                    <span class="badge bg-orange-lt">OFW</span>
                                 @endif
                             </td>
                             <td>
