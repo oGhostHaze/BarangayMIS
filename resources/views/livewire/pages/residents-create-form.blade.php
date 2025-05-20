@@ -126,6 +126,14 @@
                         @enderror
                     </div>
                     <div class="col-md-3">
+                        <label for="house_no">House Number</label>
+                        <input type="text" class="form-control @error('house_no') is-invalid @enderror"
+                            wire:model="house_no" placeholder="House Number">
+                        @error('house_no')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-3">
                         <label for="sitio">Sitio</label>
                         <input type="text" class="form-control @error('sitio') is-invalid @enderror"
                             wire:model="sitio" placeholder="Sitio">

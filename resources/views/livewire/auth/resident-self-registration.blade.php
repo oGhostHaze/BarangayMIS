@@ -100,7 +100,14 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label">House Number</label>
+                            <input type="text" class="form-control" wire:model="house_no">
+                            @error('house_no')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-md-3">
                             <label class="form-label">Sitio/Street</label>
                             <input type="text" class="form-control" wire:model="sitio">
                             @error('sitio')

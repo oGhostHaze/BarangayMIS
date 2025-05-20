@@ -228,6 +228,7 @@
                                 <th>Cedula</th>
                                 <th>Pickup Date</th>
                                 <th>Requested At</th>
+                                <th>Processed By</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -332,6 +333,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $request->requested_at->format('M d, Y g:i A') }}</td>
+                                    <td>{{ $request->processedBy->name }}</td>
                                     <td>
                                         <div class="btn-list flex-nowrap">
                                             @if ($request->status == 'Pending')
@@ -457,7 +459,7 @@
                             <div class="col-md-6">
                                 <label class="form-label required">Resident</label>
                                 <select class="form-select @error('resident_id') is-invalid @enderror"
-                                    wire:model="resident_id">
+                                    wire:model.live="resident_id">
                                     <option value="">Select Resident</option>
                                     @foreach ($residents as $resident)
                                         <option value="{{ $resident->id }}">{{ $resident->first_name }}
@@ -512,7 +514,7 @@
                                 <label class="form-label" x-bind:class="{ 'required': showIdField }">ID Number</label>
                                 <input type="text"
                                     class="form-control @error('discount_id_number') is-invalid @enderror"
-                                    wire:model="discount_id_number" placeholder="Enter student/senior citizen ID"
+                                    wire:model.live="discount_id_number" placeholder="Enter student/senior citizen ID"
                                     x-bind:disabled="!showIdField">
                                 @error('discount_id_number')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -881,6 +883,11 @@
     <!-- Add script to handle Cedula Modal -->
     <script>
         // Listen for the openConfirmModal event
+        window.addEventListener('requestModal', event => {
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('requestModal'));
+            modal.show();
+        });
         window.addEventListener('openConfirmModal', event => {
             const data = event.detail;
             const requestId = data.requestId;

@@ -22,6 +22,7 @@ class CertificateRequestsResident extends Component
 
     // Form properties
     public $resident_id;
+    public $hasPendingBlotter = false;
     public $certificate_type;
     public $paymentFilter;
     public $pickupDateFilter;
@@ -550,6 +551,7 @@ class CertificateRequestsResident extends Component
             // For regular residents, they can only see themselves
             if (Auth::user()->hasRole('resident')) {
                 $this->residents = collect([Auth::user()->resident]);
+                $this->hasPendingBlotter = Auth::user()->resident->pendingBlotterCases() > 0 ? true : false;
             }
             // For admins/staff, they can see all residents
             else if (Auth::user()->hasAnyRole(['barangay_official', 'admin', 'staff'])) {

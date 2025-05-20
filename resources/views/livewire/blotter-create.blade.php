@@ -41,6 +41,24 @@
 
         <h5>Respondent Details</h5>
         <div class="row">
+            <div class="p-0 mb-3 col-md-12 card">
+                <div class="card-header">
+                    <div class="form-check">
+                        <label><input class="form-check-input" type="checkbox" wire:model.live="is_resident"> is
+                            Resident?</label>
+                    </div>
+                </div>
+                @if ($is_resident)
+                    <div class="space-y-2 card-body">
+                        <label for="resident_rfid">Resident RFID</label>
+                        <input type="text" class="form-control @error('resident_rfid') is-invalid @enderror"
+                            wire:model.lazy="resident_rfid" placeholder="Resident RFID">
+                        @error('resident_rfid')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                @endif
+            </div>
             <div class="mb-3 col-md-6">
                 <label>Name</label>
                 <input type="text" class="form-control" wire:model="respondent_name">

@@ -16,7 +16,7 @@ class ResidentSelfRegistration extends Component
     use Toastr;
     use WithFileUploads; // Use Livewire's file upload trait
 
-    public $last_name, $first_name, $middle_name, $suffix, $prefix, $contact_no, $sitio, $date_of_birth, $gender, $civil_status,
+    public $last_name, $first_name, $middle_name, $suffix, $prefix, $contact_no, $sitio, $house_no, $date_of_birth, $gender, $civil_status,
         $philhealth_id, $sss_id, $gsis_id, $social_pension_id, $is_pwd = false, $pwd_id, $type_of_disability, $illness,
         $is_solo_parent = false, $solo_parent_id, $is_senior_citizen = false, $senior_citizen_id, $educational_attainment,
         $source_of_income, $monthly_income, $income_type, $is_ofw = false, $ofw_country, $ofw_is_domestic_helper = false,
@@ -47,6 +47,7 @@ class ResidentSelfRegistration extends Component
                 'gender' => 'required|string|in:Male,Female,Other',
                 'civil_status' => 'required|string|max:50',
                 'sitio' => 'nullable|string|max:255',
+                'house_no' => 'nullable|string|max:255',
             ]);
         } elseif ($this->currentStep == 2) {
             $this->validate([
@@ -104,6 +105,7 @@ class ResidentSelfRegistration extends Component
             'prefix' => 'nullable|string|max:50',
             'contact_no' => 'required|string|max:15|unique:residents,contact_no',
             'sitio' => 'nullable|string|max:255',
+            'house_no' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date',
             'gender' => 'required|string|in:Male,Female,Other',
             'civil_status' => 'required|string|max:50',
@@ -148,8 +150,8 @@ class ResidentSelfRegistration extends Component
         // Create the user account first
         $user = User::create([
             'name' => $validatedData['first_name'] . ' ' .
-                     ($validatedData['middle_name'] ? $validatedData['middle_name'] . ' ' : '') .
-                     $validatedData['last_name'],
+                ($validatedData['middle_name'] ? $validatedData['middle_name'] . ' ' : '') .
+                $validatedData['last_name'],
             'email' => $validatedData['email'],
             'username' => $validatedData['contact_no'],
             'password' => Hash::make($validatedData['password']),

@@ -18,6 +18,7 @@ class Resident extends Model
         'prefix',
         'contact_no',
         'sitio',
+        'house_no',
         'date_of_birth',
         'gender',
         'civil_status',
@@ -75,8 +76,19 @@ class Resident extends Model
             ->get();
     }
 
+    public function pendingBlotterCases()
+    {
+        return Blotter::where('resident_id', "{$this->id}")->where('status', 'Pending')
+            ->count();
+    }
+
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . ($this->middle_name ? substr($this->middle_name, 0, 1) . '. ' : '') . $this->last_name . ($this->suffix ? ' ' . $this->suffix : '');
+    }
+
+    public function getAddressAttribute()
+    {
+        return ('Sitio: ' . $this->sitio . ' ') . $this->house_no ? (', House # ' . $this->house_no) : '';
     }
 }

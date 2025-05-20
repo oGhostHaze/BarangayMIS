@@ -4,11 +4,14 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Blotter;
+use App\Models\Resident;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class BlotterCreate extends Component
 {
+    public $is_resident = false; // Flag to check if the complainant is a resident
+    public $resident_id, $resident_rfid;
     public $case_number, $complainant_name, $complainant_address, $complainant_contact;
     public $respondent_name, $respondent_address, $respondent_contact, $witnesses, $incident_details;
     public $incident_date, $location, $status = 'Pending', $remarks;
@@ -39,9 +42,16 @@ class BlotterCreate extends Component
 
     public function store()
     {
+        if ($this->is_resident) {
+            $this->validate([
+                'resident_id' => 'required|exists:residents,id',
+            ]);
+        }
+
         $this->validate();
 
         Blotter::create([
+            'resident_id' => $this->resident_id ?? null,
             'case_number' => $this->case_number,
             'complainant_name' => $this->complainant_name,
             'complainant_address' => $this->complainant_address,
@@ -60,6 +70,19 @@ class BlotterCreate extends Component
 
         session()->flash('success', 'Blotter record created successfully.');
         return redirect()->route('blotters.index'); // Redirect back to list page
+    }
+
+    public function updatedResidentRfid()
+    {
+        $resident = Resident::where('rfid_number', $this->resident_rfid)->first();
+        if ($resident) {
+            $this->resident_id = $resident->id;
+            $this->respondent_name = $resident->full_name;
+            $this->respondent_address = $resident->address;
+            $this->respondent_contact = $resident->contact_no;
+        } else {
+            session()->flash('error', 'Resident not found.');
+        }
     }
 
     public function render()

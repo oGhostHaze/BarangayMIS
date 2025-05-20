@@ -14,6 +14,7 @@ use App\Models\BarangayOfficial;
 use App\Models\CertificateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Url;
 
 class CertificateRequestPage extends Component
 {
@@ -26,7 +27,10 @@ class CertificateRequestPage extends Component
     ];
     // Form properties
     public $residents;
+
+    #[Url()]
     public $resident_id;
+
     public $amountReceived;
     public $printReceipt;
     public $certificate_type;
@@ -122,6 +126,20 @@ class CertificateRequestPage extends Component
             if (Auth::user()->resident) {
                 $this->resident_id = Auth::user()->resident->id;
             }
+        }
+
+        if ($this->resident_id) {
+            $this->certificate_type = 'Barangay Clearance';
+            $this->purpose = 'Certificate of Residency';
+            $this->payment_method = 'Cash';
+            $this->pickup_datetime = now()->addDays(1)->format('Y-m-d H:i');
+            $resident = Resident::find($this->resident_id);
+            if ($resident and $resident->is_senior_citizen) {
+                $this->discount_type = 'Senior Citizen';
+                $this->discount_id_number = $resident->senior_citizen_id;
+                $this->calculateDiscount();
+            }
+            $this->dispatch('requestModal');
         }
     }
 
@@ -267,6 +285,16 @@ class CertificateRequestPage extends Component
             $this->currentDiscountAmount = null;
         } catch (\Exception $e) {
             $this->alert('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    public function updatedResidentId()
+    {
+        $resident = Resident::find($this->resident_id);
+        if ($resident and $resident->is_senior_citizen) {
+            $this->discount_type = 'Senior Citizen';
+            $this->discount_id_number = $resident->senior_citizen_id;
+            $this->calculateDiscount();
         }
     }
 

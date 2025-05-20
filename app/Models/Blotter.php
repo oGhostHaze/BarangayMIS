@@ -11,6 +11,7 @@ class Blotter extends Model
 
     protected $fillable = [
         'case_number',
+        'resident_id',
         'complainant_name',
         'complainant_address',
         'complainant_contact',
@@ -33,5 +34,10 @@ class Blotter extends Model
     public function recordedBy()
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class, 'resident_id');
     }
 }

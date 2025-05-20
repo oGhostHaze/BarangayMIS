@@ -76,7 +76,8 @@
                     <div class="row g-3">
                         <div class="col-sm-6"><strong>Contact No.:</strong> {{ $resident->contact_no ?? 'N/A' }}</div>
                         <div class="col-sm-6"><strong>Email Address:</strong> {{ $resident->email ?? 'N/A' }}</div>
-                        <div class="col-sm-6"><strong>Address (Sitio):</strong> {{ $resident->sitio ?? 'N/A' }}</div>
+                        <div class="col-sm-6"><strong>Sitio:</strong> {{ $resident->sitio ?? 'N/A' }}</div>
+                        <div class="col-sm-6"><strong>House #:</strong> {{ $resident->house_no ?? 'N/A' }}</div>
                     </div>
                 </div>
             </div>

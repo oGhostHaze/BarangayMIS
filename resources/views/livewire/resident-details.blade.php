@@ -24,7 +24,8 @@
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Address</div>
-                                <div class="datagrid-content">{{ $resident->sitio }}</div>
+                                <div class="datagrid-content">Sitio: {{ $resident->sitio }}</div>
+                                <div class="datagrid-content">House #: {{ $resident->house_no }}</div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Contact</div>
@@ -270,6 +271,10 @@
                         <div class="tab-pane {{ $activeTab == 'certificates' ? 'active show' : '' }}"
                             id="certificates">
                             <h3>Certificate Requests</h3>
+                            <a href="{{ route('auth.certs.requests', ['resident_id' => $resident->id]) }}"
+                                class="btn btn-primary">
+                                Go to certificate requests
+                            </a>
                             @if (count($certificateRequests) > 0)
                                 <div class="table-responsive">
                                     <table class="table table-vcenter card-table">
@@ -346,7 +351,8 @@
                                     </p>
 
                                     <div class="empty-action">
-                                        <a href="{{ route('auth.certs.requests') }}" class="btn btn-primary">
+                                        <a href="{{ route('auth.certs.requests', ['resident_id' => $resident->id]) }}"
+                                            class="btn btn-primary">
                                             Go to certificate requests
                                         </a>
                                     </div>

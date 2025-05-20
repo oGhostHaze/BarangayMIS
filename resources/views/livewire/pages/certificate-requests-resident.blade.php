@@ -26,16 +26,23 @@
                                 </span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" wire:click="showRequestForm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12 5l0 14"></path>
-                                <path d="M5 12l14 0"></path>
-                            </svg>
-                            New Request
-                        </button>
+                        @if ($hasPendingBlotter)
+                            <div class="me-3 d-none d-md-block">
+                                <span class="badge bg-red-lt">You have pending blotter cases. You will not be able to
+                                    request for certifications until resolved.</span>
+                            </div>
+                        @else
+                            <button class="btn btn-primary" wire:click="showRequestForm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 5l0 14"></path>
+                                    <path d="M5 12l14 0"></path>
+                                </svg>
+                                New Request
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>
