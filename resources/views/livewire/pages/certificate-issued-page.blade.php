@@ -28,7 +28,7 @@
                             </td>
                             <td>{{ $request->approved_at ? $request->approved_at->format('M d, Y') : '-' }}</td>
                             <td>{{ $request->released_at ? $request->released_at->format('M d, Y') : '-' }}</td>
-                            <td>{{ $request->processedBy?->name ?? 'N/A' }}</td>
+                            <td>{{ $request->processedBy ? $request->processedBy->name : 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

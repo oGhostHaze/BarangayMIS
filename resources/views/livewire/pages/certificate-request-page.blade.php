@@ -333,7 +333,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $request->requested_at->format('M d, Y g:i A') }}</td>
-                                    <td>{{ $request->processedBy->name }}</td>
+                                    <td>{{ $request->processedBy ? $request->processedBy->name : 'N/A' }}</td>
                                     <td>
                                         <div class="btn-list flex-nowrap">
                                             @if ($request->status == 'Pending')
